@@ -120,7 +120,7 @@
     <QtMoc Include="ParsingAssistant.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="ParsingAssistant.ui" />
+    <QtUic Include="MainMenu.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="ParsingAssistant.qrc" />
