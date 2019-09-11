@@ -93,7 +93,7 @@
             </property>
             <property name="font">
              <font>
-              <family>Comic Sans MS</family>
+              <family>Century Gothic</family>
               <pointsize>12</pointsize>
               <weight>50</weight>
               <italic>false</italic>
@@ -123,7 +123,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="btnLtoR">
             <property name="minimumSize">
              <size>
               <width>400</width>
@@ -132,7 +132,7 @@
             </property>
             <property name="font">
              <font>
-              <family>Comic Sans MS</family>
+              <family>Century Gothic</family>
               <pointsize>9</pointsize>
              </font>
             </property>
@@ -163,7 +163,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_2">
+           <widget class="QPushButton" name="btnTtoD">
             <property name="minimumSize">
              <size>
               <width>400</width>
@@ -172,7 +172,7 @@
             </property>
             <property name="font">
              <font>
-              <family>Comic Sans MS</family>
+              <family>Century Gothic</family>
               <pointsize>9</pointsize>
              </font>
             </property>
@@ -194,7 +194,7 @@
             </property>
             <property name="font">
              <font>
-              <family>Comic Sans MS</family>
+              <family>Century Gothic</family>
               <pointsize>9</pointsize>
              </font>
             </property>
@@ -216,7 +216,7 @@
             </property>
             <property name="font">
              <font>
-              <family>Comic Sans MS</family>
+              <family>Century Gothic</family>
               <pointsize>9</pointsize>
              </font>
             </property>
@@ -248,7 +248,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QPushButton" name="pushButton_6">
+         <widget class="QPushButton" name="btnExit">
           <property name="minimumSize">
            <size>
             <width>200</width>
@@ -257,7 +257,7 @@
           </property>
           <property name="font">
            <font>
-            <family>Comic Sans MS</family>
+            <family>Century Gothic</family>
             <pointsize>9</pointsize>
            </font>
           </property>
@@ -283,7 +283,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_5">
+         <widget class="QPushButton" name="btnHelp">
           <property name="minimumSize">
            <size>
             <width>200</width>
@@ -292,7 +292,7 @@
           </property>
           <property name="font">
            <font>
-            <family>Comic Sans MS</family>
+            <family>Century Gothic</family>
             <pointsize>9</pointsize>
            </font>
           </property>

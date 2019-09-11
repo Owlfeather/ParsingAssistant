@@ -1,10 +1,11 @@
-#include "ParsingAssistant.h"
+﻿#include "MainMenu.h"
+//#include "CustomWindow.h"
 #include <QtWidgets/QApplication>
 
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	ParsingAssistant w;
+	MainMenu w;
 	w.show();
 	return a.exec();
 }
