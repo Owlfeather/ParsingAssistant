@@ -16,6 +16,7 @@ CWindow::CWindow(QWidget *parent)
 	ui.setupUi(this);
 
 	connect(ui.btnBack, SIGNAL(clicked()), this, SLOT(onBackClicked()));
+	connect(ui.btnParse, SIGNAL(clicked()), this, SLOT(onParseModeClicked()));
 }
 
 CWindow::~CWindow()
@@ -29,19 +30,26 @@ void CWindow::RenderCWin(unsigned type)
 	{
 	case CWBEGIN: // окно только открыто, показываем меню
 		{
-		ui.grboxParse->setVisible(false);
-		ui.grboxTest->setVisible(false);
-		QTextCodec * codec = QTextCodec::codecForName("Windows-1251");
-		switch (alg_type)
-		{
-		case LTOR:
-			{ ui.lblName->setText(RUS("Левосторонний восходящий разбор")); break; }
-		case TTOD:
-			{ ui.lblName->setText(RUS("Левосторонний нисходящий разбор")); break; }
-		default:
-			break;
-		}
+			ui.grboxParse->setVisible(false);
+			ui.grboxTest->setVisible(false);
+			ui.btnRepeat->setDisabled(true);
+			QTextCodec * codec = QTextCodec::codecForName("Windows-1251");
+			switch (alg_type)
+			{
+			case LTOR:
+				{ ui.lblName->setText(RUS("Левосторонний восходящий разбор")); break; }
+			case TTOD:
+				{ ui.lblName->setText(RUS("Левосторонний нисходящий разбор")); break; }
+			default:
+				break;
+			}
 		break;
+		}
+	case CWPARSE:
+		{
+			ui.grboxParse->setVisible(true);
+			ui.btnParse->setDisabled(true);
+			//
 		}
 	default:
 		break;
@@ -53,10 +61,15 @@ void CWindow::SetType(unsigned inp_alg_type)
 	alg_type = inp_alg_type;
 }
 
+void CWindow::onParseModeClicked()
+{
+
+	RenderCWin(CWPARSE);
+}
+
 void CWindow::onBackClicked()
 {
-	//w.show();
-	//hide();
+	ui.btnParse->setDisabled(false);
 	close();
-	emit mainMenu();
+	emit cWindowClosed();
 }

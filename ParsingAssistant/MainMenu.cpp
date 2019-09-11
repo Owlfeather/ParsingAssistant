@@ -9,11 +9,9 @@
 #define LTOR 0
 #define TTOD 1
 
-
 #define CWBEGIN 0
 #define CWPARSE 1
 #define CWTEST 2
-
 
 MainMenu::MainMenu(QWidget *parent)
 	: QMainWindow(parent)
@@ -21,7 +19,7 @@ MainMenu::MainMenu(QWidget *parent)
 	ui.setupUi(this);
 
 	c_win = new CWindow;
-	connect(c_win, &CWindow::mainMenu, this, &MainMenu::show);
+	connect(c_win, &CWindow::cWindowClosed, this, &MainMenu::show);
 
 	connect(ui.btnExit, SIGNAL(clicked()), this, SLOT(onExitClicked()));
 
@@ -51,7 +49,6 @@ void MainMenu::onLtoRClicked()
 	c_win->SetType(LTOR);
 	c_win->RenderCWin(CWBEGIN);
 	c_win->show();
-	//hide();
 	close();
 }
 
@@ -60,7 +57,6 @@ void MainMenu::onTtoDClicked()
 	c_win->SetType(TTOD);
 	c_win->RenderCWin(CWBEGIN);
 	c_win->show();
-	//hide();
 	close();
 }
 

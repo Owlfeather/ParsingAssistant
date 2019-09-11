@@ -19,8 +19,9 @@ private:
 	unsigned alg_type;
 
 signals:
-	void mainMenu();
+	void cWindowClosed();
 
 private slots:
 	void onBackClicked();
+	void onParseModeClicked();
 };
