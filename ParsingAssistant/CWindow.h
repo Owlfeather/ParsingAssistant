@@ -13,10 +13,14 @@ public:
 	~CWindow();
 	void RenderCWin(unsigned type);
 	void SetType(unsigned inp_alg_type);
+	void DrawRules();
+	void ChangeColor(unsigned i, unsigned j);
 
 private:
 	Ui::Form ui;
 	unsigned alg_type;
+	std::vector<std::vector<QLabel *>> drawed_rules;
+
 
 signals:
 	void cWindowClosed();

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Методы грамматического разбора</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_8">
    <item>
@@ -140,7 +140,7 @@
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_3">
             <item>
-             <widget class="QPushButton" name="btnStep">
+             <widget class="QPushButton" name="btnStart">
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -159,7 +159,26 @@
              </widget>
             </item>
             <item>
-             <widget class="QGroupBox" name="groupBox_3">
+             <widget class="QPushButton" name="btnStep">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>41</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Century Gothic</family>
+                <pointsize>9</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Шаг</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="ruleBox">
               <property name="font">
                <font>
                 <family>Century Gothic</family>
