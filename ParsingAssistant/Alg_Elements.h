@@ -7,6 +7,7 @@
 #include <iostream>
 #include <vector>
 #include "Basic_Elements.h"
+#include "LogTable.h"
 
 using namespace std;
 
@@ -110,13 +111,17 @@ protected:
 	ItemString parsing_str;
 	ParseLog parsing_log;
 
+	LogTable * table_view;
+
 public:
 
-	ParseAlgorithm() {}
+	ParseAlgorithm() { table_view = new LogTable; }
 	ParseAlgorithm(ItemString & inp_str) : parsing_str(inp_str) {}
 
 	ItemRule & GetRule(unsigned i) { return rules[i]; }
 	unsigned RulesSize() { return rules.size(); }
+	void SetLogTable(unsigned type_alg);
+	LogTable * GetTable() { return table_view; }
 
 	//void SetParsingStr(ItemString inp_str) { parsing_str = inp_str; }
 

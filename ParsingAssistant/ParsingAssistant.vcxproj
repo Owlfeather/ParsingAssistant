@@ -117,6 +117,7 @@
     <ClCompile Include="Algorithm_TtoD.cpp" />
     <ClCompile Include="Alg_Elements.cpp" />
     <ClCompile Include="Basic_Elements.cpp" />
+    <ClCompile Include="LogTable.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="CWindow.cpp" />
@@ -139,6 +140,7 @@
     <ClInclude Include="Algorithm_TtoD.h" />
     <ClInclude Include="Alg_Elements.h" />
     <ClInclude Include="Basic_Elements.h" />
+    <QtMoc Include="LogTable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

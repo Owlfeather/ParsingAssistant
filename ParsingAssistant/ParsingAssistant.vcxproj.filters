@@ -51,6 +51,9 @@
     <ClCompile Include="Basic_Elements.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LogTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="MainMenu.ui">
@@ -65,6 +68,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="CWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="LogTable.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

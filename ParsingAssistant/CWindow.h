@@ -4,6 +4,7 @@
 #include "ui_CWindow.h"
 #include "Algorithm_LtoR.h"
 #include "Algorithm_TtoD.h"
+#include "LogTable.h"
 
 
 class CWindow : public QWidget
@@ -23,6 +24,7 @@ private:
 	unsigned alg_type;
 	std::vector<std::vector<QLabel *>> drawed_rules;
 	ParseAlgorithm* algorithm;
+	LogTable* log_table;
 
 
 signals:
@@ -31,4 +33,5 @@ signals:
 private slots:
 	void onBackClicked();
 	void onParseModeClicked();
+	void onStartClicked();
 };

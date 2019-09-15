@@ -143,7 +143,7 @@
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Левосторонний восходищий (&quot;слева направо&quot;)</string>
+             <string>Левосторонний восходящий (&quot;слева направо&quot;)</string>
             </property>
             <property name="iconSize">
              <size>

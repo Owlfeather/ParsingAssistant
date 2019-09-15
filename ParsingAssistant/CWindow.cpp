@@ -1,10 +1,8 @@
 ﻿#include "CWindow.h"
 #include <QTextCodec>
 #include <QString>
-#include <QTimer>
-#include <QPoint>
-#include <QMouseEvent>
-#include <QMouseEvent>
+#include <QMessageBox>
+
 
 
 
@@ -21,10 +19,12 @@ CWindow::CWindow(QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
+	log_table = new LogTable;
 	//DrawRules();
 
 	connect(ui.btnBack, SIGNAL(clicked()), this, SLOT(onBackClicked()));
 	connect(ui.btnParse, SIGNAL(clicked()), this, SLOT(onParseModeClicked()));
+	connect(ui.btnStart, SIGNAL(clicked()), this, SLOT(onStartClicked()));
 }
 
 CWindow::~CWindow()
@@ -176,12 +176,36 @@ void CWindow::onParseModeClicked()
 	RenderCWin(CWPARSE);
 }
 
+void CWindow::onStartClicked()
+{
+	if (ui.lineInpStr->text().isEmpty()) {
+		QMessageBox messageBox;
+		messageBox.critical(0, "Error", "An error has occured !");
+		messageBox.setFixedSize(500, 200);
+	}
+	else {
+		algorithm->SetParsingStr(ItemString(ui.lineInpStr->text().toLocal8Bit().constData()));
+		ui.btnStart->setDisabled(true);
+		ui.lineInpStr->setDisabled(true);
+		algorithm->DoParse();
+		/// ЛОГ СФОРМИРОВАН
+		//log_table = new LogTable;
+		
+		algorithm->SetLogTable(alg_type);
+		ui.tableView->setModel(algorithm->GetTable());
+	}
+}
+
 void CWindow::onBackClicked()
 {
 	qDeleteAll(ui.ruleBox->children());
 	drawed_rules.clear();
 	//delete algorithm;
 	ui.btnParse->setDisabled(false);
+	ui.btnStart->setDisabled(false);
+	ui.lineInpStr->setDisabled(false);
+	ui.lineInpStr->clear();
+	ui.tableView->setModel(0);
 	close();
 	emit cWindowClosed();
 }
