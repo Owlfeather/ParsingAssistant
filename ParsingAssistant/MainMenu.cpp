@@ -46,7 +46,7 @@ void MainMenu::onExitClicked()
 
 void MainMenu::onLtoRClicked()
 {
-	c_win->SetType(LTOR);
+	c_win->SetAlgorithm(LTOR);
 	c_win->RenderCWin(CWBEGIN);
 	c_win->show();
 	close();
@@ -54,7 +54,7 @@ void MainMenu::onLtoRClicked()
 
 void MainMenu::onTtoDClicked()
 {
-	c_win->SetType(TTOD);
+	c_win->SetAlgorithm(TTOD);
 	c_win->RenderCWin(CWBEGIN);
 	c_win->show();
 	close();

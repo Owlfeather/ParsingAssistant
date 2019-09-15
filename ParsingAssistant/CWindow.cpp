@@ -1,5 +1,12 @@
 ﻿#include "CWindow.h"
 #include <QTextCodec>
+#include <QString>
+#include <QTimer>
+#include <QPoint>
+#include <QMouseEvent>
+#include <QMouseEvent>
+
+
 
 #define RUS( str ) codec->toUnicode(str)
 
@@ -14,7 +21,7 @@ CWindow::CWindow(QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
-	DrawRules();
+	//DrawRules();
 
 	connect(ui.btnBack, SIGNAL(clicked()), this, SLOT(onBackClicked()));
 	connect(ui.btnParse, SIGNAL(clicked()), this, SLOT(onParseModeClicked()));
@@ -34,13 +41,18 @@ void CWindow::RenderCWin(unsigned type)
 			ui.grboxParse->setVisible(false);
 			ui.grboxTest->setVisible(false);
 			ui.btnRepeat->setDisabled(true);
+			ui.btnStep->setVisible(false);
+
+			ui.lineInpStr->setFocus();
+			ui.lineInpStr->grabKeyboard();
+		
 			QTextCodec * codec = QTextCodec::codecForName("Windows-1251");
 			switch (alg_type)
 			{
 			case LTOR:
-				{ ui.lblName->setText(RUS("Левосторонний восходящий разбор")); break; }
+			{ ui.lblName->setText(RUS("Левосторонний восходящий разбор")); break; }
 			case TTOD:
-				{ ui.lblName->setText(RUS("Левосторонний нисходящий разбор")); break; }
+			{ ui.lblName->setText(RUS("Левосторонний нисходящий разбор")); break; }
 			default:
 				break;
 			}
@@ -50,31 +62,60 @@ void CWindow::RenderCWin(unsigned type)
 		{
 			ui.grboxParse->setVisible(true);
 			ui.btnParse->setDisabled(true);
+			//ui.ruleBox->close();
+			//ui.ruleBox->show();
 			//
 		}
-	default:
-		break;
 	}
 }
 
-void CWindow::SetType(unsigned inp_alg_type)
+void CWindow::SetAlgorithm(unsigned inp_alg_type)
 {
 	alg_type = inp_alg_type;
+
+	switch (alg_type)
+	{
+	case LTOR: 
+		{
+			LtoR_MethodAlg * cur_alg = new LtoR_MethodAlg;
+			algorithm = cur_alg;
+			break;
+		}
+	case TTOD:
+		{
+			TtoD_MethodAlg* cur_alg = new TtoD_MethodAlg;
+			algorithm = cur_alg;
+			break;
+		}
+	}
+	algorithm->SetRulesOfAlg();
+	DrawRules();
 }
 
 void CWindow::DrawRules()
 {
 	QVBoxLayout* vbox = new QVBoxLayout;
+	QTextCodec* codec = QTextCodec::codecForName("Windows-1251");
 
 	std::vector<QLabel *> buf;
 	std::vector<QHBoxLayout *> array_h_layouts;
+	std::vector<QLabel*> separators;
+	separators.resize(1);
+	ItemRule cur_rule;
+	QString text;
+	unsigned rules_size = algorithm->RulesSize(); // размер строк правил
 
-	array_h_layouts.resize(3); //число правил
+	array_h_layouts.resize(rules_size); //число правил
+	drawed_rules.resize(rules_size); ///число правил
 
-	drawed_rules.resize(3); ///число правил
+	cur_rule = algorithm->GetRule(0);
+	int size = cur_rule.RightSize() + 1; // число вариантов раскрытия первого правила
 
-	int size = 3;
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < size; i++) {
+
+		cur_rule = algorithm->GetRule(i);
+		size = cur_rule.RightSize() + 1;
+
 		array_h_layouts[i] = new QHBoxLayout;
 		buf.clear();
 		buf.resize(size);
@@ -83,11 +124,35 @@ void CWindow::DrawRules()
 
 		for (int j = 0; j < size; j++) {
 			buf[j] = new QLabel;
-			buf[j]->setText("***");
 
-			drawed_rules[i].push_back(buf[j]);
+			if (j == 0) {
+				text = QString::fromLocal8Bit((string(cur_rule.GetLeft())).c_str());
+				buf[j]->setText(text);
+				drawed_rules[i].push_back(buf[j]);
+				array_h_layouts[i]->addWidget(buf[j]);
 
-			array_h_layouts[i]->addWidget(buf[j]);
+				text = "::=";
+				separators.resize(separators.size() + 1);
+				unsigned last_sep_num = separators.size() - 1;
+				separators[last_sep_num] = new QLabel;
+				separators[last_sep_num]->setText(text);
+				array_h_layouts[i]->addWidget(separators[separators.size() - 1]);
+			}
+			else {
+				text = QString::fromLocal8Bit((string(cur_rule.GetRight(j-1))).c_str());
+				buf[j]->setText(text);
+				drawed_rules[i].push_back(buf[j]);
+				array_h_layouts[i]->addWidget(buf[j]);
+
+				if (j != size - 1) {
+					text = "|";
+					separators.resize(separators.size() + 1);
+					unsigned last_sep_num = separators.size() - 1;
+					separators[last_sep_num] = new QLabel;
+					separators[last_sep_num]->setText(text);
+					array_h_layouts[i]->addWidget(separators[separators.size() - 1]);
+				}
+			}
 		}
 
 		array_h_layouts[i]->insertStretch(array_h_layouts[i]->count(), 1);
@@ -113,6 +178,9 @@ void CWindow::onParseModeClicked()
 
 void CWindow::onBackClicked()
 {
+	qDeleteAll(ui.ruleBox->children());
+	drawed_rules.clear();
+	//delete algorithm;
 	ui.btnParse->setDisabled(false);
 	close();
 	emit cWindowClosed();
