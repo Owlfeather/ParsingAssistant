@@ -24,7 +24,7 @@ private:
 	unsigned alg_type;
 	std::vector<std::vector<QLabel *>> drawed_rules;
 	ParseAlgorithm* algorithm;
-	LogTable* log_table;
+	//LogTable* log_table;
 
 
 signals:

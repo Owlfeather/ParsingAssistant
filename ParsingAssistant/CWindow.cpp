@@ -19,7 +19,7 @@ CWindow::CWindow(QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
-	log_table = new LogTable;
+	//log_table = new LogTable;
 	//DrawRules();
 
 	connect(ui.btnBack, SIGNAL(clicked()), this, SLOT(onBackClicked()));
