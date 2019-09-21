@@ -52,6 +52,8 @@ public:
 
 	string GetCurString() { return cur_string; }
 	RuleNum GetRuleNum() { return rule_num; }
+
+	virtual vector<string>  GetLine() = 0;
 };
 
 
@@ -63,6 +65,7 @@ public:
 
 	void SetLine(const string & inp_str, const RuleNum & inp_rnum);
 	void PrintLine() override;
+	vector<string>  GetLine() override;
 };
 
 //-----------------------------------------------------------------
@@ -77,6 +80,7 @@ public:
 
 	void SetLine(const string & rec_str, const string & pars_str, const string & targ_str, unsigned type_of_line, const RuleNum & inp_rnum);
 	void PrintLine() override;
+	vector<string>  GetLine() override;
 
 	void MarkRollback() { rule_num.sec_num++; }
 	string MakePrintable(string & str_with_seps);

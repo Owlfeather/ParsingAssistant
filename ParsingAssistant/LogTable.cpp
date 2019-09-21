@@ -33,8 +33,24 @@ int LogTable::columnCount(const QModelIndex& parent) const
 QVariant LogTable::data(const QModelIndex& index, int role) const
 {
 	if (role == Qt::DisplayRole) {
-		QString unswer = QString("row = ") + QString::number(index.row()) + "  col = " + QString::number(index.column());
+		//QString unswer = QString("row = ") + QString::number(index.row()) + "  col = " + QString::number(index.column());
 		// строкой выше мы формируем ответ. QString::number преобразует число в текст
+
+		QString unswer = QString::fromLocal8Bit(records[index.row()]->GetLine()[index.column()].c_str());
+		/*
+		QString unswer;
+		switch (alg_type)
+		{
+		case TypeOfAlg::LTOR:
+			unswer = QString::fromLocal8Bit(dynamic_cast <LtoR_Line*>(records[index.row()])->GetLine()[index.column()].c_str());
+			
+			break;
+		case TypeOfAlg::TTOD:
+			unswer = QString::fromLocal8Bit(dynamic_cast <TtoD_Line*>(records[index.row()])->GetLine()[index.column()].c_str());
+			break;
+		}
+		//QString unswer = QString::fromLocal8Bit(dynamic_cast <LtoR_Line *>(records[0])->GetLine()[0].c_str());
+		*/
 		return QVariant(unswer);
 	}
 	return QVariant();
@@ -77,5 +93,9 @@ QVariant LogTable::headerData(int section, Qt::Orientation orientation, int role
 
 void  LogTable::AppendLine(RecordLine* line)
 {
+	int row = records.size();
+
+	beginInsertRows(QModelIndex(), row, row);
 	records.push_back(line);
+	beginInsertRows(QModelIndex(), row, row);
 }

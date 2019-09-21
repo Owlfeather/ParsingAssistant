@@ -55,6 +55,39 @@ void LtoR_Line::PrintLine()
 		}
 }
 
+vector<string> LtoR_Line::GetLine()
+{
+	vector<string> line;
+	string cur_string = GetCurString();
+	string str_for_print;
+
+	for (int i = 0; i < cur_string.size(); i++) {
+		if (cur_string[i] != '\n') {
+			str_for_print += cur_string[i];
+		}
+	}
+	line.push_back(str_for_print);
+
+	RuleNum rule_num = GetRuleNum();
+
+	if (rule_num.fir_num > -1) {
+		line.push_back(to_string(rule_num.fir_num + 1) + char(rule_num.sec_num + 224));
+	}
+	else
+		if (rule_num.sec_num == -3) {
+			line.push_back("Конец разбора");
+		}
+		else if (rule_num.sec_num == -4) {
+			line.push_back("Разбор дальше невозможен!");
+		}
+		else {
+			line.push_back("Тупик!");
+		}
+	return line;
+}
+
+
+
 //---------------------ParseLog---------------------
 
 void ParseLog::PrintLogltoR() 
@@ -112,11 +145,38 @@ void TtoD_Line::PrintLine()
 	case 4:
 		cout << rule_num.fir_num+1 << char(rule_num.sec_num + 224) << " - да" << endl;
 		break;
-	default:
-		cout << "Ошибка типа строки" << endl;
-		break;
 	}
 	
+}
+
+vector<string> TtoD_Line::GetLine()
+{
+	vector<string> line;
+	line.push_back(MakePrintable(recognized));
+	line.push_back(MakePrintable(cur_string));
+	line.push_back(MakePrintable(target));
+
+	switch (type)
+	{
+	case 1:
+		line.push_back("?");
+		break;
+	case 2:
+		line.push_back(to_string(rule_num.fir_num + 1) + char(rule_num.sec_num + 224) + " - ?");
+		break;
+	case 3:
+		if (rule_num.sec_num == 0) {
+			line.push_back(to_string(rule_num.fir_num + 1) + char(rule_num.sec_num + 224) + " - нет");
+		}
+		else {
+			line.push_back(to_string(rule_num.fir_num + 1) + "а..." + char(rule_num.sec_num + 224) + " - нет");
+		}
+		break;
+	case 4:
+		line.push_back(to_string(rule_num.fir_num + 1) + char(rule_num.sec_num + 224) + " - да");
+		break;
+	}
+	return line;
 }
 
 string TtoD_Line::MakePrintable(string & str_with_seps)
@@ -129,6 +189,7 @@ string TtoD_Line::MakePrintable(string & str_with_seps)
 	}
 	return str_for_print;
 }
+
 
 /*
 void ParseAlgorithm::SetLogTable(unsigned type_alg)
