@@ -263,9 +263,7 @@ void TtoD_MethodAlg::WriteToLog(const unsigned & type, const RuleNum & cur_rule_
 
 	buf_line->SetLine(rec_str, pars_str, targ_str, type, cur_rule_num);
 	parsing_log.AddRecordLine(buf_line);
-
-
-
+	table_model->AppendLine(buf_line);
 }
 
 string TtoD_MethodAlg::MakeStrForLog(ItemString & orig_str)

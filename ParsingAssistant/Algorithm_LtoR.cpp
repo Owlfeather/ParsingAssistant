@@ -130,6 +130,7 @@ void LtoR_MethodAlg::WriteToLog(const RuleNum cur_rule_num)
 
 	buf_line->SetLine(str_with_separators, cur_rule_num);
 	parsing_log.AddRecordLine(buf_line);
+	table_model->AppendLine(buf_line);
 }
 
 ItemString LtoR_MethodAlg::RestoreStringFromLog(const string & log_str)

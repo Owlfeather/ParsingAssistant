@@ -3,8 +3,10 @@
 //#define TTOD 1
 
 
-void ParseAlgorithm::SetLogTable(TypeOfAlg type_alg)
-{
+void ParseAlgorithm::SetLogTableType(TypeOfAlg type_alg)
+{ 
+	table_model->SetType(type_alg);
+	/*
 	table_model->SetRowCount(parsing_log.Size());
 	switch (type_alg)
 	{
@@ -18,4 +20,5 @@ void ParseAlgorithm::SetLogTable(TypeOfAlg type_alg)
 		break;
 	}
 	}
+	*/
 }

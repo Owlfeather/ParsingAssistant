@@ -79,12 +79,14 @@ void CWindow::SetAlgorithm(TypeOfAlg inp_alg_type)
 		{
 			LtoR_MethodAlg * cur_alg = new LtoR_MethodAlg;
 			algorithm = cur_alg;
+			algorithm->SetLogTableType(TypeOfAlg::LTOR);
 			break;
 		}
 	case TypeOfAlg::TTOD:
 		{
 			TtoD_MethodAlg* cur_alg = new TtoD_MethodAlg;
 			algorithm = cur_alg;
+			algorithm->SetLogTableType(TypeOfAlg::TTOD);
 			break;
 		}
 	}
@@ -192,7 +194,7 @@ void CWindow::onStartClicked()
 		//log_table = new LogTable;
 		
 		/////////////////////////////////////////////////////
-		algorithm->SetLogTable(alg_type);
+		//algorithm->SetLogTable(alg_type);
 		ui.tableView->setModel(algorithm->GetTable());
 		/////////////////////////////////////////////////////
 	}

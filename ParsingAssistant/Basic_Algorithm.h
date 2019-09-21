@@ -22,7 +22,7 @@ public:
 
 	ItemRule& GetRule(unsigned i) { return rules[i]; }
 	unsigned RulesSize() { return rules.size(); }
-	void SetLogTable(TypeOfAlg type_alg);
+	void SetLogTableType(TypeOfAlg type_alg);
 	LogTable* GetTable() { return table_model; }
 
 	//void SetParsingStr(ItemString inp_str) { parsing_str = inp_str; }
