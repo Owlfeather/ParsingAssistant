@@ -6,7 +6,8 @@
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
-#include "Alg_Elements.h"
+//#include "Alg_Elements.h"
+#include "Basic_Algorithm.h"
 
 
 class LtoR_MethodAlg : public ParseAlgorithm {

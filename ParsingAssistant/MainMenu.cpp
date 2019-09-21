@@ -6,12 +6,12 @@
 // Преобразуем входную последовательность символов в кодировку UNICODE
 #define RUS( str ) codec->toUnicode(str)
 
-#define LTOR 0
-#define TTOD 1
+//#define LTOR 0
+//#define TTOD 1
 
-#define CWBEGIN 0
-#define CWPARSE 1
-#define CWTEST 2
+//#define CWBEGIN 0
+//#define CWPARSE 1
+//#define CWTEST 2
 
 MainMenu::MainMenu(QWidget *parent)
 	: QMainWindow(parent)
@@ -46,16 +46,16 @@ void MainMenu::onExitClicked()
 
 void MainMenu::onLtoRClicked()
 {
-	c_win->SetAlgorithm(LTOR);
-	c_win->RenderCWin(CWBEGIN);
+	c_win->SetAlgorithm(TypeOfAlg::LTOR);
+	c_win->RenderCWin(ModeOfCWin::CWBEGIN);
 	c_win->show();
 	close();
 }
 
 void MainMenu::onTtoDClicked()
 {
-	c_win->SetAlgorithm(TTOD);
-	c_win->RenderCWin(CWBEGIN);
+	c_win->SetAlgorithm(TypeOfAlg::TTOD);
+	c_win->RenderCWin(ModeOfCWin::CWBEGIN);
 	c_win->show();
 	close();
 }

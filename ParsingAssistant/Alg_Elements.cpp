@@ -130,19 +130,21 @@ string TtoD_Line::MakePrintable(string & str_with_seps)
 	return str_for_print;
 }
 
+/*
 void ParseAlgorithm::SetLogTable(unsigned type_alg)
 {
-	table_view->SetRowCount(parsing_log.Size());
+	table_model->SetRowCount(parsing_log.Size());
 	switch (type_alg)
 	{
 	case LTOR: {
-		table_view->SetColomnCount(2);
+		table_model->SetColomnCount(2);
 		break;
 		//table_view->headerData(1, "dfrg");
 	}
 	case TTOD: {
-		table_view->SetColomnCount(4);
+		table_model->SetColomnCount(4);
 		break;
 	}
 	}
 }
+*/

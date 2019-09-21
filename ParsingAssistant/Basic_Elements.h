@@ -68,4 +68,13 @@ public:
 
 
 
+enum class TypeOfAlg {
+	LTOR,
+	TTOD
+};
 
+enum class ModeOfCWin {
+	CWBEGIN,
+	CWPARSE,
+	CWTEST
+};

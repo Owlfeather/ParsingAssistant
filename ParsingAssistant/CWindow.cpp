@@ -8,12 +8,12 @@
 
 #define RUS( str ) codec->toUnicode(str)
 
-#define LTOR 0
-#define TTOD 1
+//#define LTOR 0
+//#define TTOD 1
 
-#define CWBEGIN 0
-#define CWPARSE 1
-#define CWTEST 2
+//#define CWBEGIN 0
+//#define CWPARSE 1
+//#define CWTEST 2
 
 CWindow::CWindow(QWidget *parent)
 	: QWidget(parent)
@@ -31,12 +31,12 @@ CWindow::~CWindow()
 {
 }
 
-void CWindow::RenderCWin(unsigned type)
+void CWindow::RenderCWin(ModeOfCWin type)
 {
 
 	switch (type)
 	{
-	case CWBEGIN: // окно только открыто, показываем меню
+	case ModeOfCWin::CWBEGIN: // окно только открыто, показываем меню
 		{
 			ui.grboxParse->setVisible(false);
 			ui.grboxTest->setVisible(false);
@@ -49,16 +49,16 @@ void CWindow::RenderCWin(unsigned type)
 			QTextCodec * codec = QTextCodec::codecForName("Windows-1251");
 			switch (alg_type)
 			{
-			case LTOR:
+			case TypeOfAlg::LTOR:
 			{ ui.lblName->setText(RUS("Левосторонний восходящий разбор")); break; }
-			case TTOD:
+			case TypeOfAlg::TTOD:
 			{ ui.lblName->setText(RUS("Левосторонний нисходящий разбор")); break; }
 			default:
 				break;
 			}
 		break;
 		}
-	case CWPARSE:
+	case ModeOfCWin::CWPARSE:
 		{
 			ui.grboxParse->setVisible(true);
 			ui.btnParse->setDisabled(true);
@@ -69,19 +69,19 @@ void CWindow::RenderCWin(unsigned type)
 	}
 }
 
-void CWindow::SetAlgorithm(unsigned inp_alg_type)
+void CWindow::SetAlgorithm(TypeOfAlg inp_alg_type)
 {
 	alg_type = inp_alg_type;
 
 	switch (alg_type)
 	{
-	case LTOR: 
+	case TypeOfAlg::LTOR:
 		{
 			LtoR_MethodAlg * cur_alg = new LtoR_MethodAlg;
 			algorithm = cur_alg;
 			break;
 		}
-	case TTOD:
+	case TypeOfAlg::TTOD:
 		{
 			TtoD_MethodAlg* cur_alg = new TtoD_MethodAlg;
 			algorithm = cur_alg;
@@ -173,7 +173,7 @@ void CWindow::ChangeColor(unsigned i, unsigned j)
 void CWindow::onParseModeClicked()
 {
 
-	RenderCWin(CWPARSE);
+	RenderCWin(ModeOfCWin::CWPARSE);
 }
 
 void CWindow::onStartClicked()
@@ -191,8 +191,10 @@ void CWindow::onStartClicked()
 		/// ЛОГ СФОРМИРОВАН
 		//log_table = new LogTable;
 		
+		/////////////////////////////////////////////////////
 		algorithm->SetLogTable(alg_type);
 		ui.tableView->setModel(algorithm->GetTable());
+		/////////////////////////////////////////////////////
 	}
 }
 

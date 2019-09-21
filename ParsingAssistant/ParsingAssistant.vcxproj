@@ -116,6 +116,7 @@
     <ClCompile Include="Algorithm_LtoR.cpp" />
     <ClCompile Include="Algorithm_TtoD.cpp" />
     <ClCompile Include="Alg_Elements.cpp" />
+    <ClCompile Include="Basic_Algorithm.cpp" />
     <ClCompile Include="Basic_Elements.cpp" />
     <ClCompile Include="LogTable.cpp" />
     <ClCompile Include="main.cpp" />
@@ -139,6 +140,7 @@
     <ClInclude Include="Algorithm_LtoR.h" />
     <ClInclude Include="Algorithm_TtoD.h" />
     <ClInclude Include="Alg_Elements.h" />
+    <ClInclude Include="Basic_Algorithm.h" />
     <ClInclude Include="Basic_Elements.h" />
     <QtMoc Include="LogTable.h" />
   </ItemGroup>

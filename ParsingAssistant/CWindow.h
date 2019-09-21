@@ -4,7 +4,9 @@
 #include "ui_CWindow.h"
 #include "Algorithm_LtoR.h"
 #include "Algorithm_TtoD.h"
-#include "LogTable.h"
+//#include "LogTable.h"
+#include <iostream>
+
 
 
 class CWindow : public QWidget
@@ -14,14 +16,15 @@ class CWindow : public QWidget
 public:
 	CWindow(QWidget *parent = Q_NULLPTR);
 	~CWindow();
-	void RenderCWin(unsigned type);
-	void SetAlgorithm(unsigned inp_alg_type);
+	void RenderCWin(ModeOfCWin type);
+	void SetAlgorithm(TypeOfAlg inp_alg_type);
 	void DrawRules();
 	void ChangeColor(unsigned i, unsigned j);
 
 private:
 	Ui::Form ui;
-	unsigned alg_type;
+	//unsigned alg_type;
+	TypeOfAlg alg_type;
 	std::vector<std::vector<QLabel *>> drawed_rules;
 	ParseAlgorithm* algorithm;
 	//LogTable* log_table;

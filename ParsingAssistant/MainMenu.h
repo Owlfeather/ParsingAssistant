@@ -4,6 +4,8 @@
 //#include "ui_ParsingAssistant.h"
 #include "ui_MainMenu.h"
 #include"CWindow.h"
+#include <iostream>
+
 
 class MainMenu : public QMainWindow
 {
