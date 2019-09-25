@@ -37,20 +37,6 @@ QVariant LogTable::data(const QModelIndex& index, int role) const
 		// строкой выше мы формируем ответ. QString::number преобразует число в текст
 
 		QString unswer = QString::fromLocal8Bit(records[index.row()]->GetLine()[index.column()].c_str());
-		/*
-		QString unswer;
-		switch (alg_type)
-		{
-		case TypeOfAlg::LTOR:
-			unswer = QString::fromLocal8Bit(dynamic_cast <LtoR_Line*>(records[index.row()])->GetLine()[index.column()].c_str());
-			
-			break;
-		case TypeOfAlg::TTOD:
-			unswer = QString::fromLocal8Bit(dynamic_cast <TtoD_Line*>(records[index.row()])->GetLine()[index.column()].c_str());
-			break;
-		}
-		//QString unswer = QString::fromLocal8Bit(dynamic_cast <LtoR_Line *>(records[0])->GetLine()[0].c_str());
-		*/
 		return QVariant(unswer);
 	}
 	return QVariant();

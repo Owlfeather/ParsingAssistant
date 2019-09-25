@@ -68,13 +68,23 @@ public:
 
 
 
-enum class TypeOfAlg {
+enum class TypeOfAlg 
+{
 	LTOR,
 	TTOD
 };
 
-enum class ModeOfCWin {
+enum class ModeOfCWin 
+{
 	CWBEGIN,
 	CWPARSE,
+	CWPARSESTARTED,
 	CWTEST
+};
+
+enum class Color
+{
+	RED,
+	BLACK,
+	GREEN
 };

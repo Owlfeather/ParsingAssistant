@@ -15,6 +15,7 @@ public:
 	//void SetColomnCount(unsigned inp_col_count);
 	void SetType(TypeOfAlg type) { alg_type = type; };
 	void AppendLine(RecordLine * line);
+	RecordLine* GetRow(unsigned i) { return records[i]; }
 
 
 private:

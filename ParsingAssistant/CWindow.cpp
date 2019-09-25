@@ -2,18 +2,14 @@
 #include <QTextCodec>
 #include <QString>
 #include <QMessageBox>
+#include <QColorDialog>
 
 
 
 
 #define RUS( str ) codec->toUnicode(str)
 
-//#define LTOR 0
-//#define TTOD 1
 
-//#define CWBEGIN 0
-//#define CWPARSE 1
-//#define CWTEST 2
 
 CWindow::CWindow(QWidget *parent)
 	: QWidget(parent)
@@ -25,6 +21,7 @@ CWindow::CWindow(QWidget *parent)
 	connect(ui.btnBack, SIGNAL(clicked()), this, SLOT(onBackClicked()));
 	connect(ui.btnParse, SIGNAL(clicked()), this, SLOT(onParseModeClicked()));
 	connect(ui.btnStart, SIGNAL(clicked()), this, SLOT(onStartClicked()));
+	connect(ui.btnStep, SIGNAL(clicked()), this, SLOT(onStepClicked()));
 }
 
 CWindow::~CWindow()
@@ -62,11 +59,26 @@ void CWindow::RenderCWin(ModeOfCWin type)
 		{
 			ui.grboxParse->setVisible(true);
 			ui.btnParse->setDisabled(true);
+			cur_rule = {-10, 0};
+			prev_rule = { -10, 0 };
+			cur_row = 0;
+			break;
 			//ui.ruleBox->close();
 			//ui.ruleBox->show();
 			//
 		}
+	case ModeOfCWin::CWPARSESTARTED:
+		{
+			ui.btnStep->setVisible(true);
+			ui.btnStart->setDisabled(true);
+			ui.lineInpStr->setDisabled(true);
+			ui.tableView->setModel(algorithm->GetTable());
+			ui.tableView->resizeColumnsToContents();
+			HideRows();
+			break;
+		}
 	}
+
 }
 
 void CWindow::SetAlgorithm(TypeOfAlg inp_alg_type)
@@ -166,11 +178,66 @@ void CWindow::DrawRules()
 	//ChangeColor(1, 1);
 }
 
-void CWindow::ChangeColor(unsigned i, unsigned j)
+void CWindow::ChangeColor(unsigned i, unsigned j, Color inp_color)
 {
-	drawed_rules[i][j]->setStyleSheet("color: red");
+	QColor color;
+	QPalette palette;
+
+	switch (inp_color)
+	{
+		//QColor color;
+		//QPalette palette;
+
+	case Color::RED:
+		//drawed_rules[i][0]->setStyleSheet("color: red; font-family: Century Gothic, interval; font-size: 100%");
+		
+		//drawed_rules[i][j]->setStyleSheet("color: red");
+		//drawed_rules[i][0]->setStyleSheet("color: red");
+	{
+		color = Qt::red;
+		palette = drawed_rules[i][j]->palette();
+		palette.setColor(QPalette::WindowText, color);
+		drawed_rules[i][j]->setPalette(palette);
+		drawed_rules[i][0]->setPalette(palette);
+
+	}
+		break;
+	
+	case Color::BLACK:
+		//drawed_rules[i][0]->setStyleSheet("color: black; font-family: Century Gothic, interval; font-size: 100% ");
+		
+		//drawed_rules[i][j]->setStyleSheet("color: black");
+		//drawed_rules[i][0]->setStyleSheet("color: black");
+	{
+		color = Qt::black;
+		palette = drawed_rules[i][j]->palette();
+		palette.setColor(QPalette::WindowText, color);
+		drawed_rules[i][j]->setPalette(palette);
+		drawed_rules[i][0]->setPalette(palette);
+	}
+		break;
+	case Color::GREEN:
+	{
+		color = Qt::green;
+		palette = drawed_rules[i][j]->palette();
+		palette.setColor(QPalette::WindowText, color);
+		drawed_rules[i][j]->setPalette(palette);
+		drawed_rules[i][0]->setPalette(palette);
+	}
+	}
 }
 
+
+void CWindow::HideRows()
+{
+	unsigned size = ui.tableView->model()->rowCount();
+
+	for (unsigned i = 1; i <= size; i++) {
+		ui.tableView->hideRow(size - i);
+	}
+	//ui.tableView->hideRow(size);
+
+}
 
 void CWindow::onParseModeClicked()
 {
@@ -182,26 +249,38 @@ void CWindow::onStartClicked()
 {
 	if (ui.lineInpStr->text().isEmpty()) {
 		QMessageBox messageBox;
-		messageBox.critical(0, "Error", "An error has occured !");
+		messageBox.critical(0, QString::fromLocal8Bit("Ошибка: пустая строка"), 
+							   QString::fromLocal8Bit("Введите строку для разбора!"));
 		messageBox.setFixedSize(500, 200);
 	}
 	else {
 		algorithm->SetParsingStr(ItemString(ui.lineInpStr->text().toLocal8Bit().constData()));
-		ui.btnStart->setDisabled(true);
-		ui.lineInpStr->setDisabled(true);
+		//ui.btnStart->setDisabled(true);
+		//ui.lineInpStr->setDisabled(true);
 		algorithm->DoParse();
 		/// ЛОГ СФОРМИРОВАН
 		//log_table = new LogTable;
 		
 		/////////////////////////////////////////////////////
 		//algorithm->SetLogTable(alg_type);
-		ui.tableView->setModel(algorithm->GetTable());
+
+		//ui.tableView->setModel(algorithm->GetTable());
+		//ui.tableView->resizeColumnsToContents();
+		//ui.tableView->setStyleSheet("border: 1px solid;  border-radius: 10px;");
+		//ui.tableView->setStyleSheet("QHeaderView::section:checked{border: 1px solid;  border-radius: 10px;}"); 
+
 		/////////////////////////////////////////////////////
+		RenderCWin(ModeOfCWin::CWPARSESTARTED);
+
+
 	}
 }
 
 void CWindow::onBackClicked()
 {
+	cur_rule.fir_num = -10; // знак того, что разбор не начат
+	prev_rule.fir_num = -10;
+	cur_row = 0; // ни одна строка не видна
 	qDeleteAll(ui.ruleBox->children());
 	drawed_rules.clear();
 	//delete algorithm;
@@ -212,4 +291,59 @@ void CWindow::onBackClicked()
 	ui.tableView->setModel(0);
 	close();
 	emit cWindowClosed();
+}
+
+void CWindow::onStepClicked()
+{
+	//
+	switch (alg_type)
+	{
+	case TypeOfAlg::LTOR:
+		if (prev_rule.fir_num != -10) {
+			ChangeColor(prev_rule.fir_num, prev_rule.sec_num, Color::BLACK);
+			prev_rule.fir_num = -10;
+		}
+		if (cur_rule.fir_num == -10) // начало разбора
+		{
+			cur_rule.fir_num = algorithm->RulesSize() - 1;
+			cur_rule.sec_num = algorithm->GetRule(cur_rule.fir_num).RightSize();
+			ChangeColor(cur_rule.fir_num, cur_rule.sec_num, Color::RED);
+		}
+		else {
+			ChangeColor(cur_rule.fir_num, cur_rule.sec_num, Color::BLACK);
+			if (cur_rule.sec_num != 1) {
+				cur_rule.sec_num--;
+			}
+			else {
+				if (cur_rule.fir_num != 0) {
+					cur_rule.fir_num--;
+					cur_rule.sec_num = algorithm->GetRule(cur_rule.fir_num).RightSize();
+				}
+			}
+			ChangeColor(cur_rule.fir_num, cur_rule.sec_num, Color::RED);
+		}
+
+		if ((algorithm->GetTable()->GetRow(cur_row)->GetRuleNum().fir_num == cur_rule.fir_num) 
+			&& (algorithm->GetTable()->GetRow(cur_row)->GetRuleNum().sec_num == cur_rule.sec_num - 1))
+		{
+			ui.tableView->showRow(cur_row);
+			if (cur_row != ui.tableView->model()->rowCount() - 1) {
+				cur_row++;
+				if (cur_rule.fir_num == 0) {
+					ui.tableView->showRow(cur_row);
+				}
+			}
+
+		
+			ChangeColor(cur_rule.fir_num, cur_rule.sec_num, Color::GREEN);
+			prev_rule = cur_rule;
+			cur_rule.fir_num = -10; // начать смотреть правила сначала
+
+		}
+		
+		break;
+
+	case TypeOfAlg::TTOD:
+		break;
+	}
 }

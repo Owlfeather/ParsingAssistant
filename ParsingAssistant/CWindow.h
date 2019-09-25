@@ -19,7 +19,7 @@ public:
 	void RenderCWin(ModeOfCWin type);
 	void SetAlgorithm(TypeOfAlg inp_alg_type);
 	void DrawRules();
-	void ChangeColor(unsigned i, unsigned j);
+	void ChangeColor(unsigned i, unsigned j, Color inp_color);
 
 private:
 	Ui::Form ui;
@@ -27,7 +27,13 @@ private:
 	TypeOfAlg alg_type;
 	std::vector<std::vector<QLabel *>> drawed_rules;
 	ParseAlgorithm* algorithm;
+
+	RuleNum cur_rule;
+	RuleNum prev_rule;
+	int cur_row;
 	//LogTable* log_table;
+
+	void HideRows();
 
 
 signals:
@@ -37,4 +43,5 @@ private slots:
 	void onBackClicked();
 	void onParseModeClicked();
 	void onStartClicked();
+	void onStepClicked();
 };
