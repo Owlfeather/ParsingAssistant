@@ -3,6 +3,8 @@
 #include <QString>
 #include <QMessageBox>
 #include <QColorDialog>
+#include <QAbstractItemView>
+#include <QScrollBar>
 
 
 
@@ -15,13 +17,17 @@ CWindow::CWindow(QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
-	//log_table = new LogTable;
-	//DrawRules();
 
 	connect(ui.btnBack, SIGNAL(clicked()), this, SLOT(onBackClicked()));
 	connect(ui.btnParse, SIGNAL(clicked()), this, SLOT(onParseModeClicked()));
 	connect(ui.btnStart, SIGNAL(clicked()), this, SLOT(onStartClicked()));
 	connect(ui.btnStep, SIGNAL(clicked()), this, SLOT(onStepClicked()));
+
+	scrollbar = new QScrollBar;
+	ui.tableView->setVerticalScrollBar(scrollbar);
+	//scrollbar.setvertical
+	//ui.tableView->setAutoScroll(true);
+	//ui.tableView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 }
 
 CWindow::~CWindow()
@@ -63,9 +69,6 @@ void CWindow::RenderCWin(ModeOfCWin type)
 			prev_rule = { -10, 0 };
 			cur_row = 0;
 			break;
-			//ui.ruleBox->close();
-			//ui.ruleBox->show();
-			//
 		}
 	case ModeOfCWin::CWPARSESTARTED:
 		{
@@ -75,6 +78,7 @@ void CWindow::RenderCWin(ModeOfCWin type)
 			ui.tableView->setModel(algorithm->GetTable());
 			ui.tableView->resizeColumnsToContents();
 			HideRows();
+			rollback = false;
 			break;
 		}
 	}
@@ -175,7 +179,6 @@ void CWindow::DrawRules()
 		++size;
 	}
 
-	//ChangeColor(1, 1);
 }
 
 void CWindow::ChangeColor(unsigned i, unsigned j, Color inp_color)
@@ -185,14 +188,7 @@ void CWindow::ChangeColor(unsigned i, unsigned j, Color inp_color)
 
 	switch (inp_color)
 	{
-		//QColor color;
-		//QPalette palette;
-
 	case Color::RED:
-		//drawed_rules[i][0]->setStyleSheet("color: red; font-family: Century Gothic, interval; font-size: 100%");
-		
-		//drawed_rules[i][j]->setStyleSheet("color: red");
-		//drawed_rules[i][0]->setStyleSheet("color: red");
 	{
 		color = Qt::red;
 		palette = drawed_rules[i][j]->palette();
@@ -204,10 +200,6 @@ void CWindow::ChangeColor(unsigned i, unsigned j, Color inp_color)
 		break;
 	
 	case Color::BLACK:
-		//drawed_rules[i][0]->setStyleSheet("color: black; font-family: Century Gothic, interval; font-size: 100% ");
-		
-		//drawed_rules[i][j]->setStyleSheet("color: black");
-		//drawed_rules[i][0]->setStyleSheet("color: black");
 	{
 		color = Qt::black;
 		palette = drawed_rules[i][j]->palette();
@@ -235,7 +227,6 @@ void CWindow::HideRows()
 	for (unsigned i = 1; i <= size; i++) {
 		ui.tableView->hideRow(size - i);
 	}
-	//ui.tableView->hideRow(size);
 
 }
 
@@ -255,21 +246,8 @@ void CWindow::onStartClicked()
 	}
 	else {
 		algorithm->SetParsingStr(ItemString(ui.lineInpStr->text().toLocal8Bit().constData()));
-		//ui.btnStart->setDisabled(true);
-		//ui.lineInpStr->setDisabled(true);
 		algorithm->DoParse();
 		/// ЛОГ СФОРМИРОВАН
-		//log_table = new LogTable;
-		
-		/////////////////////////////////////////////////////
-		//algorithm->SetLogTable(alg_type);
-
-		//ui.tableView->setModel(algorithm->GetTable());
-		//ui.tableView->resizeColumnsToContents();
-		//ui.tableView->setStyleSheet("border: 1px solid;  border-radius: 10px;");
-		//ui.tableView->setStyleSheet("QHeaderView::section:checked{border: 1px solid;  border-radius: 10px;}"); 
-
-		/////////////////////////////////////////////////////
 		RenderCWin(ModeOfCWin::CWPARSESTARTED);
 
 
@@ -280,6 +258,7 @@ void CWindow::onBackClicked()
 {
 	cur_rule.fir_num = -10; // знак того, что разбор не начат
 	prev_rule.fir_num = -10;
+	rollback = false;
 	cur_row = 0; // ни одна строка не видна
 	qDeleteAll(ui.ruleBox->children());
 	drawed_rules.clear();
@@ -299,6 +278,12 @@ void CWindow::onStepClicked()
 	switch (alg_type)
 	{
 	case TypeOfAlg::LTOR:
+
+		RuleNum last_rule;
+		//if (rollback) {
+		//	last_rule = algorithm->GetTable()->GetRow(cur_row - 1)->GetRuleNum();
+		//}
+
 		if (prev_rule.fir_num != -10) {
 			ChangeColor(prev_rule.fir_num, prev_rule.sec_num, Color::BLACK);
 			prev_rule.fir_num = -10;
@@ -323,14 +308,57 @@ void CWindow::onStepClicked()
 			ChangeColor(cur_rule.fir_num, cur_rule.sec_num, Color::RED);
 		}
 
-		if ((algorithm->GetTable()->GetRow(cur_row)->GetRuleNum().fir_num == cur_rule.fir_num) 
-			&& (algorithm->GetTable()->GetRow(cur_row)->GetRuleNum().sec_num == cur_rule.sec_num - 1))
+		
+
+		//if (rollback) {
+		//	last_rule = algorithm->GetTable()->GetRow(cur_row - 1)->GetRuleNum();
+		//}
+		//else {
+			last_rule = algorithm->GetTable()->GetRow(cur_row)->GetRuleNum();
+		//}
+
+		//if ((algorithm->GetTable()->GetRow(cur_row)->GetRuleNum().fir_num == cur_rule.fir_num) 
+			//&& (algorithm->GetTable()->GetRow(cur_row)->GetRuleNum().sec_num == cur_rule.sec_num - 1))
+
+		if ((last_rule.fir_num == cur_rule.fir_num) && (last_rule.sec_num == cur_rule.sec_num - 1))
 		{
 			ui.tableView->showRow(cur_row);
+			//ui.tableView->setCurrentIndex(ui.tableView->model()->index(cur_row, 0));
+			ui.tableView->selectRow(cur_row);
+
+			//ui.tableView->scrollToBottom();
+			//ui.tableView->scrollTo(ui.tableView->model()->index(cur_row, 0));
+			ui.tableView->scrollTo(ui.tableView->model()->index(cur_row-1, 0));
+			ui.tableView->model()->index(cur_row, 0).row();
+			//ui.tableView->cursorPosition()
+			//scrollbar->scroll(-10, 0);
+			//ui.tableView->scrollBarWidgets(Qt::Aligment bottom);
+			//ui.tableView->setAlignment();
+
 			if (cur_row != ui.tableView->model()->rowCount() - 1) {
 				cur_row++;
+				//проверка на тупик
+				
 				if (cur_rule.fir_num == 0) {
 					ui.tableView->showRow(cur_row);
+					//ui.tableView->setCurrentIndex(ui.tableView->model()->index(cur_row, 0));
+					ui.tableView->selectRow(cur_row);
+					ui.tableView->scrollTo(ui.tableView->model()->index(cur_row - 1, 0));
+					ui.tableView->model()->index(cur_row, 0).row();
+					//scrollbar->scroll(-10, 0);
+
+
+					//ui.tableView->scrollToBottom();
+					//ui.tableView->scrollTo(ui.tableView->model()->index(cur_row, 0));
+					//ui.tableView->setCornerWidget(cur_row);
+
+					cur_row++;
+				}
+				if (cur_rule.sec_num == -2) { //если это тупик
+					rollback = true;
+				}
+				else {
+					rollback = false;
 				}
 			}
 

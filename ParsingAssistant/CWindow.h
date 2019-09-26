@@ -23,6 +23,7 @@ public:
 
 private:
 	Ui::Form ui;
+	QScrollBar* scrollbar;
 	//unsigned alg_type;
 	TypeOfAlg alg_type;
 	std::vector<std::vector<QLabel *>> drawed_rules;
@@ -31,6 +32,7 @@ private:
 	RuleNum cur_rule;
 	RuleNum prev_rule;
 	int cur_row;
+	bool rollback;
 	//LogTable* log_table;
 
 	void HideRows();
