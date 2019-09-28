@@ -23,8 +23,14 @@ CWindow::CWindow(QWidget *parent)
 	connect(ui.btnStart, SIGNAL(clicked()), this, SLOT(onStartClicked()));
 	connect(ui.btnStep, SIGNAL(clicked()), this, SLOT(onStepClicked()));
 
+
+
 	scrollbar = new QScrollBar;
 	ui.tableView->setVerticalScrollBar(scrollbar);
+	//scrollbar->setRange(0, 100);
+	//QObject::connect(ui.tableView, SIGNAL(valueChanged(int)), scrollbar, SLOT(setValue(int)));
+
+	//QObject::connect(spinBox, SIGNAL(valueChanged(int)), scrollbar, SLOT(setValue(int)));
 	//scrollbar.setvertical
 	//ui.tableView->setAutoScroll(true);
 	//ui.tableView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
@@ -78,7 +84,13 @@ void CWindow::RenderCWin(ModeOfCWin type)
 			ui.tableView->setModel(algorithm->GetTable());
 			ui.tableView->resizeColumnsToContents();
 			HideRows();
-			rollback = false;
+			//rollback = false;
+			break;
+		}
+	case ModeOfCWin::CWPARSEENDED:
+		{
+			ui.btnRepeat->setEnabled(true);
+			ui.btnStep->setEnabled(false);
 			break;
 		}
 	}
@@ -258,12 +270,13 @@ void CWindow::onBackClicked()
 {
 	cur_rule.fir_num = -10; // знак того, что разбор не начат
 	prev_rule.fir_num = -10;
-	rollback = false;
 	cur_row = 0; // ни одна строка не видна
 	qDeleteAll(ui.ruleBox->children());
 	drawed_rules.clear();
 	//delete algorithm;
 	ui.btnParse->setDisabled(false);
+	ui.btnStep->setDisabled(false);
+	ui.btnRepeat->setDisabled(true);
 	ui.btnStart->setDisabled(false);
 	ui.lineInpStr->setDisabled(false);
 	ui.lineInpStr->clear();
@@ -280,58 +293,58 @@ void CWindow::onStepClicked()
 	case TypeOfAlg::LTOR:
 
 		RuleNum last_rule;
-		//if (rollback) {
-		//	last_rule = algorithm->GetTable()->GetRow(cur_row - 1)->GetRuleNum();
-		//}
 
-		if (prev_rule.fir_num != -10) {
-			ChangeColor(prev_rule.fir_num, prev_rule.sec_num, Color::BLACK);
+		if (prev_rule.fir_num != -10) {											// если в предыдущий шаг какое-то правило было закрашено зелёным - 
+			ChangeColor(prev_rule.fir_num, prev_rule.sec_num, Color::BLACK);	// покрасить его обратно в чёрный
 			prev_rule.fir_num = -10;
 		}
-		if (cur_rule.fir_num == -10) // начало разбора
+
+		if (cur_rule.fir_num == -10) // если начало поиска правил - смотрим с самого последнего правила
 		{
 			cur_rule.fir_num = algorithm->RulesSize() - 1;
 			cur_rule.sec_num = algorithm->GetRule(cur_rule.fir_num).RightSize();
 			ChangeColor(cur_rule.fir_num, cur_rule.sec_num, Color::RED);
 		}
 		else {
-			ChangeColor(cur_rule.fir_num, cur_rule.sec_num, Color::BLACK);
-			if (cur_rule.sec_num != 1) {
-				cur_rule.sec_num--;
+
+			ChangeColor(cur_rule.fir_num, cur_rule.sec_num, Color::BLACK);	// если не начало поиска - красим обратно в чёрный предыдущее
+			if (cur_rule.sec_num != 1) {	// идём дальше по правилам
+				cur_rule.sec_num--;	
 			}
 			else {
 				if (cur_rule.fir_num != 0) {
 					cur_rule.fir_num--;
 					cur_rule.sec_num = algorithm->GetRule(cur_rule.fir_num).RightSize();
 				}
+				else {
+					ui.tableView->showRow(0);
+					ui.tableView->selectRow(0);
+					RenderCWin(ModeOfCWin::CWPARSEENDED);
+					break;
+				}
 			}
-			ChangeColor(cur_rule.fir_num, cur_rule.sec_num, Color::RED);
+			ChangeColor(cur_rule.fir_num, cur_rule.sec_num, Color::RED); // закрашиваем красным следующее рассматриваемое правило
 		}
 
-		
+		last_rule = algorithm->GetTable()->GetRow(cur_row)->GetRuleNum(); // last_rule - последнее искомое правило
 
-		//if (rollback) {
-		//	last_rule = algorithm->GetTable()->GetRow(cur_row - 1)->GetRuleNum();
-		//}
-		//else {
-			last_rule = algorithm->GetTable()->GetRow(cur_row)->GetRuleNum();
-		//}
-
-		//if ((algorithm->GetTable()->GetRow(cur_row)->GetRuleNum().fir_num == cur_rule.fir_num) 
-			//&& (algorithm->GetTable()->GetRow(cur_row)->GetRuleNum().sec_num == cur_rule.sec_num - 1))
-
-		if ((last_rule.fir_num == cur_rule.fir_num) && (last_rule.sec_num == cur_rule.sec_num - 1))
+		if ((last_rule.fir_num == cur_rule.fir_num) && (last_rule.sec_num == cur_rule.sec_num - 1)) // если правило нашлось
 		{
 			ui.tableView->showRow(cur_row);
 			//ui.tableView->setCurrentIndex(ui.tableView->model()->index(cur_row, 0));
 			ui.tableView->selectRow(cur_row);
+			//		RenderCWin(ModeOfCWin::CWPARSEENDED);
+
+			//scrollbar->setValue(100);
+			//scrollbar.
+			scrollbar->setMaximum(200);
+			emit scrollbar->setValue(200);
 
 			//ui.tableView->scrollToBottom();
 			//ui.tableView->scrollTo(ui.tableView->model()->index(cur_row, 0));
-			ui.tableView->scrollTo(ui.tableView->model()->index(cur_row-1, 0));
-			ui.tableView->model()->index(cur_row, 0).row();
+			//ui.tableView->scrollTo(ui.tableView->model()->index(cur_row-1, 0));
+			//ui.tableView->model()->index(cur_row, 0).row();
 			//ui.tableView->cursorPosition()
-			//scrollbar->scroll(-10, 0);
 			//ui.tableView->scrollBarWidgets(Qt::Aligment bottom);
 			//ui.tableView->setAlignment();
 
@@ -341,32 +354,42 @@ void CWindow::onStepClicked()
 				
 				if (cur_rule.fir_num == 0) {
 					ui.tableView->showRow(cur_row);
-					//ui.tableView->setCurrentIndex(ui.tableView->model()->index(cur_row, 0));
 					ui.tableView->selectRow(cur_row);
-					ui.tableView->scrollTo(ui.tableView->model()->index(cur_row - 1, 0));
-					ui.tableView->model()->index(cur_row, 0).row();
-					//scrollbar->scroll(-10, 0);
+
+					//scrollbar->setValue(100);
+
+
+					scrollbar->setMaximum(200);
+					emit scrollbar->setValue(200);
+
+
+					//ui.tableView->scrollTo(ui.tableView->model()->index(cur_row - 1, 0));
+					//ui.tableView->model()->index(cur_row, 0).row();
 
 
 					//ui.tableView->scrollToBottom();
 					//ui.tableView->scrollTo(ui.tableView->model()->index(cur_row, 0));
 					//ui.tableView->setCornerWidget(cur_row);
 
-					cur_row++;
-				}
-				if (cur_rule.sec_num == -2) { //если это тупик
-					rollback = true;
-				}
-				else {
-					rollback = false;
+					//cur_row++;
+					if (algorithm->GetTable()->GetRow(cur_row)->GetRuleNum().sec_num == -3) {
+						RenderCWin(ModeOfCWin::CWPARSEENDED);
+								break;
+					}
+					else {
+						cur_row++;
+						if (algorithm->GetTable()->GetRow(cur_row)->GetRuleNum().sec_num == -4) {
+							ui.tableView->showRow(cur_row);
+							ui.tableView->selectRow(cur_row);
+							RenderCWin(ModeOfCWin::CWPARSEENDED);
+							break;
+						}
+					}
 				}
 			}
-
-		
 			ChangeColor(cur_rule.fir_num, cur_rule.sec_num, Color::GREEN);
 			prev_rule = cur_rule;
 			cur_rule.fir_num = -10; // начать смотреть правила сначала
-
 		}
 		
 		break;

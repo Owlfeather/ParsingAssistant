@@ -32,7 +32,7 @@ private:
 	RuleNum cur_rule;
 	RuleNum prev_rule;
 	int cur_row;
-	bool rollback;
+	//bool rollback;
 	//LogTable* log_table;
 
 	void HideRows();
