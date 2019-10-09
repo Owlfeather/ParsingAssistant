@@ -2,20 +2,31 @@
 #include <qwidget.h>
 #include <qlabel.h>
 #include "Alg_Elements.h"
+#include <QVBoxLayout>
 
 class RulesManager :
 	public QWidget
 {
 	Q_OBJECT
-
+//public:
+	//std::vector<std::vector<QLabel*>> my_rules;
 public:
-	void SetSize(unsigned size) { drawed_rules.resize(size); }
-	void AddRule(unsigned i, QLabel* rule) { drawed_rules[i].push_back(rule); }
-	void DrawRules(const std::vector<ItemRule>& rules);
+	//std::vector<std::vector<QLabel *>> my_rules;
+	~RulesManager() 
+	{ 
+		for (int i = 0; i < my_rules.size(); i++) {
+			my_rules[i].clear();
+		}
+	}
+	void SetSize(unsigned size) { my_rules.resize(size); }
+	void AddRule(unsigned i, QLabel* rule) { my_rules[i].push_back(rule); }
+	QLayout* DrawRules(const std::vector<ItemRule>& rules);
+	void ColorRule(const RuleNum r_num, Color inp_color);
+	//void DeleteRules() { my_rules.clear(); }
 
-	std::vector<QLabel*>& operator[] (int i) { return drawed_rules[i]; }
+	std::vector<QLabel*>& operator[] (int i) { return my_rules[i]; }
 
 private:
-	std::vector<std::vector<QLabel*>> drawed_rules;
+	std::vector<std::vector<QLabel*>> my_rules;
 };
 

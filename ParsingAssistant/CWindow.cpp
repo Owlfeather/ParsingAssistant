@@ -5,6 +5,7 @@
 #include <QColorDialog>
 #include <QAbstractItemView>
 #include <QScrollBar>
+#include <QVBoxLayout>
 
 
 #define RUS( str ) codec->toUnicode(str)
@@ -46,6 +47,7 @@ void CWindow::RenderCWin(ModeOfCWin type)
 	{
 	case ModeOfCWin::CWBEGIN: // окно только открыто, показываем меню
 		{
+
 			ui.grboxParse->setVisible(false);
 			ui.grboxTest->setVisible(false);
 			ui.btnRepeat->setDisabled(true);
@@ -125,6 +127,7 @@ void CWindow::SetAlgorithm(TypeOfAlg inp_alg_type)
 	DrawRules();
 }
 
+/*
 void CWindow::DrawRules()
 {
 	QVBoxLayout* vbox = new QVBoxLayout;
@@ -196,9 +199,19 @@ void CWindow::DrawRules()
 	}
 
 }
+*/
+
+void CWindow::DrawRules()
+{
+	QVBoxLayout* rule_lay = new QVBoxLayout;
+
+	rules_manager->setLayout(rules_manager->DrawRules((algorithm->GetRules())));
+	rule_lay->addWidget(rules_manager);
+	ui.ruleBox->setLayout(rule_lay);
+}
 
 void CWindow::ChangeColor(unsigned i, unsigned j, Color inp_color)
-{
+{ /*
 	QColor color;
 	QPalette palette;
 
@@ -233,6 +246,7 @@ void CWindow::ChangeColor(unsigned i, unsigned j, Color inp_color)
 		drawed_rules[i][0]->setPalette(palette);
 	}
 	}
+	*/
 }
 
 
@@ -281,7 +295,10 @@ void CWindow::onBackClicked()
 	cur_table_row = 0; // ни одна строка не видна
 	cur_comment_row = 0;
 	qDeleteAll(ui.ruleBox->children());
-	drawed_rules.clear();
+	rules_manager = new RulesManager;
+
+	//rules_manager->DeleteRules();
+	//drawed_rules.clear();
 	//delete algorithm;
 	ui.btnParse->setDisabled(false);
 	ui.btnStep->setDisabled(false);
@@ -296,7 +313,8 @@ void CWindow::onBackClicked()
 	close();
 	emit cWindowClosed();
 }
-/*
+// НЕ ТОТ ПОРЯДОК ПРОСМОТРА
+/* //НЕ ТОТ ПОРЯДОК ПРОСМОТРА
 void CWindow::onStepClicked()
 {
 	//
@@ -385,8 +403,9 @@ void CWindow::onStepClicked()
 		break;
 	}
 }
-*/
-
+*/  //
+// НЕКОРРЕКТНЫЙ ВЫВОД
+/*
 void CWindow::onStepClicked()
 {
 	//
@@ -492,6 +511,12 @@ void CWindow::onStepClicked()
 	case TypeOfAlg::TTOD:
 		break;
 	}
+}
+*/ 
+
+void CWindow::onStepClicked()
+{
+	rules_manager->ColorRule({ 0, 0 }, Color::RED);
 }
 
 void CWindow::onShowAllClicked()

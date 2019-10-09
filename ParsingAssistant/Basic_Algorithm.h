@@ -35,6 +35,7 @@ public:
 	void SetLogTableType(TypeOfAlg type_alg);
 	LogTable* GetTable() { return table_model; }
 	LogComments* GetComments() { return comments_model; }
+	vector<ItemRule>& GetRules() { return rules; }
 
 
 	//void SetParsingStr(ItemString inp_str) { parsing_str = inp_str; }
