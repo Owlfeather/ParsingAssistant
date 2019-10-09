@@ -6,6 +6,7 @@
 #include "Algorithm_TtoD.h"
 //#include "LogTable.h"
 #include <iostream>
+#include "RulesManager.h"
 
 
 
@@ -23,15 +24,19 @@ public:
 
 private:
 	Ui::Form ui;
-	QScrollBar* scrollbar;
-	//unsigned alg_type;
+	QScrollBar* scrollbar_table;
+	QScrollBar* scrollbar_comments;
+	RulesManager* rules_manager;
+	//-----------------------------
 	TypeOfAlg alg_type;
 	std::vector<std::vector<QLabel *>> drawed_rules;
 	ParseAlgorithm* algorithm;
 
 	RuleNum cur_rule;
 	RuleNum prev_rule;
-	int cur_row;
+	int cur_table_row;
+	int cur_comment_row;
+	//int 
 	//bool rollback;
 	//LogTable* log_table;
 
@@ -46,4 +51,5 @@ private slots:
 	void onParseModeClicked();
 	void onStartClicked();
 	void onStepClicked();
+	void onShowAllClicked();
 };

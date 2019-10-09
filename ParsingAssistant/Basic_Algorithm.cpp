@@ -1,6 +1,5 @@
 ﻿#include "Basic_Algorithm.h"
-//#define LTOR 0
-//#define TTOD 1
+
 
 
 void ParseAlgorithm::SetLogTableType(TypeOfAlg type_alg)

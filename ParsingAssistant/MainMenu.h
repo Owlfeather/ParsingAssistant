@@ -5,6 +5,7 @@
 #include "ui_MainMenu.h"
 #include"CWindow.h"
 #include <iostream>
+//#include <RulesManager.h>
 
 
 class MainMenu : public QMainWindow

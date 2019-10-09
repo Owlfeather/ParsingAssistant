@@ -7,11 +7,7 @@
 #include <QScrollBar>
 
 
-
-
 #define RUS( str ) codec->toUnicode(str)
-
-
 
 CWindow::CWindow(QWidget *parent)
 	: QWidget(parent)
@@ -22,11 +18,14 @@ CWindow::CWindow(QWidget *parent)
 	connect(ui.btnParse, SIGNAL(clicked()), this, SLOT(onParseModeClicked()));
 	connect(ui.btnStart, SIGNAL(clicked()), this, SLOT(onStartClicked()));
 	connect(ui.btnStep, SIGNAL(clicked()), this, SLOT(onStepClicked()));
+	connect(ui.btnShowAll, SIGNAL(clicked()), this, SLOT(onShowAllClicked()));
 
+	scrollbar_table = new QScrollBar;
+	ui.tableView->setVerticalScrollBar(scrollbar_table);
+	scrollbar_comments = new QScrollBar;
+	ui.listView->setVerticalScrollBar(scrollbar_comments);
 
-
-	scrollbar = new QScrollBar;
-	ui.tableView->setVerticalScrollBar(scrollbar);
+	rules_manager = new RulesManager;
 	//scrollbar->setRange(0, 100);
 	//QObject::connect(ui.tableView, SIGNAL(valueChanged(int)), scrollbar, SLOT(setValue(int)));
 
@@ -73,7 +72,8 @@ void CWindow::RenderCWin(ModeOfCWin type)
 			ui.btnParse->setDisabled(true);
 			cur_rule = {-10, 0};
 			prev_rule = { -10, 0 };
-			cur_row = 0;
+			cur_table_row = 0;
+			cur_comment_row = 0;
 			break;
 		}
 	case ModeOfCWin::CWPARSESTARTED:
@@ -83,7 +83,10 @@ void CWindow::RenderCWin(ModeOfCWin type)
 			ui.lineInpStr->setDisabled(true);
 			ui.tableView->setModel(algorithm->GetTable());
 			ui.tableView->resizeColumnsToContents();
+			ui.listView->setModel(algorithm->GetComments());
 			HideRows();
+
+
 			//rollback = false;
 			break;
 		}
@@ -125,6 +128,7 @@ void CWindow::SetAlgorithm(TypeOfAlg inp_alg_type)
 void CWindow::DrawRules()
 {
 	QVBoxLayout* vbox = new QVBoxLayout;
+	//QWidget* gbox = new QWidget;
 	QTextCodec* codec = QTextCodec::codecForName("Windows-1251");
 
 	std::vector<QLabel *> buf;
@@ -240,11 +244,15 @@ void CWindow::HideRows()
 		ui.tableView->hideRow(size - i);
 	}
 
+	size = algorithm->GetComments()->Size();
+	for (unsigned j = 1; j <= size; j++) {
+		ui.listView->setRowHidden(j, true);
+	}
+
 }
 
 void CWindow::onParseModeClicked()
 {
-
 	RenderCWin(ModeOfCWin::CWPARSE);
 }
 
@@ -270,7 +278,8 @@ void CWindow::onBackClicked()
 {
 	cur_rule.fir_num = -10; // знак того, что разбор не начат
 	prev_rule.fir_num = -10;
-	cur_row = 0; // ни одна строка не видна
+	cur_table_row = 0; // ни одна строка не видна
+	cur_comment_row = 0;
 	qDeleteAll(ui.ruleBox->children());
 	drawed_rules.clear();
 	//delete algorithm;
@@ -281,10 +290,13 @@ void CWindow::onBackClicked()
 	ui.lineInpStr->setDisabled(false);
 	ui.lineInpStr->clear();
 	ui.tableView->setModel(0);
+
+	ui.listView->setModel(0);
+
 	close();
 	emit cWindowClosed();
 }
-
+/*
 void CWindow::onStepClicked()
 {
 	//
@@ -331,22 +343,10 @@ void CWindow::onStepClicked()
 		if ((last_rule.fir_num == cur_rule.fir_num) && (last_rule.sec_num == cur_rule.sec_num - 1)) // если правило нашлось
 		{
 			ui.tableView->showRow(cur_row);
-			//ui.tableView->setCurrentIndex(ui.tableView->model()->index(cur_row, 0));
 			ui.tableView->selectRow(cur_row);
-			//		RenderCWin(ModeOfCWin::CWPARSEENDED);
 
-			//scrollbar->setValue(100);
-			//scrollbar.
 			scrollbar->setMaximum(200);
 			emit scrollbar->setValue(200);
-
-			//ui.tableView->scrollToBottom();
-			//ui.tableView->scrollTo(ui.tableView->model()->index(cur_row, 0));
-			//ui.tableView->scrollTo(ui.tableView->model()->index(cur_row-1, 0));
-			//ui.tableView->model()->index(cur_row, 0).row();
-			//ui.tableView->cursorPosition()
-			//ui.tableView->scrollBarWidgets(Qt::Aligment bottom);
-			//ui.tableView->setAlignment();
 
 			if (cur_row != ui.tableView->model()->rowCount() - 1) {
 				cur_row++;
@@ -356,22 +356,9 @@ void CWindow::onStepClicked()
 					ui.tableView->showRow(cur_row);
 					ui.tableView->selectRow(cur_row);
 
-					//scrollbar->setValue(100);
-
-
 					scrollbar->setMaximum(200);
 					emit scrollbar->setValue(200);
 
-
-					//ui.tableView->scrollTo(ui.tableView->model()->index(cur_row - 1, 0));
-					//ui.tableView->model()->index(cur_row, 0).row();
-
-
-					//ui.tableView->scrollToBottom();
-					//ui.tableView->scrollTo(ui.tableView->model()->index(cur_row, 0));
-					//ui.tableView->setCornerWidget(cur_row);
-
-					//cur_row++;
 					if (algorithm->GetTable()->GetRow(cur_row)->GetRuleNum().sec_num == -3) {
 						RenderCWin(ModeOfCWin::CWPARSEENDED);
 								break;
@@ -396,5 +383,126 @@ void CWindow::onStepClicked()
 
 	case TypeOfAlg::TTOD:
 		break;
+	}
+}
+*/
+
+void CWindow::onStepClicked()
+{
+	//
+	switch (alg_type)
+	{
+	case TypeOfAlg::LTOR:
+
+		RuleNum last_rule;
+
+		if (prev_rule.fir_num != -10) {											// если в предыдущий шаг какое-то правило было закрашено зелёным - 
+			ChangeColor(prev_rule.fir_num, prev_rule.sec_num, Color::BLACK);	// покрасить его обратно в чёрный
+			prev_rule.fir_num = -10;
+		}
+
+		if (cur_rule.fir_num == -10) // если начало поиска правил - смотрим с первого правила
+		{
+			cur_rule.fir_num = 0;
+			cur_rule.sec_num = 1;
+			ChangeColor(cur_rule.fir_num, cur_rule.sec_num, Color::RED);
+		}
+		else {
+
+			ChangeColor(cur_rule.fir_num, cur_rule.sec_num, Color::BLACK);	// если не конец поиска - красим обратно в чёрный предыдущее
+			if (cur_rule.sec_num != algorithm->GetRule(cur_rule.fir_num).RightSize()) {	// идём дальше по правилам
+				cur_rule.sec_num++;
+			}
+			else {
+				if (cur_rule.fir_num != algorithm->RulesSize()-1) {
+					cur_rule.fir_num++;
+					cur_rule.sec_num = 1;
+				}
+				else {
+					ui.tableView->showRow(0);
+					ui.tableView->selectRow(0);
+					RenderCWin(ModeOfCWin::CWPARSEENDED);
+					break;
+				}
+			}
+			ChangeColor(cur_rule.fir_num, cur_rule.sec_num, Color::RED); // закрашиваем красным следующее рассматриваемое правило
+
+		}
+
+		last_rule = algorithm->GetTable()->GetRow(cur_table_row)->GetRuleNum(); // last_rule - последнее искомое правило
+
+		if ((last_rule.fir_num == cur_rule.fir_num) && (last_rule.sec_num == cur_rule.sec_num - 1)) // если правило нашлось
+		{
+			ui.tableView->showRow(cur_table_row);
+			ui.tableView->selectRow(cur_table_row);
+
+			scrollbar_table->setMaximum(200);
+			emit scrollbar_table->setValue(200);
+
+			if (cur_table_row != ui.tableView->model()->rowCount() - 1) {
+				cur_table_row++;
+				//проверка на тупик
+
+				if (cur_rule.fir_num == 0) {
+					ui.tableView->showRow(cur_table_row);
+					ui.tableView->selectRow(cur_table_row);
+
+					scrollbar_table->setMaximum(200);
+					emit scrollbar_table->setValue(200);
+
+					if (algorithm->GetTable()->GetRow(cur_table_row)->GetRuleNum().sec_num == -3) {
+						RenderCWin(ModeOfCWin::CWPARSEENDED);
+						break;
+					}
+					else {
+						cur_table_row++;
+						if (algorithm->GetTable()->GetRow(cur_table_row)->GetRuleNum().sec_num == -4) {
+							ui.tableView->showRow(cur_table_row);
+							ui.tableView->selectRow(cur_table_row);
+							RenderCWin(ModeOfCWin::CWPARSEENDED);
+							break;
+						}
+					}
+				}
+			}
+			ChangeColor(cur_rule.fir_num, cur_rule.sec_num, Color::GREEN);
+			prev_rule = cur_rule;
+			cur_rule.fir_num = -10; // начать смотреть правила сначала
+
+			for (unsigned i = 0; i < 3; i++) {
+				cur_comment_row++;
+				ui.listView->setRowHidden(cur_comment_row, false);
+				scrollbar_comments->setMaximum(200);
+				scrollbar_comments->setValue(200);
+			}
+
+
+		}
+		else {
+			if (cur_comment_row != algorithm->GetComments()->Size()) {
+				cur_comment_row++;
+				ui.listView->setRowHidden(cur_comment_row, false);
+				scrollbar_comments->setMaximum(200);
+				scrollbar_comments->setValue(200);
+			}
+		}
+
+		break;
+
+	case TypeOfAlg::TTOD:
+		break;
+	}
+}
+
+void CWindow::onShowAllClicked()
+{
+	unsigned size = ui.tableView->model()->rowCount();
+
+	for (unsigned i = 1; i <= size; i++) {
+		ui.tableView->showRow(size - i);
+	}
+	size = algorithm->GetComments()->Size();
+	for (unsigned j = 1; j <= size; j++) {
+		ui.listView->setRowHidden(j, false);
 	}
 }

@@ -11,16 +11,17 @@ class LogTable :
 {
 	Q_OBJECT
 public:
-	//void SetRowCount(unsigned inp_row_count);
-	//void SetColomnCount(unsigned inp_col_count);
+
 	void SetType(TypeOfAlg type) { alg_type = type; };
 	void AppendLine(RecordLine * line);
+	//void ColorizeRule(const RuleNum & rulenum);
+
+
 	RecordLine* GetRow(unsigned i) { return records[i]; }
 
 
 private:
-	//unsigned row_count;
-	//unsigned colomn_count;
+
 	TypeOfAlg alg_type;
 
 	///

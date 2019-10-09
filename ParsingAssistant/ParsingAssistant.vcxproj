@@ -118,10 +118,12 @@
     <ClCompile Include="Alg_Elements.cpp" />
     <ClCompile Include="Basic_Algorithm.cpp" />
     <ClCompile Include="Basic_Elements.cpp" />
+    <ClCompile Include="LogComments.cpp" />
     <ClCompile Include="LogTable.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="CWindow.cpp" />
+    <ClCompile Include="RulesManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="MainMenu.h" />
@@ -142,6 +144,8 @@
     <ClInclude Include="Alg_Elements.h" />
     <ClInclude Include="Basic_Algorithm.h" />
     <ClInclude Include="Basic_Elements.h" />
+    <QtMoc Include="RulesManager.h" />
+    <QtMoc Include="LogComments.h" />
     <QtMoc Include="LogTable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

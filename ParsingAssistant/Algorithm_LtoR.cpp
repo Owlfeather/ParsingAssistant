@@ -63,6 +63,16 @@ void LtoR_MethodAlg::SetRulesOfAlg()
 		rules[i].PrintRule();
 		cout << endl;
 	}
+
+	/*
+	//string* stroka = new string("Правила сформированы 1 \n перенос сработал");
+	comments_model->AddRecordLine("Правила сформированы 1 \n перенос сработал");
+	
+	string* stroka2 = new string("___________________________");
+	comments_model->AddRecordLine(stroka2);
+	string* stroka3 = new string("Правила сформированы 2");
+	comments_model->AddRecordLine(stroka3);
+	*/
 }
 
 unsigned LtoR_MethodAlg::FindMaxQuantity() 
@@ -82,8 +92,14 @@ unsigned LtoR_MethodAlg::FindMaxQuantity()
 
 RuleNum LtoR_MethodAlg::FindRuleNum(const RuleNum & rulenum) 
 {
-	cout << endl << "Производится разбор строки: ";
-	parsing_str.PrintString();
+	//cout << endl << "Производится разбор строки: ";
+	//parsing_str.PrintString();
+	///
+	comment_line = "Производится разбор строки: \n";
+	comment_line += string(parsing_str);
+	comment_line += "\nИскомая конструкция: " + string(parsing_item);
+	comments_model->AddRecordLine(comment_line);
+
 
 	int rules_number = rules.size();		// суммарное число правил
 	int subrules_number;					// число подпунктов (вариантов расшифровки) одного правила
@@ -93,14 +109,25 @@ RuleNum LtoR_MethodAlg::FindRuleNum(const RuleNum & rulenum)
 		for (int j = rulenum.sec_num; j < subrules_number; j++) {
 			if (parsing_item == rules[i][j]) {
 
-				cout << endl << endl << "СОВПАДЕНИЕ";
-				cout << endl << "Рассматриваемая конструкция: ";
-				parsing_item.PrintString();
-				cout << endl;
-				cout << "Совпадение: правило №" << i << ", пункт №" << j << " : ";
-				rules[i][j].PrintString();
-				cout << endl;
+				comment_line.clear();
+				comment_line = "   Правило " + to_string((i + 1)) + (char(j + 224)) + " подошло!";
+				comments_model->AddRecordLine(comment_line);
+				comment_line.clear();
+
+				//cout << endl << endl << "СОВПАДЕНИЕ";
+				//cout << endl << "Рассматриваемая конструкция: ";
+				//parsing_item.PrintString();
+				//cout << endl;
+				//cout << "Совпадение: правило №" << i << ", пункт №" << j << " : ";
+				//rules[i][j].PrintString();
+				//cout << endl;
 				return RuleNum{ i, j };
+			}
+			else {
+				comment_line.clear();
+				comment_line = "   Правило " + to_string((i + 1)) + (char(j + 224)) + " не подошло";
+				comments_model->AddRecordLine(comment_line);
+				comment_line.clear();
 			}
 		}
 	}
@@ -197,14 +224,21 @@ bool LtoR_MethodAlg::DoParse()
 	unsigned quantity = FindMaxQuantity();
 
 	while (okey == 0) {
+		comment_line.clear();
 		RuleNum rule_num = FindRuleNum(next_rule);
 
 		if (rule_num.fir_num != -1) {		// Если правило нашлось
 
-			cout << endl << "Замена: ";
-			parsing_item.PrintString();
-			cout << " на ";
-			cout << string(rules[rule_num.fir_num].GetLeft());
+			comment_line.clear();
+			comment_line = "   Изменяем разбираемую строку: \n   " + string(parsing_str) + "\n   ";
+			comment_line += "Производится замена: " + string(parsing_item)
+				+ " на " + string(rules[rule_num.fir_num].GetLeft());
+			//comments_model->AddRecordLine(comment_line);
+
+			//cout << endl << "Замена: ";
+			//parsing_item.PrintString();
+			//cout << " на ";
+			//cout << string(rules[rule_num.fir_num].GetLeft());
 
 			// запись в лог
 			WriteToLog(rule_num);
@@ -213,6 +247,8 @@ bool LtoR_MethodAlg::DoParse()
 			// замена строк
 			TransformAccordingRule(rules[rule_num.fir_num].GetLeft(), entry_point, parsing_item.Length());
 			parsing_item.SetString({ parsing_str[0] });
+			comment_line += "\n   Cтрока после замены: \n   " + string(parsing_str);
+			comments_model->AddRecordLine(comment_line);
 			//
 
 			if (rule_num.fir_num == 0) {

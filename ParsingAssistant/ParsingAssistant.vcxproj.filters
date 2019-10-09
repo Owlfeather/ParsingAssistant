@@ -57,6 +57,12 @@
     <ClCompile Include="Basic_Algorithm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LogComments.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RulesManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="MainMenu.ui">
@@ -74,6 +80,12 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="LogTable.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="LogComments.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="RulesManager.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

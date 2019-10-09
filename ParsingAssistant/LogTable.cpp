@@ -1,17 +1,5 @@
 #include "LogTable.h"
 
-/*
-void LogTable::SetRowCount(unsigned inp_row_count)
-{
-	row_count = inp_row_count;
-}
-
-void LogTable::SetColomnCount(unsigned inp_col_count)
-{
-	colomn_count = inp_col_count;
-}
-*/
-
 int LogTable::rowCount(const QModelIndex& parent) const
 {
 	//return row_count;
