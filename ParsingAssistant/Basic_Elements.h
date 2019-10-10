@@ -89,3 +89,13 @@ enum class Color
 	BLACK,
 	GREEN
 };
+
+enum class TypeOfComment
+{
+	INFO,
+	WRONG_RULE,
+	CORRECT_RULE,
+	DEAD_END,
+	PARSE_CORRECT,
+	PARSE_INCORRECT
+};

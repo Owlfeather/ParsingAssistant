@@ -69,7 +69,7 @@ void CWindow::RenderCWin(ModeOfCWin type)
 			cur_rule = {-10, 0};
 			prev_rule = { -10, 0 };
 			cur_table_row = 0;
-			cur_comment_row = 0;
+			cur_comment_row = 1;
 			break;
 		}
 	case ModeOfCWin::CWPARSESTARTED:
@@ -286,7 +286,7 @@ void CWindow::onBackClicked()
 	cur_rule.fir_num = -10; // знак того, что разбор не начат
 	prev_rule.fir_num = -10;
 	cur_table_row = 0; // ни одна строка не видна
-	cur_comment_row = 0;
+	cur_comment_row = 1;
 	qDeleteAll(ui.ruleBox->children());
 	rules_manager = new RulesManager;
 
@@ -510,7 +510,69 @@ void CWindow::onStepClicked()
 
 void CWindow::onStepClicked()
 {
-	rules_manager->ColorRule({ 0, 0 }, Color::RED);
+	//rules_manager->ColorRule({ 0, 0 }, Color::RED);
+	switch (alg_type)
+	{
+	case TypeOfAlg::LTOR:
+	{
+		if (cur_comment_row != algorithm->GetComments()->Size()) {
+			ui.listView->setRowHidden(cur_comment_row, false);
+			scrollbar_comments->setMaximum(200);
+			scrollbar_comments->setValue(200);
+
+			///УПРАВЛЕНИЕ БЛОКАМИ///
+			Comment* cur_comment = algorithm->GetComments()->GetRow(cur_comment_row);
+
+			switch (cur_comment->GetType())
+			{
+			case TypeOfComment::INFO:
+			{
+				rules_manager->Neutralize();
+				break;
+			}
+			case TypeOfComment::WRONG_RULE:
+			{
+				rules_manager->Neutralize();
+				rules_manager->ColorRule(cur_comment->GetRuleNum(), Color::RED);
+				break;
+			}
+			case TypeOfComment::CORRECT_RULE:
+			{
+				rules_manager->Neutralize();
+				rules_manager->ColorRule(cur_comment->GetRuleNum(), Color::GREEN);
+				for (unsigned i = 0; i < 2; i++) {
+					cur_comment_row++;
+					ui.listView->setRowHidden(cur_comment_row, false);
+					scrollbar_comments->setMaximum(200);
+					scrollbar_comments->setValue(200);
+				}
+				break;
+			}
+			case TypeOfComment::DEAD_END:
+			{
+				break;
+			}
+			case TypeOfComment::PARSE_CORRECT:
+			{
+				break;
+			}
+			case TypeOfComment::PARSE_INCORRECT:
+			{
+				break;
+			}
+			}
+
+
+
+			cur_comment_row++;
+		}
+		break;
+	}
+	case TypeOfAlg::TTOD:
+	{
+		break;
+	}
+	}
 }
 
 void CWindow::onShowAllClicked()

@@ -25,8 +25,13 @@ public:
 	//void DeleteRules() { my_rules.clear(); }
 
 	std::vector<QLabel*>& operator[] (int i) { return my_rules[i]; }
+	void Neutralize();
 
 private:
 	std::vector<std::vector<QLabel*>> my_rules;
+	RuleNum colored_rule;
+
+	//void Neutralize();
+
 };
 

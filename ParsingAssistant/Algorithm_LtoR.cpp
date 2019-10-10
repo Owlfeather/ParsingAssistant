@@ -98,7 +98,7 @@ RuleNum LtoR_MethodAlg::FindRuleNum(const RuleNum & rulenum)
 	comment_line = "Производится разбор строки: \n";
 	comment_line += string(parsing_str);
 	comment_line += "\nИскомая конструкция: " + string(parsing_item);
-	comments_model->AddRecordLine(comment_line);
+	comments_model->AddRecordLine(comment_line, TypeOfComment::INFO);
 
 
 	int rules_number = rules.size();		// суммарное число правил
@@ -111,7 +111,7 @@ RuleNum LtoR_MethodAlg::FindRuleNum(const RuleNum & rulenum)
 
 				comment_line.clear();
 				comment_line = "   Правило " + to_string((i + 1)) + (char(j + 224)) + " подошло!";
-				comments_model->AddRecordLine(comment_line);
+				comments_model->AddRecordLine(comment_line, TypeOfComment::CORRECT_RULE, {i, j});
 				comment_line.clear();
 
 				//cout << endl << endl << "СОВПАДЕНИЕ";
@@ -126,7 +126,7 @@ RuleNum LtoR_MethodAlg::FindRuleNum(const RuleNum & rulenum)
 			else {
 				comment_line.clear();
 				comment_line = "   Правило " + to_string((i + 1)) + (char(j + 224)) + " не подошло";
-				comments_model->AddRecordLine(comment_line);
+				comments_model->AddRecordLine(comment_line, TypeOfComment::WRONG_RULE, {i, j});
 				comment_line.clear();
 			}
 		}
@@ -195,7 +195,7 @@ void LtoR_MethodAlg::Rollback()
 	comment_line.clear();
 	comment_line = "   Тупиковая ситуация, необходим откат назад\n";
 	comment_line += "   Производится откат к позиции " + to_string(parsing_log.Size() - 2) + " разбора";
-	comments_model->AddRecordLine(comment_line);
+	comments_model->AddRecordLine(comment_line, TypeOfComment::DEAD_END);
 	comment_line.clear();
 
 
@@ -255,7 +255,7 @@ bool LtoR_MethodAlg::DoParse()
 			TransformAccordingRule(rules[rule_num.fir_num].GetLeft(), entry_point, parsing_item.Length());
 			parsing_item.SetString({ parsing_str[0] });
 			comment_line += "\n   Cтрока после замены: \n   " + string(parsing_str);
-			comments_model->AddRecordLine(comment_line);
+			comments_model->AddRecordLine(comment_line, TypeOfComment::INFO);
 			//
 
 			if (rule_num.fir_num == 0) {
@@ -268,7 +268,7 @@ bool LtoR_MethodAlg::DoParse()
 					comment_line.clear();
 					comment_line = "Разбор завершён успешно\n";
 					comment_line += "Введённая строка - целое число";
-					comments_model->AddRecordLine(comment_line);
+					comments_model->AddRecordLine(comment_line, TypeOfComment::PARSE_CORRECT);
 					comment_line.clear();
 
 					okey = 1;
@@ -295,7 +295,7 @@ bool LtoR_MethodAlg::DoParse()
 				comment_line.clear();
 				comment_line = "   Неопознанный символ: " + string(parsing_item) + "\n";
 				comment_line += "   Дальнейший рабор невозможен\nВведённая строка - не целое";
-				comments_model->AddRecordLine(comment_line);
+				comments_model->AddRecordLine(comment_line, TypeOfComment::PARSE_INCORRECT);
 				comment_line.clear();
 
 				//cout << endl << "Ошибка, неопознанный символ : ";
@@ -311,7 +311,7 @@ bool LtoR_MethodAlg::DoParse()
 
 					comment_line.clear();
 					comment_line = "   Все возможные преобразования выполнены\nCтрока не является целым числом";
-					comments_model->AddRecordLine(comment_line);
+					comments_model->AddRecordLine(comment_line, TypeOfComment::PARSE_INCORRECT);
 					comment_line.clear();
 
 					//cout << endl << "Все возможные преобразования выполнены, но строка не является целым числом";

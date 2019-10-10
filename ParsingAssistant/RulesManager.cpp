@@ -71,11 +71,16 @@ QLayout* RulesManager::DrawRules(const std::vector<ItemRule>& rules)
 		returned_l->addLayout(vbox);
 		++size;
 	}
+	colored_rule = { 0, 0 };
 	return returned_l;
 }
 
 void RulesManager::ColorRule(const RuleNum r_num, Color inp_color)
 {
+	//Neutralize();
+	colored_rule = r_num;
+	colored_rule.sec_num++;
+
 	int i = r_num.fir_num;
 	int j = r_num.sec_num + 1;
 	QColor color;
@@ -111,4 +116,15 @@ void RulesManager::ColorRule(const RuleNum r_num, Color inp_color)
 		my_rules[i][0]->setPalette(palette);
 	}
 	}
+}
+
+void RulesManager::Neutralize()
+{
+	QColor color;
+	QPalette palette;
+	color = Qt::black;
+	palette = my_rules[colored_rule.fir_num][colored_rule.sec_num]->palette();
+	palette.setColor(QPalette::WindowText, color);
+	my_rules[colored_rule.fir_num][colored_rule.sec_num]->setPalette(palette);
+	my_rules[colored_rule.fir_num][0]->setPalette(palette);
 }
