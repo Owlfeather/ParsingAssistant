@@ -20,7 +20,7 @@ public:
 	void RenderCWin(ModeOfCWin type);
 	void SetAlgorithm(TypeOfAlg inp_alg_type);
 	void DrawRules();
-	void ChangeColor(unsigned i, unsigned j, Color inp_color);
+	//void ChangeColor(unsigned i, unsigned j, Color inp_color);
 
 private:
 	Ui::Form ui;

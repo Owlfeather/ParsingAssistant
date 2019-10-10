@@ -192,17 +192,24 @@ ItemString LtoR_MethodAlg::RestoreStringFromLog(const string & log_str)
 
 void LtoR_MethodAlg::Rollback() 
 {
-	cout << endl << "Выполняется откат назад" << endl;
+	comment_line.clear();
+	comment_line = "   Тупиковая ситуация, необходим откат назад\n";
+	comment_line += "   Производится откат к позиции " + to_string(parsing_log.Size() - 2) + " разбора";
+	comments_model->AddRecordLine(comment_line);
+	comment_line.clear();
+
+
+	//cout << endl << "Выполняется откат назад" << endl;
 	parsing_str = RestoreStringFromLog((*(parsing_log[parsing_log.Size() - 2])).GetCurString());
 	RuleNum prev_rule = (*(parsing_log[parsing_log.Size() - 2])).GetRuleNum();
 
 	parsing_item = rules[prev_rule.fir_num][prev_rule.sec_num];
 
-	cout << endl << "Разбираемая строка: ";
-	parsing_str.PrintString();
-	cout << endl << "Будет выполняться поиск конструкции: ";
-	parsing_item.PrintString();
-	cout << endl;
+	//cout << endl << "Разбираемая строка: ";
+	//parsing_str.PrintString();
+	//cout << endl << "Будет выполняться поиск конструкции: ";
+	//parsing_item.PrintString();
+	//cout << endl;
 }
 
 RuleNum LtoR_MethodAlg::GetNextRule()
@@ -257,6 +264,13 @@ bool LtoR_MethodAlg::DoParse()
 					// выявлено целое, конец разбора
 
 					WriteToLog({ -3, -3 }); // КОД -3 - конец разбора
+
+					comment_line.clear();
+					comment_line = "Разбор завершён успешно\n";
+					comment_line += "Введённая строка - целое число";
+					comments_model->AddRecordLine(comment_line);
+					comment_line.clear();
+
 					okey = 1;
 					//return true;
 				}
@@ -278,20 +292,33 @@ bool LtoR_MethodAlg::DoParse()
 				//запись в лог
 				WriteToLog({ -4, -4 });
 
-				cout << endl << "Ошибка, неопознанный символ : ";
-				parsing_item.PrintString();
-				cout << endl;
+				comment_line.clear();
+				comment_line = "   Неопознанный символ: " + string(parsing_item) + "\n";
+				comment_line += "   Дальнейший рабор невозможен\nВведённая строка - не целое";
+				comments_model->AddRecordLine(comment_line);
+				comment_line.clear();
+
+				//cout << endl << "Ошибка, неопознанный символ : ";
+				//parsing_item.PrintString();
+				//cout << endl;
 				okey = -1;
 				//return false;
 			}
-			if (entry_point == parsing_str.Length() - 1) {
-				//запись в лог
-				WriteToLog({ -4, -4 });
+			else{
+				if (entry_point == parsing_str.Length() - 1) {
+					//запись в лог
+					WriteToLog({ -4, -4 });
 
-				cout << endl << "Все возможные преобразования выполнены, но строка не является целым числом";
-				cout << endl;
-				okey = -1;
-				//return false;
+					comment_line.clear();
+					comment_line = "   Все возможные преобразования выполнены\nCтрока не является целым числом";
+					comments_model->AddRecordLine(comment_line);
+					comment_line.clear();
+
+					//cout << endl << "Все возможные преобразования выполнены, но строка не является целым числом";
+					//cout << endl;
+					okey = -1;
+					//return false;
+				}
 			}
 			if ((parsing_item.Length() < quantity) && (entry_point != parsing_str.Length() - 1)) {
 				parsing_item.AddSymb(parsing_str[entry_point + parsing_item.Length()]);

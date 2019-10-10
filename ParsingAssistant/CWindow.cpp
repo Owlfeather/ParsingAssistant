@@ -27,13 +27,6 @@ CWindow::CWindow(QWidget *parent)
 	ui.listView->setVerticalScrollBar(scrollbar_comments);
 
 	rules_manager = new RulesManager;
-	//scrollbar->setRange(0, 100);
-	//QObject::connect(ui.tableView, SIGNAL(valueChanged(int)), scrollbar, SLOT(setValue(int)));
-
-	//QObject::connect(spinBox, SIGNAL(valueChanged(int)), scrollbar, SLOT(setValue(int)));
-	//scrollbar.setvertical
-	//ui.tableView->setAutoScroll(true);
-	//ui.tableView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 }
 
 CWindow::~CWindow()
@@ -52,6 +45,7 @@ void CWindow::RenderCWin(ModeOfCWin type)
 			ui.grboxTest->setVisible(false);
 			ui.btnRepeat->setDisabled(true);
 			ui.btnStep->setVisible(false);
+			ui.btnShowAll->setDisabled(true);
 
 			ui.lineInpStr->setFocus();
 			ui.lineInpStr->grabKeyboard();
@@ -83,13 +77,12 @@ void CWindow::RenderCWin(ModeOfCWin type)
 			ui.btnStep->setVisible(true);
 			ui.btnStart->setDisabled(true);
 			ui.lineInpStr->setDisabled(true);
+			ui.btnShowAll->setDisabled(false);
 			ui.tableView->setModel(algorithm->GetTable());
 			ui.tableView->resizeColumnsToContents();
 			ui.listView->setModel(algorithm->GetComments());
 			HideRows();
 
-
-			//rollback = false;
 			break;
 		}
 	case ModeOfCWin::CWPARSEENDED:
@@ -210,8 +203,8 @@ void CWindow::DrawRules()
 	ui.ruleBox->setLayout(rule_lay);
 }
 
-void CWindow::ChangeColor(unsigned i, unsigned j, Color inp_color)
-{ /*
+//void CWindow::ChangeColor(unsigned i, unsigned j, Color inp_color)
+/*{ 
 	QColor color;
 	QPalette palette;
 
@@ -246,8 +239,8 @@ void CWindow::ChangeColor(unsigned i, unsigned j, Color inp_color)
 		drawed_rules[i][0]->setPalette(palette);
 	}
 	}
-	*/
-}
+	
+}*/
 
 
 void CWindow::HideRows()
@@ -305,6 +298,7 @@ void CWindow::onBackClicked()
 	ui.btnRepeat->setDisabled(true);
 	ui.btnStart->setDisabled(false);
 	ui.lineInpStr->setDisabled(false);
+	ui.btnShowAll->setDisabled(true);
 	ui.lineInpStr->clear();
 	ui.tableView->setModel(0);
 
