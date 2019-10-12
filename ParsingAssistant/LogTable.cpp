@@ -1,4 +1,6 @@
 #include "LogTable.h"
+#include <QColor>
+#include <QBrush>
 
 int LogTable::rowCount(const QModelIndex& parent) const
 {
@@ -27,6 +29,19 @@ QVariant LogTable::data(const QModelIndex& index, int role) const
 		QString unswer = QString::fromLocal8Bit(records[index.row()]->GetLine()[index.column()].c_str());
 		return QVariant(unswer);
 	}
+	///
+	if (role == Qt::BackgroundColorRole) {
+		if (records[index.row()]->GetRuleNum().fir_num == -2) {		
+			return QVariant(QBrush(QColor(255, 217, 217)));
+		}
+		else if (records[index.row()]->GetRuleNum().fir_num == -3) {
+			return QVariant(QBrush(QColor(217, 255, 196)));
+		}
+		else if (records[index.row()]->GetRuleNum().fir_num == -4) {
+			return QVariant(QBrush(QColor(255, 215, 174)));
+		}
+	}
+
 	return QVariant();
 }
 

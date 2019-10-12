@@ -68,8 +68,10 @@ void CWindow::RenderCWin(ModeOfCWin type)
 			ui.btnParse->setDisabled(true);
 			cur_rule = {-10, 0};
 			prev_rule = { -10, 0 };
-			cur_table_row = 0;
-			cur_comment_row = 1;
+			algorithm->GetTable()->ResetRow();
+			algorithm->GetComments()->ResetRow();
+			//cur_table_row = 0;
+			//cur_comment_row = 1;
 			break;
 		}
 	case ModeOfCWin::CWPARSESTARTED:
@@ -285,8 +287,8 @@ void CWindow::onBackClicked()
 {
 	cur_rule.fir_num = -10; // знак того, что разбор не начат
 	prev_rule.fir_num = -10;
-	cur_table_row = 0; // ни одна строка не видна
-	cur_comment_row = 1;
+	//cur_table_row = 0; // ни одна строка не видна
+	//cur_comment_row = 1;
 	qDeleteAll(ui.ruleBox->children());
 	rules_manager = new RulesManager;
 
@@ -303,6 +305,9 @@ void CWindow::onBackClicked()
 	ui.tableView->setModel(0);
 
 	ui.listView->setModel(0);
+
+	algorithm->GetTable()->ResetRow();
+	algorithm->GetComments()->ResetRow();
 
 	close();
 	emit cWindowClosed();
@@ -515,13 +520,17 @@ void CWindow::onStepClicked()
 	{
 	case TypeOfAlg::LTOR:
 	{
-		if (cur_comment_row != algorithm->GetComments()->Size()) {
-			ui.listView->setRowHidden(cur_comment_row, false);
-			scrollbar_comments->setMaximum(200);
-			scrollbar_comments->setValue(200);
+		if (algorithm->GetComments()->NotEnd()) {
+		//if (cur_comment_row != algorithm->GetComments()->Size()) {
+			//ui.listView->setRowHidden(cur_comment_row, false);
+			ui.listView->setRowHidden(algorithm->GetComments()->GetNextRow(), false);
+			//algorithm->GetComments()->IncRow();
+
+			scrollbar_comments->setMaximum(1000);
+			scrollbar_comments->setValue(1000);
 
 			///УПРАВЛЕНИЕ БЛОКАМИ///
-			Comment* cur_comment = algorithm->GetComments()->GetRow(cur_comment_row);
+			Comment* cur_comment = algorithm->GetComments()->GetRow(algorithm->GetComments()->GetNextRow());
 
 			switch (cur_comment->GetType())
 			{
@@ -540,32 +549,53 @@ void CWindow::onStepClicked()
 			{
 				rules_manager->Neutralize();
 				rules_manager->ColorRule(cur_comment->GetRuleNum(), Color::GREEN);
-				for (unsigned i = 0; i < 2; i++) {
-					cur_comment_row++;
-					ui.listView->setRowHidden(cur_comment_row, false);
-					scrollbar_comments->setMaximum(200);
-					scrollbar_comments->setValue(200);
-				}
+				//for (unsigned i = 0; i < 1; i++) {
+					//cur_comment_row++;
+					algorithm->GetComments()->IncRow();
+					ui.listView->setRowHidden(algorithm->GetComments()->GetNextRow(), false);
+					scrollbar_comments->setMaximum(1000);
+					scrollbar_comments->setValue(1000);
+				//	emit onStepClicked();
+				//}
+				///
+				ui.tableView->showRow(algorithm->GetTable()->GetNextRow());
+				ui.tableView->selectRow(algorithm->GetTable()->GetNextRow());
+				algorithm->GetTable()->IncRow();
+				scrollbar_table->setMaximum(200);
+				scrollbar_table->setValue(200);
+
 				break;
 			}
 			case TypeOfComment::DEAD_END:
 			{
+				ui.tableView->showRow(algorithm->GetTable()->GetNextRow());
+				ui.tableView->selectRow(algorithm->GetTable()->GetNextRow());
+				//ui.tableView->rowAt(algorithm->GetTable()->GetNextRow()).BackColor() = QColor(100,100,100);
+				algorithm->GetTable()->IncRow();
+				scrollbar_table->setMaximum(200);
+				scrollbar_table->setValue(200);
 				break;
 			}
 			case TypeOfComment::PARSE_CORRECT:
-			{
-				break;
-			}
 			case TypeOfComment::PARSE_INCORRECT:
 			{
+				ui.tableView->showRow(algorithm->GetTable()->GetNextRow());
+				ui.tableView->selectRow(algorithm->GetTable()->GetNextRow());
+				algorithm->GetTable()->IncRow();
+				scrollbar_table->setMaximum(200);
+				scrollbar_table->setValue(200);
+
+				RenderCWin(ModeOfCWin::CWPARSEENDED);
 				break;
 			}
 			}
 
 
-
-			cur_comment_row++;
+			algorithm->GetComments()->IncRow();
+			//cur_comment_row++;
 		}
+			
+
 		break;
 	}
 	case TypeOfAlg::TTOD:
@@ -586,4 +616,5 @@ void CWindow::onShowAllClicked()
 	for (unsigned j = 1; j <= size; j++) {
 		ui.listView->setRowHidden(j, false);
 	}
+	RenderCWin(ModeOfCWin::CWPARSEENDED);
 }

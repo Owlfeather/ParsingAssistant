@@ -109,7 +109,7 @@ void RulesManager::ColorRule(const RuleNum r_num, Color inp_color)
 	break;
 	case Color::GREEN:
 	{
-		color = Qt::green;
+		color = QColor(90, 200, 71);
 		palette = my_rules[i][j]->palette();
 		palette.setColor(QPalette::WindowText, color);
 		my_rules[i][j]->setPalette(palette);

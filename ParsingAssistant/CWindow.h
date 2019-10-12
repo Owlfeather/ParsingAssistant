@@ -34,8 +34,8 @@ private:
 
 	RuleNum cur_rule;
 	RuleNum prev_rule;
-	int cur_table_row;
-	int cur_comment_row;
+	//int cur_table_row;
+	//int cur_comment_row;
 	//int 
 	//bool rollback;
 	//LogTable* log_table;
@@ -52,4 +52,5 @@ private slots:
 	void onStartClicked();
 	void onStepClicked();
 	void onShowAllClicked();
+	
 };

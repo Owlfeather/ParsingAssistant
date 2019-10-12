@@ -45,11 +45,21 @@ public:
 	const int Size() { return records.size(); }
 	//Comment* operator[] (int i) { return records[i]; }
 	//void Inc() { cur_row++; }
+	void ResetRow() { next_row = 1; }
+	void IncRow()
+	{
+		if (next_row < records.size()) {
+			next_row++;
+		}
+	}
+	const unsigned GetNextRow() { return next_row; }
+	bool NotEnd() { return (next_row != records.size()); }
 
 
 private:
 
 	vector<Comment*> records;
+	unsigned next_row;
 	//unsigned cur_row;
 
 	int rowCount(const QModelIndex& parent) const;

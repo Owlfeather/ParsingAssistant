@@ -22,12 +22,16 @@ public:
 	ParseAlgorithm() 
 	{ 
 		table_model = new LogTable; 
+		table_model->ResetRow();
 		comments_model = new LogComments;
+		comments_model->ResetRow();
 	}
 	ParseAlgorithm(ItemString& inp_str) {
 		parsing_str = inp_str;
 		table_model = new LogTable;
+		table_model->ResetRow();
 		comments_model = new LogComments;
+		comments_model->ResetRow();
 	}
 
 	ItemRule& GetRule(unsigned i) { return rules[i]; }

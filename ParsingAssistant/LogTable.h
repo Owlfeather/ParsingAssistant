@@ -16,6 +16,15 @@ public:
 	void AppendLine(RecordLine * line);
 	//void ColorizeRule(const RuleNum & rulenum);
 
+	void ResetRow() { next_row = 0; }
+	void IncRow() 
+	{ 
+		if (next_row < records.size()) {
+			next_row++;
+		}
+	}
+	const unsigned GetNextRow() { return next_row; }
+	//bool NotEndOfTable() { return (next_row < records.size()); }
 
 	RecordLine* GetRow(unsigned i) { return records[i]; }
 
@@ -23,6 +32,7 @@ public:
 private:
 
 	TypeOfAlg alg_type;
+	unsigned next_row;
 
 	///
 	vector<RecordLine*> records;

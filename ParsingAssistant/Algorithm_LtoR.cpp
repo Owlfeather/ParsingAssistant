@@ -95,7 +95,7 @@ RuleNum LtoR_MethodAlg::FindRuleNum(const RuleNum & rulenum)
 	//cout << endl << "Производится разбор строки: ";
 	//parsing_str.PrintString();
 	///
-	comment_line = "Производится разбор строки: \n";
+	comment_line = "____________________________________\nПроизводится разбор строки: \n";
 	comment_line += string(parsing_str);
 	comment_line += "\nИскомая конструкция: " + string(parsing_item);
 	comments_model->AddRecordLine(comment_line, TypeOfComment::INFO);
