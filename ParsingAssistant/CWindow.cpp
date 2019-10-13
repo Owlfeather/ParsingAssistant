@@ -20,6 +20,10 @@ CWindow::CWindow(QWidget *parent)
 	connect(ui.btnStart, SIGNAL(clicked()), this, SLOT(onStartClicked()));
 	connect(ui.btnStep, SIGNAL(clicked()), this, SLOT(onStepClicked()));
 	connect(ui.btnShowAll, SIGNAL(clicked()), this, SLOT(onShowAllClicked()));
+	connect(ui.btnRepeat, SIGNAL(clicked()), this, SLOT(onRepeatClicked()));
+	connect(ui.btnNewParse, SIGNAL(clicked()), this, SLOT(onNewParseClicked()));
+
+
 
 	scrollbar_table = new QScrollBar;
 	ui.tableView->setVerticalScrollBar(scrollbar_table);
@@ -47,8 +51,8 @@ void CWindow::RenderCWin(ModeOfCWin type)
 			ui.btnStep->setVisible(false);
 			ui.btnShowAll->setDisabled(true);
 
-			ui.lineInpStr->setFocus();
-			ui.lineInpStr->grabKeyboard();
+			//ui.lineInpStr->setFocus();
+			//ui.lineInpStr->grabKeyboard();
 		
 			QTextCodec * codec = QTextCodec::codecForName("Windows-1251");
 			switch (alg_type)
@@ -66,17 +70,19 @@ void CWindow::RenderCWin(ModeOfCWin type)
 		{
 			ui.grboxParse->setVisible(true);
 			ui.btnParse->setDisabled(true);
-			cur_rule = {-10, 0};
-			prev_rule = { -10, 0 };
+
+			ui.lineInpStr->setFocus();
+			ui.lineInpStr->grabKeyboard();
+
 			algorithm->GetTable()->ResetRow();
 			algorithm->GetComments()->ResetRow();
-			//cur_table_row = 0;
-			//cur_comment_row = 1;
+
 			break;
 		}
 	case ModeOfCWin::CWPARSESTARTED:
 		{
 			ui.btnStep->setVisible(true);
+			ui.btnStep->setDisabled(false);
 			ui.btnStart->setDisabled(true);
 			ui.lineInpStr->setDisabled(true);
 			ui.btnShowAll->setDisabled(false);
@@ -85,14 +91,42 @@ void CWindow::RenderCWin(ModeOfCWin type)
 			ui.listView->setModel(algorithm->GetComments());
 			HideRows();
 
+
 			break;
 		}
 	case ModeOfCWin::CWPARSEENDED:
 		{
 			ui.btnRepeat->setEnabled(true);
 			ui.btnStep->setEnabled(false);
+			ui.btnShowAll->setDisabled(true);
+			rules_manager->Neutralize();
+
 			break;
 		}
+	case ModeOfCWin::CWRESET:
+	{
+		ui.btnParse->setDisabled(false);
+		ui.btnStep->setDisabled(true);
+		ui.btnStep->setVisible(false);
+		ui.btnRepeat->setDisabled(true);
+		ui.btnStart->setDisabled(false);
+		ui.lineInpStr->setDisabled(false);
+		ui.btnShowAll->setDisabled(true);
+
+		ui.lineInpStr->clear();
+		ui.lineInpStr->setDisabled(false);
+		ui.lineInpStr->setFocus();
+		ui.lineInpStr->grabKeyboard();
+
+		ui.tableView->setModel(0);
+		ui.listView->setModel(0);
+
+		algorithm->GetTable()->ResetRow();
+		algorithm->GetComments()->ResetRow();
+		rules_manager->Neutralize();
+
+		break;
+	}
 	}
 
 }
@@ -278,23 +312,32 @@ void CWindow::onStartClicked()
 		algorithm->DoParse();
 		/// ЛОГ СФОРМИРОВАН
 		RenderCWin(ModeOfCWin::CWPARSESTARTED);
-
-
 	}
+}
+
+void CWindow::onNewParseClicked()
+{
+	RenderCWin(ModeOfCWin::CWRESET);
+	algorithm->ResetLogs();
+}
+
+void CWindow::onRepeatClicked()
+{
+	HideRows();
+	rules_manager->Neutralize();
+	ui.btnStep->setDisabled(false);
+	ui.btnShowAll->setDisabled(false);
+	algorithm->GetComments()->ResetRow();
+	algorithm->GetTable()->ResetRow();
 }
 
 void CWindow::onBackClicked()
 {
-	cur_rule.fir_num = -10; // знак того, что разбор не начат
-	prev_rule.fir_num = -10;
-	//cur_table_row = 0; // ни одна строка не видна
-	//cur_comment_row = 1;
+
 	qDeleteAll(ui.ruleBox->children());
 	rules_manager = new RulesManager;
 
-	//rules_manager->DeleteRules();
-	//drawed_rules.clear();
-	//delete algorithm;
+	////////////////////////////////
 	ui.btnParse->setDisabled(false);
 	ui.btnStep->setDisabled(false);
 	ui.btnRepeat->setDisabled(true);
@@ -308,6 +351,7 @@ void CWindow::onBackClicked()
 
 	algorithm->GetTable()->ResetRow();
 	algorithm->GetComments()->ResetRow();
+	////////////////////////////////
 
 	close();
 	emit cWindowClosed();
@@ -515,16 +559,13 @@ void CWindow::onStepClicked()
 
 void CWindow::onStepClicked()
 {
-	//rules_manager->ColorRule({ 0, 0 }, Color::RED);
 	switch (alg_type)
 	{
 	case TypeOfAlg::LTOR:
 	{
 		if (algorithm->GetComments()->NotEnd()) {
-		//if (cur_comment_row != algorithm->GetComments()->Size()) {
-			//ui.listView->setRowHidden(cur_comment_row, false);
+
 			ui.listView->setRowHidden(algorithm->GetComments()->GetNextRow(), false);
-			//algorithm->GetComments()->IncRow();
 
 			scrollbar_comments->setMaximum(1000);
 			scrollbar_comments->setValue(1000);
@@ -549,15 +590,12 @@ void CWindow::onStepClicked()
 			{
 				rules_manager->Neutralize();
 				rules_manager->ColorRule(cur_comment->GetRuleNum(), Color::GREEN);
-				//for (unsigned i = 0; i < 1; i++) {
-					//cur_comment_row++;
-					algorithm->GetComments()->IncRow();
-					ui.listView->setRowHidden(algorithm->GetComments()->GetNextRow(), false);
-					scrollbar_comments->setMaximum(1000);
-					scrollbar_comments->setValue(1000);
-				//	emit onStepClicked();
-				//}
-				///
+
+				algorithm->GetComments()->IncRow();
+				ui.listView->setRowHidden(algorithm->GetComments()->GetNextRow(), false);
+				scrollbar_comments->setMaximum(1000);
+				scrollbar_comments->setValue(1000);
+
 				ui.tableView->showRow(algorithm->GetTable()->GetNextRow());
 				ui.tableView->selectRow(algorithm->GetTable()->GetNextRow());
 				algorithm->GetTable()->IncRow();
@@ -570,7 +608,6 @@ void CWindow::onStepClicked()
 			{
 				ui.tableView->showRow(algorithm->GetTable()->GetNextRow());
 				ui.tableView->selectRow(algorithm->GetTable()->GetNextRow());
-				//ui.tableView->rowAt(algorithm->GetTable()->GetNextRow()).BackColor() = QColor(100,100,100);
 				algorithm->GetTable()->IncRow();
 				scrollbar_table->setMaximum(200);
 				scrollbar_table->setValue(200);
@@ -590,9 +627,7 @@ void CWindow::onStepClicked()
 			}
 			}
 
-
 			algorithm->GetComments()->IncRow();
-			//cur_comment_row++;
 		}
 			
 

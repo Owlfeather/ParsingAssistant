@@ -6,12 +6,6 @@
 // Преобразуем входную последовательность символов в кодировку UNICODE
 #define RUS( str ) codec->toUnicode(str)
 
-//#define LTOR 0
-//#define TTOD 1
-
-//#define CWBEGIN 0
-//#define CWPARSE 1
-//#define CWTEST 2
 
 MainMenu::MainMenu(QWidget *parent)
 	: QMainWindow(parent)

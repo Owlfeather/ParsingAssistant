@@ -29,6 +29,12 @@ class LogComments :
 	Q_OBJECT
 public:
 	LogComments() {}
+	~LogComments() 
+	{
+		for (int i = 0; i < records.size(); i++) {
+			delete records[i];
+		}
+	}
 	Comment* GetRow(unsigned i) { return records[i]; }
 	void AddRecordLine(const string& inp_s, TypeOfComment inp_t, RuleNum inp_r = {-7, -7})
 	{ 
@@ -40,6 +46,8 @@ public:
 		beginInsertRows(QModelIndex(), row, row);
 
 	}
+
+	void ClearRecords() { records.clear(); }
 
 	//const unsigned & CurRow() { return cur_row; }
 	const int Size() { return records.size(); }

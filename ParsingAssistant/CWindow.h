@@ -29,16 +29,8 @@ private:
 	RulesManager* rules_manager;
 	//-----------------------------
 	TypeOfAlg alg_type;
-	std::vector<std::vector<QLabel *>> drawed_rules;
 	ParseAlgorithm* algorithm;
 
-	RuleNum cur_rule;
-	RuleNum prev_rule;
-	//int cur_table_row;
-	//int cur_comment_row;
-	//int 
-	//bool rollback;
-	//LogTable* log_table;
 
 	void HideRows();
 
@@ -52,5 +44,7 @@ private slots:
 	void onStartClicked();
 	void onStepClicked();
 	void onShowAllClicked();
+	void onRepeatClicked();
+	void onNewParseClicked();
 	
 };

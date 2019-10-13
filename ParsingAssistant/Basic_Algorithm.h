@@ -34,6 +34,15 @@ public:
 		comments_model->ResetRow();
 	}
 
+	void ResetLogs()
+	{
+		table_model->ResetRow();
+		comments_model->ResetRow();
+
+		table_model->ClearRecords();
+		comments_model->ClearRecords();
+	}
+
 	ItemRule& GetRule(unsigned i) { return rules[i]; }
 	unsigned RulesSize() { return rules.size(); }
 	void SetLogTableType(TypeOfAlg type_alg);

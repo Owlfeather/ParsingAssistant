@@ -11,10 +11,18 @@ class LogTable :
 {
 	Q_OBJECT
 public:
-
+	LogTable() {}
+	~LogTable()
+	{
+		for (int i = 0; i < records.size(); i++) {
+			delete records[i];
+		}
+	}
 	void SetType(TypeOfAlg type) { alg_type = type; };
 	void AppendLine(RecordLine * line);
 	//void ColorizeRule(const RuleNum & rulenum);
+
+	void ClearRecords() { records.clear(); }
 
 	void ResetRow() { next_row = 0; }
 	void IncRow() 
