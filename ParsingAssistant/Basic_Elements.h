@@ -100,3 +100,12 @@ enum class TypeOfComment
 	PARSE_CORRECT,
 	PARSE_INCORRECT
 };
+
+enum TypeOfTtoDLine
+{
+	STATEMENT,
+	ROLLB_POSS,
+	ROLLB_IMPOSS,
+	RULE_NOT_FIT,
+	RULE_FIT
+};

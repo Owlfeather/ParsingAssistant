@@ -109,13 +109,24 @@ void ParseLog::PrintLogTtoD()
 
 
 //---------------------TtoD_Line---------------------
-
+/*
 void TtoD_Line::SetLine(const string & rec_str, const string & pars_str, const string & targ_str, unsigned type_of_line, const RuleNum & inp_rnum)
 {
 	recognized = rec_str;
 	cur_string = pars_str;
 	target = targ_str;
 	type = type_of_line;
+	rule_num = inp_rnum;
+}
+*/
+void TtoD_Line::SetLine(const string& rec_str, const string& pars_str, const string& targ_str, unsigned type_of_l, TypeOfTtoDLine line_type, const RuleNum& inp_rnum)
+{
+	recognized = rec_str;
+	cur_string = pars_str;
+	target = targ_str;
+	type = type_of_line;
+	type = type_of_l;
+	type_of_line = line_type;
 	rule_num = inp_rnum;
 }
 
@@ -138,7 +149,13 @@ void TtoD_Line::PrintLine()
 			cout << rule_num.fir_num+1 << char(rule_num.sec_num + 224);
 		}
 		else {
-			cout << rule_num.fir_num+1 << "a..." << char(rule_num.sec_num + 224);
+			//cout << rule_num.fir_num+1 << "a..." << char(rule_num.sec_num + 224);
+			if (rule_num.fir_num == 3) {
+				cout << rule_num.fir_num + 1 << "a..." << char(rule_num.sec_num + 224 - 1);
+			}
+			else {
+				cout << rule_num.fir_num + 1 << "a..." << char(rule_num.sec_num + 224);
+			}
 		}
 		cout << " - нет" << endl;
 		break;
