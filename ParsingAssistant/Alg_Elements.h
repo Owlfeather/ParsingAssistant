@@ -56,6 +56,7 @@ protected:
 public:
 
 	virtual void PrintLine() = 0;
+	virtual TypeOfAlg GetType() = 0;
 
 	string GetCurString() { return cur_string; }
 	RuleNum GetRuleNum() { return rule_num; }
@@ -73,6 +74,8 @@ public:
 	void SetLine(const string & inp_str, const RuleNum & inp_rnum);
 	void PrintLine() override;
 	vector<string>  GetLine() override;
+
+	TypeOfAlg GetType() override;
 };
 
 //-----------------------------------------------------------------
@@ -86,6 +89,8 @@ class TtoD_Line : public RecordLine {
 
 public:
 
+	TypeOfAlg GetType() override;
+
 	//void SetLine(const string & rec_str, const string & pars_str, const string & targ_str, unsigned type_of_line, const RuleNum & inp_rnum);
 	void SetLine(const string& rec_str, const string& pars_str,
 		const string& targ_str, unsigned type_of_l,
@@ -93,6 +98,7 @@ public:
 	void PrintLine() override;
 	vector<string>  GetLine() override;
 
+	void MarkLastLine() { type_of_line = END_LINE; }
 	void MarkRollback() { rule_num.sec_num++; }
 	void TypeMarkRollback() { type_of_line = TypeOfTtoDLine::ROLLB_IMPOSS; }
 	string MakePrintable(string & str_with_seps);
@@ -114,6 +120,7 @@ public:
 	int Size() { return records.size(); }
 	void PrintLogltoR();
 	void PrintLogTtoD();
+	void ClearRecords() { records.clear(); }
 
 	RecordLine * &operator[] (int i) { return records[i]; }
 };

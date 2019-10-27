@@ -128,6 +128,11 @@ bool TtoD_MethodAlg::DoParse()
 	RuleNum next_rule;
 	RuleNum new_rule;
 	ItemSymb end("end");
+
+	if (recognized_str.Length() != 0) {
+		recognized_str.DeleteSymb(0, recognized_str.Length());
+	}
+	
 	recognized_str.AddSymb(ItemSymb(""));
 	bool rollback_happened = false;
 
@@ -195,6 +200,8 @@ bool TtoD_MethodAlg::DoParse()
 					comment_line = "Больше откат выполнить невозможно\nРазбор завершён";
 					comments_model->AddRecordLine(comment_line, TypeOfComment::PARSE_INCORRECT);
 
+					WriteToLog(2, TypeOfTtoDLine::WRONG_SYMB, next_rule);
+
 					okey = false;
 				}
 			}
@@ -204,6 +211,8 @@ bool TtoD_MethodAlg::DoParse()
 
 					comment_line = "Разбор завершён успешно";
 					comments_model->AddRecordLine(comment_line, TypeOfComment::PARSE_CORRECT);
+
+					dynamic_cast<TtoD_Line*>(parsing_log[parsing_log.Size() - 1])->MarkLastLine();
 
 					okey = false;
 				}
@@ -248,7 +257,7 @@ RuleNum TtoD_MethodAlg::FindRuleNum() // используется для пои�
 			if (i < 2) {
 				comment_line.clear();
 				comment_line = "   Пробуем правило " + to_string((i + 1)) + "a ";
-				comments_model->AddRecordLine(comment_line, TypeOfComment::INFO, { i, 0 });
+				comments_model->AddRecordLine(comment_line, TypeOfComment::HYPOTHESIS, { i, 0 });
 				comment_line.clear();
 			}
 
@@ -275,7 +284,7 @@ bool TtoD_MethodAlg::FindCorrectTerm(const RuleNum & rulenum)
 				for(int j = 0; j < i; j++) {
 				comment_line.clear();
 				comment_line = "   Правило " + to_string(rulenum.fir_num + 1) + (char(j + 224)) + " не подошло";
-				comments_model->AddRecordLine(comment_line, TypeOfComment::WRONG_RULE, { rulenum.fir_num, i });
+				comments_model->AddRecordLine(comment_line, TypeOfComment::WRONG_RULE, { rulenum.fir_num, j });
 				comment_line.clear();
 				}
 
@@ -367,7 +376,7 @@ void TtoD_MethodAlg::TransformAccordingRule(const RuleNum & rulenum)
 		comment_line.clear();
 	}
 	else {
-		comments_model->AddRecordLine(comment_line, TypeOfComment::INFO);
+		comments_model->AddRecordLine(comment_line, TypeOfComment::HYPOTHESIS);
 	}
 	//comments_model->AddRecordLine(comment_line, TypeOfComment::INFO);
 }
@@ -491,6 +500,13 @@ RuleNum TtoD_MethodAlg::Rollback()
 
 		RuleNum next_rule = rollback_info;
 		next_rule.sec_num += 1;
+
+		comment_line.clear();
+		comment_line = "   Пробуем правило " + to_string((next_rule.fir_num + 1)) + "б ";
+		comments_model->AddRecordLine(comment_line, TypeOfComment::HYPOTHESIS, { next_rule.fir_num, 1 });
+		comment_line.clear();
+
+
 		return next_rule;
 	}
 	return RuleNum({ -1, -1 });

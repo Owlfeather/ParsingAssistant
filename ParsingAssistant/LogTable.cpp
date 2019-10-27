@@ -30,16 +30,64 @@ QVariant LogTable::data(const QModelIndex& index, int role) const
 		return QVariant(unswer);
 	}
 	///
+
+
+
 	if (role == Qt::BackgroundColorRole) {
-		if (records[index.row()]->GetRuleNum().fir_num == -2) {		
-			return QVariant(QBrush(QColor(255, 217, 217)));
+
+		switch (records[index.row()]->GetType())
+		{
+		case TypeOfAlg::LTOR:
+		{
+			if (records[index.row()]->GetRuleNum().fir_num == -2) {
+				return QVariant(QBrush(QColor(255, 217, 217)));
+			}
+			else if (records[index.row()]->GetRuleNum().fir_num == -3) {
+				return QVariant(QBrush(QColor(217, 255, 196)));
+			}
+			else if (records[index.row()]->GetRuleNum().fir_num == -4) {
+				return QVariant(QBrush(QColor(255, 215, 174)));
+			}
+			break;
 		}
-		else if (records[index.row()]->GetRuleNum().fir_num == -3) {
-			return QVariant(QBrush(QColor(217, 255, 196)));
+		case TypeOfAlg::TTOD:
+		{
+			switch (dynamic_cast<TtoD_Line*>(records[index.row()])->GetTypeOfLine())
+			{
+			case TypeOfTtoDLine::RULE_NOT_FIT:
+			{
+				return QVariant(QBrush(QColor(255, 217, 217)));
+				break;
+			}
+			case TypeOfTtoDLine::RULE_FIT:
+			{
+				return QVariant(QBrush(QColor(217, 255, 196)));
+				break;
+			}
+			case TypeOfTtoDLine::END_LINE:
+			{
+				return QVariant(QBrush(QColor(191, 255, 157)));
+				break;
+			}
+			case TypeOfTtoDLine::WRONG_SYMB:
+			{
+				return QVariant(QBrush(QColor(255, 215, 174)));
+				break;
+			}
+			}
+			break;
 		}
-		else if (records[index.row()]->GetRuleNum().fir_num == -4) {
-			return QVariant(QBrush(QColor(255, 215, 174)));
 		}
+
+	//	if (records[index.row()]->GetRuleNum().fir_num == -2) {		
+	//		return QVariant(QBrush(QColor(255, 217, 217)));
+	//	}
+	//	else if (records[index.row()]->GetRuleNum().fir_num == -3) {
+	//		return QVariant(QBrush(QColor(217, 255, 196)));
+	//	}
+	//	else if (records[index.row()]->GetRuleNum().fir_num == -4) {
+	//		return QVariant(QBrush(QColor(255, 215, 174)));
+	//	}
 	}
 
 	return QVariant();

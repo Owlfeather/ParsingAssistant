@@ -41,6 +41,7 @@ public:
 
 		table_model->ClearRecords();
 		comments_model->ClearRecords();
+		parsing_log.ClearRecords();
 	}
 
 	ItemRule& GetRule(unsigned i) { return rules[i]; }

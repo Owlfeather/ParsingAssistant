@@ -287,6 +287,11 @@ void CWindow::HideRows()
 		ui.tableView->hideRow(size - i);
 	}
 
+	if (alg_type == TypeOfAlg::TTOD) {
+		ui.tableView->showRow(0);
+		algorithm->GetTable()->IncRow();
+	}
+
 	size = algorithm->GetComments()->Size();
 	for (unsigned j = 1; j <= size; j++) {
 		ui.listView->setRowHidden(j, true);
@@ -635,6 +640,112 @@ void CWindow::onStepClicked()
 	}
 	case TypeOfAlg::TTOD:
 	{
+		if (algorithm->GetComments()->NotEnd()) {
+
+			ui.listView->setRowHidden(algorithm->GetComments()->GetNextRow(), false);
+
+			scrollbar_comments->setMaximum(1000);
+			scrollbar_comments->setValue(1000);
+
+			///УПРАВЛЕНИЕ БЛОКАМИ///
+			Comment* cur_comment = algorithm->GetComments()->GetRow(algorithm->GetComments()->GetNextRow());
+
+			switch (cur_comment->GetType())
+			{
+			case TypeOfComment::INFO:
+			{
+				rules_manager->Neutralize();
+				scrollbar_comments->setMaximum(1000);
+				scrollbar_comments->setValue(1000);
+				break;
+			}
+			case TypeOfComment::WRONG_RULE:
+			{
+				rules_manager->Neutralize();
+				rules_manager->ColorRule(cur_comment->GetRuleNum(), Color::RED);
+				break;
+			}
+			case TypeOfComment::CORRECT_RULE:
+			{
+				rules_manager->Neutralize();
+				rules_manager->ColorRule(cur_comment->GetRuleNum(), Color::GREEN);
+
+				algorithm->GetComments()->IncRow();
+				ui.listView->setRowHidden(algorithm->GetComments()->GetNextRow(), false);
+				scrollbar_comments->setMaximum(1000);
+				scrollbar_comments->setValue(1000);
+
+				for (int i = 0; i < 3; i++){
+					ui.tableView->showRow(algorithm->GetTable()->GetNextRow());
+					//ui.tableView->selectRow(algorithm->GetTable()->GetNextRow());
+					algorithm->GetTable()->IncRow();
+					scrollbar_table->setMaximum(200);
+					scrollbar_table->setValue(200);
+				}
+
+				break;
+			}
+			case TypeOfComment::DEAD_END:
+			{
+				rules_manager->Neutralize();
+
+				algorithm->GetComments()->IncRow();
+				ui.listView->setRowHidden(algorithm->GetComments()->GetNextRow(), false);
+				scrollbar_comments->setMaximum(1000);
+				scrollbar_comments->setValue(1000);
+
+				//for(int i = 0; i < 2; i++){
+					ui.tableView->showRow(algorithm->GetTable()->GetNextRow());
+					algorithm->GetTable()->IncRow();
+					scrollbar_table->setMaximum(200);
+					scrollbar_table->setValue(200);
+			//	}
+				break;
+			}
+			case TypeOfComment::HYPOTHESIS:
+			{
+				rules_manager->Neutralize();
+				rules_manager->ColorRule(cur_comment->GetRuleNum(), Color::GREEN);
+
+				algorithm->GetComments()->IncRow();
+				ui.listView->setRowHidden(algorithm->GetComments()->GetNextRow(), false);
+				scrollbar_comments->setMaximum(1000);
+				scrollbar_comments->setValue(1000);
+
+				ui.tableView->showRow(algorithm->GetTable()->GetNextRow());
+				//ui.tableView->selectRow(algorithm->GetTable()->GetNextRow());
+				algorithm->GetTable()->IncRow();
+				scrollbar_table->setMaximum(200);
+				scrollbar_table->setValue(200);
+
+				break;
+			}
+			case TypeOfComment::PARSE_INCORRECT:
+
+				for (int i = 0; i < 2; i++) {
+					ui.tableView->showRow(algorithm->GetTable()->GetNextRow());
+					algorithm->GetTable()->IncRow();
+					scrollbar_table->setMaximum(200);
+					scrollbar_table->setValue(200);
+				}
+
+			case TypeOfComment::PARSE_CORRECT:
+			{
+			//	ui.tableView->showRow(algorithm->GetTable()->GetNextRow());
+			//	ui.tableView->selectRow(algorithm->GetTable()->GetNextRow());
+			//	algorithm->GetTable()->IncRow();
+			//	scrollbar_table->setMaximum(200);
+			//	scrollbar_table->setValue(200);
+
+				RenderCWin(ModeOfCWin::CWPARSEENDED);
+				break;
+			}
+			}
+
+			algorithm->GetComments()->IncRow();
+		}
+
+
 		break;
 	}
 	}

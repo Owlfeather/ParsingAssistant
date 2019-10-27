@@ -1,7 +1,7 @@
 ﻿#include "Alg_Elements.h"
 
-#define LTOR 0
-#define TTOD 1
+//#define LTOR 0
+//#define TTOD 1
 
 
 //---------------------ItemRule---------------------
@@ -86,6 +86,11 @@ vector<string> LtoR_Line::GetLine()
 	return line;
 }
 
+TypeOfAlg LtoR_Line::GetType()
+{
+	return TypeOfAlg::LTOR;
+}
+
 
 
 //---------------------ParseLog---------------------
@@ -107,6 +112,11 @@ void ParseLog::PrintLogTtoD()
 }
 
 
+
+TypeOfAlg TtoD_Line::GetType()
+{
+	return TypeOfAlg::TTOD;
+}
 
 //---------------------TtoD_Line---------------------
 /*
@@ -172,7 +182,7 @@ vector<string> TtoD_Line::GetLine()
 	line.push_back(MakePrintable(recognized));
 	line.push_back(MakePrintable(cur_string));
 	line.push_back(MakePrintable(target));
-
+	/*
 	switch (type)
 	{
 	case 1:
@@ -193,6 +203,56 @@ vector<string> TtoD_Line::GetLine()
 		line.push_back(to_string(rule_num.fir_num + 1) + char(rule_num.sec_num + 224) + " - да");
 		break;
 	}
+
+	if (type_of_line == END_LINE) {
+		line.pop_back();
+		line.push_back("Разбор завершён");
+	}
+	*/
+
+
+	switch (type_of_line)
+	{
+	case TypeOfTtoDLine::STATEMENT:
+	{
+		line.push_back("?");
+		break;
+	}
+	case TypeOfTtoDLine::RULE_FIT:
+	{
+		line.push_back(to_string(rule_num.fir_num + 1) + char(rule_num.sec_num + 224) + " - да");
+		break;
+	}
+	case TypeOfTtoDLine::RULE_NOT_FIT:
+	{
+		if (rule_num.sec_num == 0) {
+			line.push_back(to_string(rule_num.fir_num + 1) + char(rule_num.sec_num + 224) + " - нет");
+		}
+		else {
+			line.push_back(to_string(rule_num.fir_num + 1) + "а..." + char(rule_num.sec_num + 224) + " - нет");
+		}
+		break;
+	}
+	case TypeOfTtoDLine::END_LINE:
+	{
+		line.push_back("Разбор завершён");
+		break;
+	}
+	case TypeOfTtoDLine::ROLLB_POSS:
+	case TypeOfTtoDLine::ROLLB_IMPOSS:
+	{
+		line.push_back(to_string(rule_num.fir_num + 1) + char(rule_num.sec_num + 224) + " - ?");
+		break;
+	}
+	case TypeOfTtoDLine::WRONG_SYMB:
+	{
+		line.push_back("Разбор дальше невозможен!");
+		break;
+	}
+	
+	}
+
+
 	return line;
 }
 
