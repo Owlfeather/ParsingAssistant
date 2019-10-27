@@ -161,7 +161,15 @@ bool TtoD_MethodAlg::DoParse()
 
 					if (new_rule.fir_num == -1) { // если больше откат выполнить не удастся
 						cout << "\nБольше откат выполнить невозможно" << endl;
+
+						comment_line = "Больше откат выполнить невозможно\nРазбор завершён";
+						comments_model->AddRecordLine(comment_line, TypeOfComment::PARSE_INCORRECT);
+
+
 						okey = false;
+
+						WriteToLog(3, TypeOfTtoDLine::WRONG_SYMB, next_rule);
+						return true;
 					}
 				}
 				////
