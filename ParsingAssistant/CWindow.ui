@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>964</width>
-    <height>720</height>
+    <width>971</width>
+    <height>806</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -179,6 +179,12 @@
             </item>
             <item>
              <widget class="QGroupBox" name="ruleBox">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
               <property name="font">
                <font>
                 <family>Century Gothic</family>

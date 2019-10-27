@@ -17,6 +17,8 @@ int LogTable::columnCount(const QModelIndex& parent) const
 		return 2;
 	case TypeOfAlg::TTOD:
 		return 4;
+	case TypeOfAlg::LLK_TTOD:
+		return 3;
 	}
 }
 
@@ -120,6 +122,16 @@ QVariant LogTable::headerData(int section, Qt::Orientation orientation, int role
 		case 2:
 			return QString::fromLocal8Bit("Цель");
 		case 3:
+			return QString::fromLocal8Bit("Правило");
+		}
+		break;
+	case TypeOfAlg::LLK_TTOD:
+		switch (section) {
+		case 0:
+			return QString::fromLocal8Bit("Строка");
+		case 1:
+			return QString::fromLocal8Bit("Стек");
+		case 2:
 			return QString::fromLocal8Bit("Правило");
 		}
 		break;

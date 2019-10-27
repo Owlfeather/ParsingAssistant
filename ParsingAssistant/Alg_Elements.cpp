@@ -111,6 +111,14 @@ void ParseLog::PrintLogTtoD()
 	}
 }
 
+void ParseLog::PrintLogLLk()
+{
+	cout << endl << endl << "Лог:" << endl;
+	for (int i = 0; i < records.size(); i++) {
+		dynamic_cast<LLk_TtoD_Line*>(records[i])->PrintLine();
+	}
+}
+
 
 
 TypeOfAlg TtoD_Line::GetType()
@@ -286,3 +294,88 @@ void ParseAlgorithm::SetLogTable(unsigned type_alg)
 	}
 }
 */
+
+//---------------------LLk_TtoD_Line---------------------
+
+
+TypeOfAlg LLk_TtoD_Line::GetType()
+{
+	return TypeOfAlg::LLK_TTOD;
+}
+
+vector<string> LLk_TtoD_Line::GetLine()
+{
+	vector<string> line;
+	line.push_back(cur_string);
+	line.push_back(stack_str);
+
+	if (rule_num.fir_num > 0) {
+		if ((rule_num.fir_num == 1) || (rule_num.fir_num == 3)) {
+			//cout << " Правило: " << rule_num.fir_num + 1;
+			line.push_back(" Правило: " + to_string(rule_num.fir_num + 1));
+		}
+		else {
+			//cout << " Правило: " << rule_num.fir_num + 1 << char(rule_num.sec_num + 224);
+			line.push_back(" Правило: " + to_string(rule_num.fir_num + 1) + char(rule_num.sec_num + 224));
+		}
+	}
+	else {
+		switch (rule_num.fir_num)
+		{
+		case -1:
+			//cout << " Некорректный символ, разбор завершён";
+			line.push_back("Некорректный символ, разбор завершён");
+			break;
+		case -3:
+			//cout << "";
+			line.push_back("");
+			break;
+		case -10:
+			//cout << " Разбор завершён";
+			line.push_back("Разбор завершён");
+			break;
+		}
+	}
+
+	return line;
+}
+
+void LLk_TtoD_Line::SetLine(const string& pars_str, const string& st_str, const RuleNum& inp_rnum)
+{
+	cur_string = pars_str;
+	stack_str = st_str;
+	rule_num = inp_rnum;
+}
+
+void LLk_TtoD_Line::PrintLine()
+{
+	cout << endl << "Строка: " << cur_string;
+	cout << " Стек: " << stack_str;
+
+
+	if (rule_num.fir_num > 0) {
+		if ((rule_num.fir_num == 1) || (rule_num.fir_num == 3)) {
+			cout << " Правило: " << rule_num.fir_num + 1;
+		}
+		else {
+			cout << " Правило: " << rule_num.fir_num + 1 << char(rule_num.sec_num + 224);
+		}
+	}
+	else {
+		switch (rule_num.fir_num)
+		{
+		case -1:
+			cout << " Некорректный символ, разбор завершён";
+			break;
+		case -3:
+			cout << "";
+			break;
+		case -10:
+			cout << " Разбор завершён";
+			break;
+		}
+	}
+
+
+}
+

@@ -61,6 +61,8 @@ void CWindow::RenderCWin(ModeOfCWin type)
 			{ ui.lblName->setText(RUS("Левосторонний восходящий разбор")); break; }
 			case TypeOfAlg::TTOD:
 			{ ui.lblName->setText(RUS("Левосторонний нисходящий разбор")); break; }
+			case TypeOfAlg::LLK_TTOD:
+			{ ui.lblName->setText(RUS("Левосторонний нисходящий разбор для LLk грамматики")); break; }
 			default:
 				break;
 			}
@@ -151,6 +153,13 @@ void CWindow::SetAlgorithm(TypeOfAlg inp_alg_type)
 			algorithm->SetLogTableType(TypeOfAlg::TTOD);
 			break;
 		}
+	case TypeOfAlg::LLK_TTOD:
+	{
+		TtoD_LLk_MethodAlg* cur_alg = new  TtoD_LLk_MethodAlg;
+		algorithm = cur_alg;
+		algorithm->SetLogTableType(TypeOfAlg::LLK_TTOD);
+		break;
+	}
 	}
 	algorithm->SetRulesOfAlg();
 	DrawRules();
@@ -747,6 +756,10 @@ void CWindow::onStepClicked()
 
 
 		break;
+	}
+	case TypeOfAlg::LLK_TTOD:
+	{
+		return;
 	}
 	}
 }

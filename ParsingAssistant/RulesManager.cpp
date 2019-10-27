@@ -22,7 +22,8 @@ QLayout* RulesManager::DrawRules(const std::vector<ItemRule>& rules)
 	cur_rule = rules[0];
 	int size = cur_rule.RightSize() + 1; // число вариантов раскрытия первого правила
 
-	for (int i = 0; i < size; i++) {
+	//for (int i = 0; i < size; i++) {
+	for (int i = 0; i < rules_size; i++) {
 
 		cur_rule = rules[i];
 		size = cur_rule.RightSize() + 1;

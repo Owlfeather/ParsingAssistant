@@ -4,6 +4,7 @@
 #include "ui_CWindow.h"
 #include "Algorithm_LtoR.h"
 #include "Algorithm_TtoD.h"
+#include "Algorithm_LLk_TtoD.h"
 //#include "LogTable.h"
 #include <iostream>
 #include "RulesManager.h"

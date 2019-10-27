@@ -23,4 +23,5 @@ private slots:
 	void onExitClicked();
 	void onLtoRClicked();
 	void onTtoDClicked();
+	void onLLkTtoDClicked();
 };

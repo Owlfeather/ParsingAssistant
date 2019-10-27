@@ -71,7 +71,8 @@ public:
 enum class TypeOfAlg 
 {
 	LTOR,
-	TTOD
+	TTOD,
+	LLK_TTOD
 };
 
 enum class ModeOfCWin 

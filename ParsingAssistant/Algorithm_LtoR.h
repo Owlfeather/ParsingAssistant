@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
-//#include "Alg_Elements.h"
 #include "Basic_Algorithm.h"
 
 
