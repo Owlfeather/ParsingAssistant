@@ -326,6 +326,10 @@ vector<string> LLk_TtoD_Line::GetLine()
 			//cout << " Некорректный символ, разбор завершён";
 			line.push_back("Некорректный символ, разбор завершён");
 			break;
+		case -2:
+			//cout << " Некорректный символ, разбор завершён";
+			line.push_back("Ошибка, разбор завершён");
+			break;
 		case -3:
 			//cout << "";
 			line.push_back("");
@@ -366,6 +370,9 @@ void LLk_TtoD_Line::PrintLine()
 		{
 		case -1:
 			cout << " Некорректный символ, разбор завершён";
+			break;
+		case -2:
+			cout << " Ошибка, разбор завершён";
 			break;
 		case -3:
 			cout << "";

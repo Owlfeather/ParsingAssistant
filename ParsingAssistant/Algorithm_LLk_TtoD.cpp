@@ -95,6 +95,9 @@ void TtoD_LLk_MethodAlg::SetRulesOfAlg()
 
 void TtoD_LLk_MethodAlg::SetParsingStr(ItemString inp_str)
 {
+	if (parsing_str.Length() != 0) {
+		parsing_str.DeleteSymb(0, parsing_str.Length());
+	}
 
 	unsigned inp_size = inp_str.Length();
 	int symb_code;
@@ -104,10 +107,13 @@ void TtoD_LLk_MethodAlg::SetParsingStr(ItemString inp_str)
 
 		symb_code = int(string(inp_str).c_str()[i]);
 
-		if ((isalpha(symb_code))
-			||  ((symb_code <0 && symb_code > -65) 
-				|| (symb_code > 64 && symb_code < 91) 
-				|| (symb_code > 96 && symb_code < 123))) 
+		
+		//if ((isalpha(symb_code))
+		//	|| 
+		if	((symb_code <0 && symb_code > -65) 
+			|| (symb_code > 64 && symb_code < 91) 
+			|| (symb_code > 96 && symb_code < 123))
+		
 		{
 			///это буква
 			if (!prev_is_letter) { // буква встретилась первой
@@ -130,6 +136,10 @@ void TtoD_LLk_MethodAlg::SetParsingStr(ItemString inp_str)
 
 RuleNum TtoD_LLk_MethodAlg::FindRuleNum()
 {
+	comment_line = "____________________________________\nПроизводится поиск подходящего раскрытия правила: \n";
+	comment_line += string(target_str[0]);
+	comments_model->AddRecordLine(comment_line, TypeOfComment::INFO);
+
 	int rules_size = rules.size();
 	for (int i = 1; i < rules_size; i++) { /////? по идее можно смотреть с 1
 		if (rules[i].GetLeft() == target_str[0]) { // нашли правило
@@ -173,7 +183,17 @@ bool TtoD_LLk_MethodAlg::FindCorrectTerm(const RuleNum& rulenum)
 
 			//WriteToLog({ rulenum.fir_num,rulenum.sec_num + i });
 
+			comment_line = "   Существует подходящее раскрытие: \n   ";
+			comment_line += "Меняем " + string(target_str[0]) + " на ";
+			comment_line += string(rules[rulenum.fir_num][rulenum.sec_num + i]);
+			comments_model->AddRecordLine(comment_line, TypeOfComment::CORRECT_RULE, { rulenum.fir_num, rulenum.sec_num + i });
+
+			//comment_line += "\n   Строка-цель до раскрытия:\n   " + string(target_str);
+
 			TransformAccordingRule({ rulenum.fir_num , rulenum.sec_num + i });
+
+			//comment_line += "\n   Строка-цель после раскрытия:\n   " + string(target_str);
+			//comments_model->AddRecordLine(comment_line, TypeOfComment::CORRECT_RULE);
 
 			/// запись в лог с не убранными
 			
@@ -210,6 +230,11 @@ bool TtoD_LLk_MethodAlg::FindCorrectTerm(const RuleNum& rulenum)
 
 		WriteToLog({ rulenum.fir_num, 5 });
 
+		comment_line = "   Совпадений не найдено, но можно удалить\n   Удаляем первый символ из target_str: \n   ";
+		comment_line += "Строка-цель до удаления " + string(target_str);
+		
+
+
 		cout << endl;
 		cout << "Совпадений не найдено, но можно удалить, удаляем первый символ из target_str: ";
 		cout << endl << "Строка-цель до удаления: ";
@@ -217,6 +242,10 @@ bool TtoD_LLk_MethodAlg::FindCorrectTerm(const RuleNum& rulenum)
 		target_str.DeleteSymb(0, 1);
 		cout << endl << "Строка-цель после удаления: ";
 		target_str.PrintString();
+
+		comment_line += "\n   Строка-цель после удаления: " + string(target_str);
+		comments_model->AddRecordLine(comment_line, TypeOfComment::CORRECT_RULE, { rulenum.fir_num , 0});
+
 		return true;
 	}
 	/*
@@ -234,10 +263,22 @@ bool TtoD_LLk_MethodAlg::FindCorrectTerm(const RuleNum& rulenum)
 
 void TtoD_LLk_MethodAlg::RemoveMatchingSymbs()
 {
+	comment_line = "   Разбираемая строка: \n   ";
+	comment_line += string(parsing_str);
+	comment_line += "\n   Строка-цель:\n   " + string(target_str);
+	comment_line += "\n   Произведём удаление совпадающих символов\n\n   Результат:\n";
+	//comments_model->AddRecordLine(comment_line, TypeOfComment::INFO);
+
 	//recognized_str.AddSymb(parsing_str[0]);
 	WriteToLog({ -3, 0 });
 	parsing_str.DeleteSymb(0, 1);
 	target_str.DeleteSymb(0, 1);
+
+	comment_line += "   Разбираемая строка: \n   ";
+	comment_line += string(parsing_str);
+	comment_line += "\n   Строка-цель:\n   " + string(target_str);
+	comments_model->AddRecordLine(comment_line, TypeOfComment::HYPOTHESIS);
+	comment_line.clear();
 
 	cout << endl << "Разбираемая строка после удаления: ";
 	parsing_str.PrintString();
@@ -255,6 +296,8 @@ void TtoD_LLk_MethodAlg::TransformAccordingRule(const RuleNum& rulenum)
 	substr.PrintString();
 	cout << endl;
 
+	comment_line = "   Меняем " + string(target_str[0]) + " на " + string(substr) + "\n";
+
 	WriteToLog(rulenum);
 
 	target_str[0] = substr[0];
@@ -267,6 +310,14 @@ void TtoD_LLk_MethodAlg::TransformAccordingRule(const RuleNum& rulenum)
 	target_str.PrintString();
 	cout << endl;
 	
+	comment_line += "   Полученная строка-цель: " + string(target_str);
+
+	if (substr[0].IsTerm()) {
+		comment_line.clear();
+	}
+	else {
+		comments_model->AddRecordLine(comment_line, TypeOfComment::CORRECT_RULE, { rulenum.fir_num, rulenum.sec_num});
+	}
 }
 
 void TtoD_LLk_MethodAlg::WriteToLog(const RuleNum& cur_rule_num)
@@ -291,6 +342,7 @@ bool TtoD_LLk_MethodAlg::DoParse()
 	//recognized_str.AddSymb(ItemSymb(""));
 
 	target_str.SetString({ rules[1].GetLeft(), ItemSymb("end") }); // <выражение>end
+
 	// запись в лог
 
 	cout << "Строка-цель: ";
@@ -316,6 +368,11 @@ bool TtoD_LLk_MethodAlg::DoParse()
 
 			if (next_rule.fir_num == -5) {
 				cout << "Ошибка, разбор дальше невозможен" << endl;
+
+				comment_line = "Ошибка, разбор дальше невозможен";
+
+				comments_model->AddRecordLine(comment_line, TypeOfComment::PARSE_INCORRECT);
+				WriteToLog({-2, 0});
 				okey = false;
 				return true;
 			}
@@ -326,6 +383,12 @@ bool TtoD_LLk_MethodAlg::DoParse()
 					&& (target_str[0] == end)) {
 					cout << endl << "Разбор завершён";
 					WriteToLog({ -10, 0 });
+
+					comment_line = "Разбор завершён";
+					comments_model->AddRecordLine(comment_line, TypeOfComment::PARSE_CORRECT);
+
+
+					//parsing_str.DeleteSymb(0, 1);
 					okey = false;
 				}
 			}
@@ -341,6 +404,9 @@ bool TtoD_LLk_MethodAlg::DoParse()
 					// запись в лог о некорректном символе
 					cout << endl << "Некорректный символ, дальнейший разбор невозможен" << endl;
 
+					comment_line = "Некорректный символ, дальнейший разбор невозможен";
+					comments_model->AddRecordLine(comment_line, TypeOfComment::PARSE_INCORRECT);
+
 					WriteToLog();
 					okey = false;
 				}
@@ -350,6 +416,10 @@ bool TtoD_LLk_MethodAlg::DoParse()
 					&& (target_str[0] == end)) {
 					cout << endl << "Разбор завершён"<< endl;
 					WriteToLog({ -10, 0 });
+
+					comment_line = "Разбор завершён";
+					comments_model->AddRecordLine(comment_line, TypeOfComment::PARSE_CORRECT);
+
 					okey = false;
 				}
 			}

@@ -79,6 +79,28 @@ QVariant LogTable::data(const QModelIndex& index, int role) const
 			}
 			break;
 		}
+		case TypeOfAlg::LLK_TTOD:
+		{
+			switch (records[index.row()]->GetRuleNum().fir_num)
+			{
+			case -3:
+			{
+				return QVariant(QBrush(QColor(217, 255, 196)));
+				break;
+			}
+			case -1:
+			case -2:
+			{
+				return QVariant(QBrush(QColor(255, 215, 174)));
+				break;
+			}
+			case -10:
+			{
+				return QVariant(QBrush(QColor(191, 255, 157)));
+				break;
+			}
+			}
+		}
 		}
 
 	//	if (records[index.row()]->GetRuleNum().fir_num == -2) {		
