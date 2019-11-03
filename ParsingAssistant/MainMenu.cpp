@@ -13,13 +13,15 @@ MainMenu::MainMenu(QWidget *parent)
 	ui.setupUi(this);
 
 	c_win = new CWindow;
+	//i_win = new IWindow;
+
 	connect(c_win, &CWindow::cWindowClosed, this, &MainMenu::show);
 
 	connect(ui.btnExit, SIGNAL(clicked()), this, SLOT(onExitClicked()));
+	connect(ui.btnHelp, SIGNAL(clicked()), this, SLOT(onHelpClicked()));
 
 	connect(ui.btnLtoR, SIGNAL(clicked()), this, SLOT(onLtoRClicked()));
 	connect(ui.btnTtoD, SIGNAL(clicked()), this, SLOT(onTtoDClicked()));
-
 	connect(ui.btnLLkTtoD, SIGNAL(clicked()), this, SLOT(onLLkTtoDClicked()));
 
 	//connect()
@@ -40,12 +42,17 @@ void MainMenu::onExitClicked()
 	else { show(); }
 };
 
+MainMenu::~MainMenu()
+{
+}
+
 void MainMenu::onLtoRClicked()
 {
 	c_win->SetAlgorithm(TypeOfAlg::LTOR);
 	c_win->RenderCWin(ModeOfCWin::CWBEGIN);
 	c_win->show();
-	close();
+	//close();
+	hide();
 }
 
 void MainMenu::onTtoDClicked()
@@ -53,7 +60,9 @@ void MainMenu::onTtoDClicked()
 	c_win->SetAlgorithm(TypeOfAlg::TTOD);
 	c_win->RenderCWin(ModeOfCWin::CWBEGIN);
 	c_win->show();
-	close();
+	//close();
+	hide();
+
 }
 
 void MainMenu::onLLkTtoDClicked()
@@ -61,7 +70,23 @@ void MainMenu::onLLkTtoDClicked()
 	c_win->SetAlgorithm(TypeOfAlg::LLK_TTOD);
 	c_win->RenderCWin(ModeOfCWin::CWBEGIN);
 	c_win->show();
-	close();
+	//close();
+	hide();
 
 }
+
+void MainMenu::onHelpClicked()
+{
+	c_win->GetIWin()->SetHelpInfo();
+	c_win->GetIWin()->show();
+
+}
+
+
+void MainMenu::closeEvent(QCloseEvent* event)
+{
+	delete c_win->GetIWin();
+	delete c_win;
+}
+
 

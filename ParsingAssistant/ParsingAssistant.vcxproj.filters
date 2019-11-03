@@ -66,12 +66,18 @@
     <ClCompile Include="Algorithm_LLk_TtoD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="IWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="MainMenu.ui">
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="CWindow.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="IWindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
@@ -89,6 +95,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="RulesManager.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="IWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

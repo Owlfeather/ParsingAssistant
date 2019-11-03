@@ -14,6 +14,7 @@ CWindow::CWindow(QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
+	i_win = new IWindow;
 
 	connect(ui.btnBack, SIGNAL(clicked()), this, SLOT(onBackClicked()));
 	connect(ui.btnParse, SIGNAL(clicked()), this, SLOT(onParseModeClicked()));
@@ -22,6 +23,7 @@ CWindow::CWindow(QWidget *parent)
 	connect(ui.btnShowAll, SIGNAL(clicked()), this, SLOT(onShowAllClicked()));
 	connect(ui.btnRepeat, SIGNAL(clicked()), this, SLOT(onRepeatClicked()));
 	connect(ui.btnNewParse, SIGNAL(clicked()), this, SLOT(onNewParseClicked()));
+	connect(ui.btnInform, SIGNAL(clicked()), this, SLOT(onInformClicked()));
 
 
 
@@ -336,6 +338,17 @@ void CWindow::onNewParseClicked()
 	RenderCWin(ModeOfCWin::CWRESET);
 	algorithm->ResetLogs();
 
+}
+
+void CWindow::onInformClicked()
+{
+	i_win->SetAlgorithmInfo(alg_type);
+	i_win->show();
+}
+
+void CWindow::closeEvent(QCloseEvent* event)
+{
+	i_win->hide();
 }
 
 void CWindow::onRepeatClicked()

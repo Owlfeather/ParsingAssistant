@@ -119,6 +119,7 @@
     <ClCompile Include="Alg_Elements.cpp" />
     <ClCompile Include="Basic_Algorithm.cpp" />
     <ClCompile Include="Basic_Elements.cpp" />
+    <ClCompile Include="IWindow.cpp" />
     <ClCompile Include="LogComments.cpp" />
     <ClCompile Include="LogTable.cpp" />
     <ClCompile Include="main.cpp" />
@@ -131,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="CWindow.ui" />
+    <QtUic Include="IWindow.ui" />
     <QtUic Include="MainMenu.ui" />
   </ItemGroup>
   <ItemGroup>
@@ -146,6 +148,7 @@
     <ClInclude Include="Alg_Elements.h" />
     <ClInclude Include="Basic_Algorithm.h" />
     <ClInclude Include="Basic_Elements.h" />
+    <QtMoc Include="IWindow.h" />
     <QtMoc Include="RulesManager.h" />
     <QtMoc Include="LogComments.h" />
     <QtMoc Include="LogTable.h" />
