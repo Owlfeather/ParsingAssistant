@@ -129,3 +129,86 @@ void RulesManager::Neutralize()
 	my_rules[colored_rule.fir_num][colored_rule.sec_num]->setPalette(palette);
 	my_rules[colored_rule.fir_num][0]->setPalette(palette);
 }
+
+int RelTable::rowCount(const QModelIndex& parent) const
+{
+	//return relation_table->size();
+	return 5;
+}
+
+int RelTable::columnCount(const QModelIndex& parent) const
+{
+	return 5;
+}
+
+QVariant RelTable::data(const QModelIndex& index, int role) const
+{
+	if (role == Qt::DisplayRole) {
+		QString unswer;
+///*
+		switch (relation_table->at(index.row())[index.column()])
+		{case TypeOfRelation::CARRY:
+			unswer = "<";
+			break;
+		case TypeOfRelation::CONV:
+			unswer = ">";
+			break;
+		case TypeOfRelation::CONV_BR:
+			unswer = "=";
+			break;
+		case TypeOfRelation::ERROR:
+			unswer = "?";
+			break;
+		case TypeOfRelation::EXIT:
+			unswer = "В";
+			break;
+		}
+//*/
+		return QVariant(unswer);
+		//return QVariant(QString("*"));
+	}
+	//return QVariant(unswer);
+	return QVariant();
+}
+
+QVariant RelTable::headerData(int section, Qt::Orientation orientation, int role) const
+{
+	if (role != Qt::DisplayRole) {
+		return QVariant();
+	}
+
+	if (orientation == Qt::Vertical) {
+		return section;
+	}
+	switch (section) {
+	case 0:
+		return QString::fromLocal8Bit("+");
+	case 1:
+		return QString::fromLocal8Bit("*");
+	case 2:
+		return QString::fromLocal8Bit("(");
+	case 3:
+		return QString::fromLocal8Bit(")"); 
+	case 4:
+		return QString::fromLocal8Bit("end");
+		break;
+	}
+	//return QVariant();
+	///*
+	if (orientation == Qt::Horizontal) {
+		return section;
+	}
+	switch (section) {
+	case 0:
+		return QString::fromLocal8Bit("beg");
+	case 1:
+		return QString::fromLocal8Bit("+");
+	case 2:
+		return QString::fromLocal8Bit("*");
+	case 3:
+		return QString::fromLocal8Bit("(");
+	case 4:
+		return QString::fromLocal8Bit(")");
+	}
+	//*/
+}

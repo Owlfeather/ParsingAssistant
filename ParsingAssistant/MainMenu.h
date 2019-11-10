@@ -28,6 +28,7 @@ private slots:
 	void onLtoRClicked();
 	void onTtoDClicked();
 	void onLLkTtoDClicked();
+	void onLRkStackClicked();
 	void onHelpClicked();
 
 protected:

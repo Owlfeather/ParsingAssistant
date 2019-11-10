@@ -72,7 +72,8 @@ enum class TypeOfAlg
 {
 	LTOR,
 	TTOD,
-	LLK_TTOD
+	LLK_TTOD,
+	LRK_STACK
 };
 
 enum class ModeOfCWin 
@@ -112,4 +113,15 @@ enum TypeOfTtoDLine
 	RULE_FIT,
 	END_LINE,
 	WRONG_SYMB
+};
+
+enum TypeOfRelation
+{
+	CARRY,		// перенос
+	CONV,		// свёртка
+	CONV_BR,	// свёртка скобок
+	ID_ERROR,
+	OP_ERROR,
+	ERROR,
+	EXIT
 };

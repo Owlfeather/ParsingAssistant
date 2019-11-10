@@ -65,6 +65,8 @@ void CWindow::RenderCWin(ModeOfCWin type)
 			{ ui.lblName->setText(RUS("Левосторонний нисходящий разбор")); break; }
 			case TypeOfAlg::LLK_TTOD:
 			{ ui.lblName->setText(RUS("Левосторонний нисходящий разбор для LLk грамматики")); break; }
+			case TypeOfAlg::LRK_STACK:
+			{ ui.lblName->setText(RUS("Разбор стековым методом для LRk грамматики")); break; }
 			default:
 				break;
 			}
@@ -162,6 +164,13 @@ void CWindow::SetAlgorithm(TypeOfAlg inp_alg_type)
 		algorithm->SetLogTableType(TypeOfAlg::LLK_TTOD);
 		break;
 	}
+	case TypeOfAlg::LRK_STACK:
+	{
+		Stack_LRk_MethodAlg* cur_alg = new  Stack_LRk_MethodAlg;
+		algorithm = cur_alg;
+		algorithm->SetLogTableType(TypeOfAlg::LRK_STACK);
+		break;
+	}
 	}
 	algorithm->SetRulesOfAlg();
 	DrawRules();
@@ -247,6 +256,16 @@ void CWindow::DrawRules()
 
 	rules_manager->setLayout(rules_manager->DrawRules((algorithm->GetRules())));
 	rule_lay->addWidget(rules_manager);
+
+	if (alg_type == TypeOfAlg::LRK_STACK) {
+		QTableView* relation_view = new QTableView;
+		rule_lay->addWidget(relation_view);
+		rules_manager->SetViewRelation(relation_view);
+
+		RelTable* table = new RelTable(dynamic_cast<Stack_LRk_MethodAlg*>(algorithm)->GetRelationTable());
+		rules_manager->SetRelationTable(table);
+		rules_manager->SetRelModel();
+	}
 	ui.ruleBox->setLayout(rule_lay);
 }
 

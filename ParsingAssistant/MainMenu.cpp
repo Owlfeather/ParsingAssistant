@@ -23,6 +23,7 @@ MainMenu::MainMenu(QWidget *parent)
 	connect(ui.btnLtoR, SIGNAL(clicked()), this, SLOT(onLtoRClicked()));
 	connect(ui.btnTtoD, SIGNAL(clicked()), this, SLOT(onTtoDClicked()));
 	connect(ui.btnLLkTtoD, SIGNAL(clicked()), this, SLOT(onLLkTtoDClicked()));
+	connect(ui.btnLRkStack, SIGNAL(clicked()), this, SLOT(onLRkStackClicked()));
 
 	//connect()
 }
@@ -68,6 +69,16 @@ void MainMenu::onTtoDClicked()
 void MainMenu::onLLkTtoDClicked()
 {
 	c_win->SetAlgorithm(TypeOfAlg::LLK_TTOD);
+	c_win->RenderCWin(ModeOfCWin::CWBEGIN);
+	c_win->show();
+	//close();
+	hide();
+
+}
+
+void MainMenu::onLRkStackClicked()
+{
+	c_win->SetAlgorithm(TypeOfAlg::LRK_STACK);
 	c_win->RenderCWin(ModeOfCWin::CWBEGIN);
 	c_win->show();
 	//close();

@@ -19,6 +19,8 @@ int LogTable::columnCount(const QModelIndex& parent) const
 		return 4;
 	case TypeOfAlg::LLK_TTOD:
 		return 3;
+	case TypeOfAlg::LRK_STACK:
+		return 6;
 	}
 }
 
@@ -101,6 +103,10 @@ QVariant LogTable::data(const QModelIndex& index, int role) const
 			}
 			}
 		}
+		case TypeOfAlg::LRK_STACK:
+		{
+			///
+		}
 		}
 
 	//	if (records[index.row()]->GetRuleNum().fir_num == -2) {		
@@ -155,6 +161,22 @@ QVariant LogTable::headerData(int section, Qt::Orientation orientation, int role
 			return QString::fromLocal8Bit("Стек");
 		case 2:
 			return QString::fromLocal8Bit("Правило");
+		}
+		break;
+	case TypeOfAlg::LRK_STACK:
+		switch (section) {
+		case 0:
+			return QString::fromLocal8Bit("Стек");
+		case 1:
+			return QString::fromLocal8Bit("Рассматриваемый символ");
+		case 2:
+			return QString::fromLocal8Bit("Отношение");
+		case 3:
+			return QString::fromLocal8Bit("Операция");
+		case 4:
+			return QString::fromLocal8Bit("Тройка");
+		case 5:
+			return QString::fromLocal8Bit("Результат");
 		}
 		break;
 	}

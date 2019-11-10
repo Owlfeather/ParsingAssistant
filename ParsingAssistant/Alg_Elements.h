@@ -136,6 +136,30 @@ public:
 
 //-----------------------------------------------------------------
 
+class LRk_Stack_Line : public RecordLine {
+
+	string stack_str;
+	TypeOfRelation relation_str;
+	string trio_str;
+	RuleNum result_str;
+
+public:
+	TypeOfAlg GetType() override;
+	vector<string>  GetLine() override;
+
+	void SetLine(const string& pars_str, const RuleNum rulenum, const string& st_str,
+		const TypeOfRelation rel_str, const string& tr_str,
+		const RuleNum res_str);
+	void PrintLine() override;
+
+	string& GetStackString() { return stack_str; }
+	TypeOfRelation GetRelation() { return relation_str; }
+	string& GetTrioString() { return trio_str; }
+	RuleNum GetResult() { return result_str; }
+
+};
+
+//-----------------------------------------------------------------
 
 
 class ParseLog {

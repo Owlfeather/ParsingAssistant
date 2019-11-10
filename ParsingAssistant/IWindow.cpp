@@ -71,7 +71,16 @@ void IWindow::SetAlgorithmInfo(TypeOfAlg alg_type)
 		}
 		delete file;
 		break;
-	default:
+	case TypeOfAlg::LRK_STACK:
+		setWindowTitle(QString::fromLocal8Bit("Разбор стековым методом для LRk грамматик"));
+		file = new QFile("LRk.txt");
+
+		if ((file->exists()) && (file->open(QIODevice::ReadOnly)))
+		{
+			ui.textEdit->setText(file->readAll());
+			file->close();
+		}
+		delete file;
 		break;
 	}
 }

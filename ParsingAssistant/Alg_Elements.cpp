@@ -386,3 +386,132 @@ void LLk_TtoD_Line::PrintLine()
 
 }
 
+//---------------------LRk_Stack_Line---------------------
+
+TypeOfAlg LRk_Stack_Line::GetType()
+{
+	return TypeOfAlg::LRK_STACK;
+}
+
+vector<string> LRk_Stack_Line::GetLine()
+{
+	vector<string> line;
+	line.push_back(stack_str);
+	line.push_back(cur_string);
+
+	switch (relation_str)
+	{
+	case CARRY:
+		//cout << " Отношение: < Операция: Перенос";
+		line.push_back("<");
+		line.push_back("Перенос");
+		line.push_back("");
+		line.push_back("");
+
+		break;
+	case CONV:
+		//cout << " Отношение: > Операция: Свёртка ";
+		//cout << " Тройка: " << trio_str << " Результат: ";
+		line.push_back(">");
+		line.push_back("Свёртка");
+		line.push_back(trio_str);
+
+		if (result_str.fir_num == 0) {
+			//cout << "Выражение";
+			line.push_back("Выражение");
+		}
+		else if (result_str.fir_num == 1) {
+			//cout << "Терм";
+			line.push_back("Терм");
+		}
+		break;
+	case CONV_BR:
+		line.push_back("=");
+		line.push_back("Свёртка");
+		//cout << " Отношение: = Операция: Свёртка ";
+		//cout << " Тройка: " << trio_str << " Результат: Множ";
+		line.push_back(trio_str);
+		line.push_back("Множ");
+
+		break;
+	case ERROR:
+		//cout << " Отношение: ? Операция: Ошибка ";
+		line.push_back("?");
+		line.push_back("Ошибка");
+		line.push_back("");
+		line.push_back("");
+		break;
+	case ID_ERROR:
+		//cout << " Отношение: ! Операция: Отсутствие идентификатора ";
+		line.push_back("!");
+		line.push_back("Отсутствие идентификатора");
+		line.push_back("");
+		line.push_back("");
+		break;
+	case OP_ERROR:
+		//cout << " Отношение: ! Операция: Отсутствие оператора ";
+		line.push_back("!");
+		line.push_back("Отсутствие оператора");
+		line.push_back("");
+		line.push_back("");
+		break;
+	case EXIT:
+		//cout << " Отношение: В Операция: Выход ";
+		line.push_back("В");
+		line.push_back("Выход");
+		line.push_back("");
+		line.push_back("");
+		break;
+	}
+
+	return line;
+}
+
+void LRk_Stack_Line::SetLine(const string& pars_str, const RuleNum rulenum, const string& st_str, const TypeOfRelation rel_str, const string& tr_str, const RuleNum res_str)
+{
+	cur_string = pars_str;
+	rule_num = rulenum;
+	stack_str = st_str;
+	relation_str = rel_str;
+	trio_str = tr_str;
+	result_str = res_str;
+}
+
+void LRk_Stack_Line::PrintLine()
+{
+	cout << "Стек: " << stack_str << " Рассматриваемый элемент: " << cur_string;
+	switch (relation_str)
+	{
+	case CARRY:
+		cout << " Отношение: < Операция: Перенос";
+		break;
+	case CONV:
+		cout << " Отношение: > Операция: Свёртка ";
+		cout << " Тройка: " << trio_str << " Результат: ";
+		if (result_str.fir_num == 0) {
+			cout << "Выражение";
+		}
+		else if (result_str.fir_num == 1) {
+			cout << "Терм";
+		}
+		break;
+	case CONV_BR:
+		cout << " Отношение: = Операция: Свёртка ";
+		cout << " Тройка: " << trio_str << " Результат: Множ";
+		break;
+	case ERROR:
+		cout << " Отношение: ? Операция: Ошибка ";
+		break;
+	case ID_ERROR:
+		cout << " Отношение: ! Операция: Отсутствие идентификатора ";
+		break;
+	case OP_ERROR:
+		cout << " Отношение: ! Операция: Отсутствие оператора ";
+		break;
+	case EXIT:
+		cout << " Отношение: В Операция: Выход ";
+		break;
+	}
+	cout << endl;
+
+}

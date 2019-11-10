@@ -5,6 +5,7 @@
 #include "Algorithm_LtoR.h"
 #include "Algorithm_TtoD.h"
 #include "Algorithm_LLk_TtoD.h"
+#include "Algorithm_LRk_Stack.h"
 #include "IWindow.h"
 //#include "LogTable.h"
 #include <iostream>

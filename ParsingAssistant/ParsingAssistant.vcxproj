@@ -114,6 +114,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Algorithm_LLk_TtoD.cpp" />
+    <ClCompile Include="Algorithm_LRk_Stack.cpp" />
     <ClCompile Include="Algorithm_LtoR.cpp" />
     <ClCompile Include="Algorithm_TtoD.cpp" />
     <ClCompile Include="Alg_Elements.cpp" />
@@ -143,6 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Algorithm_LLk_TtoD.h" />
+    <ClInclude Include="Algorithm_LRk_Stack.h" />
     <ClInclude Include="Algorithm_LtoR.h" />
     <ClInclude Include="Algorithm_TtoD.h" />
     <ClInclude Include="Alg_Elements.h" />
