@@ -50,6 +50,7 @@ public:
 	LogTable* GetTable() { return table_model; }
 	LogComments* GetComments() { return comments_model; }
 	vector<ItemRule>& GetRules() { return rules; }
+	string GetParsingString() {return string(parsing_str);}
 
 
 	//void SetParsingStr(ItemString inp_str) { parsing_str = inp_str; }

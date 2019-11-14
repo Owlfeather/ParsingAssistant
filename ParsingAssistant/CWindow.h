@@ -26,6 +26,11 @@ public:
 	IWindow* GetIWin() { return i_win;  };
 	//void ChangeColor(unsigned i, unsigned j, Color inp_color);
 
+	//void ShowParseStr(const string& p_s) {
+	//	ui.ruleBox->add
+
+	//}
+
 private:
 	Ui::Form ui;
 	IWindow* i_win;

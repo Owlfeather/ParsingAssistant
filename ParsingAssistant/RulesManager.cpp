@@ -1,5 +1,7 @@
 ﻿#include "RulesManager.h"
 #include <QVBoxLayout>
+#include <QModelIndex>
+#include <QAbstractItemModel>
 
 QLayout* RulesManager::DrawRules(const std::vector<ItemRule>& rules)
 {
@@ -128,6 +130,7 @@ void RulesManager::Neutralize()
 	palette.setColor(QPalette::WindowText, color);
 	my_rules[colored_rule.fir_num][colored_rule.sec_num]->setPalette(palette);
 	my_rules[colored_rule.fir_num][0]->setPalette(palette);
+
 }
 
 int RelTable::rowCount(const QModelIndex& parent) const
@@ -143,6 +146,9 @@ int RelTable::columnCount(const QModelIndex& parent) const
 
 QVariant RelTable::data(const QModelIndex& index, int role) const
 {
+	if (role == Qt::TextAlignmentRole)
+		return Qt::AlignCenter;
+
 	if (role == Qt::DisplayRole) {
 		QString unswer;
 ///*
@@ -160,7 +166,7 @@ QVariant RelTable::data(const QModelIndex& index, int role) const
 			unswer = "?";
 			break;
 		case TypeOfRelation::EXIT:
-			unswer = "В";
+			unswer = "B";
 			break;
 		}
 //*/
@@ -173,6 +179,7 @@ QVariant RelTable::data(const QModelIndex& index, int role) const
 
 QVariant RelTable::headerData(int section, Qt::Orientation orientation, int role) const
 {
+	/*
 	if (role != Qt::DisplayRole) {
 		return QVariant();
 	}
@@ -210,5 +217,53 @@ QVariant RelTable::headerData(int section, Qt::Orientation orientation, int role
 	case 4:
 		return QString::fromLocal8Bit(")");
 	}
-	//*/
+	*/
+
+	{
+		if (orientation == Qt::Horizontal)
+		{
+			if (role == Qt::DisplayRole)
+				switch (section)
+				{
+				case 0: return "+";									 break;
+				case 1: return "*";									 break;
+				case 2: return "(";									 break;
+				case 3: return ")";									 break;
+				case 4: return  QString::fromWCharArray(L"\u2BC7");  break;
+				}
+		}
+		else if (orientation == Qt::Vertical)
+		{
+			if (role == Qt::DisplayRole)
+				switch (section)
+				{
+				//case 0: return QString::fromLocal8Bit(2BC8);	break;
+				//case 0: return	QString::fromUtf8("\u2BC8");	break;
+				case 0: return	QString::fromWCharArray(L"\u2BC8");	break;
+				case 1: return "+";									break;
+				case 2: return "*";									break;
+				case 3: return "(";									break;
+				case 4: return ")";									break;
+				}
+		}
+
+		return QVariant();
+	}
+}
+
+void RulesManager::ShowRelationOnTable(const RuleNum r_num)
+{
+	//view_relation->setFocus
+	selected_relation = r_num;
+	QModelIndex index = view_relation->model()->index(r_num.fir_num, r_num.sec_num);
+	view_relation->selectionModel()->select(index, QItemSelectionModel::Select);
+
+}
+
+void RulesManager::ClearRelSelection()
+{
+	QModelIndex index = view_relation->model()->index(selected_relation.fir_num, selected_relation.sec_num);
+	//index.s = selected_relation.fir_num;
+	//index.column = selected_relation.sec_num;
+	view_relation->selectionModel()->select(index, QItemSelectionModel::Deselect);
 }

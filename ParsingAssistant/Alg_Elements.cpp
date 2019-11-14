@@ -401,7 +401,7 @@ vector<string> LRk_Stack_Line::GetLine()
 
 	switch (relation_str)
 	{
-	case CARRY:
+	case TypeOfRelation::CARRY:
 		//cout << " Отношение: < Операция: Перенос";
 		line.push_back("<");
 		line.push_back("Перенос");
@@ -409,7 +409,7 @@ vector<string> LRk_Stack_Line::GetLine()
 		line.push_back("");
 
 		break;
-	case CONV:
+	case TypeOfRelation::CONV:
 		//cout << " Отношение: > Операция: Свёртка ";
 		//cout << " Тройка: " << trio_str << " Результат: ";
 		line.push_back(">");
@@ -425,7 +425,7 @@ vector<string> LRk_Stack_Line::GetLine()
 			line.push_back("Терм");
 		}
 		break;
-	case CONV_BR:
+	case TypeOfRelation::CONV_BR:
 		line.push_back("=");
 		line.push_back("Свёртка");
 		//cout << " Отношение: = Операция: Свёртка ";
@@ -434,28 +434,28 @@ vector<string> LRk_Stack_Line::GetLine()
 		line.push_back("Множ");
 
 		break;
-	case ERROR:
+	case TypeOfRelation::ERROR:
 		//cout << " Отношение: ? Операция: Ошибка ";
 		line.push_back("?");
 		line.push_back("Ошибка");
 		line.push_back("");
 		line.push_back("");
 		break;
-	case ID_ERROR:
+	case TypeOfRelation::ID_ERROR:
 		//cout << " Отношение: ! Операция: Отсутствие идентификатора ";
 		line.push_back("!");
-		line.push_back("Отсутствие идентификатора");
+		line.push_back("Нет ид-ра");
 		line.push_back("");
 		line.push_back("");
 		break;
-	case OP_ERROR:
+	case TypeOfRelation::OP_ERROR:
 		//cout << " Отношение: ! Операция: Отсутствие оператора ";
 		line.push_back("!");
-		line.push_back("Отсутствие оператора");
+		line.push_back("Нет оп-ра");
 		line.push_back("");
 		line.push_back("");
 		break;
-	case EXIT:
+	case TypeOfRelation::EXIT:
 		//cout << " Отношение: В Операция: Выход ";
 		line.push_back("В");
 		line.push_back("Выход");
@@ -482,10 +482,10 @@ void LRk_Stack_Line::PrintLine()
 	cout << "Стек: " << stack_str << " Рассматриваемый элемент: " << cur_string;
 	switch (relation_str)
 	{
-	case CARRY:
+	case TypeOfRelation::CARRY:
 		cout << " Отношение: < Операция: Перенос";
 		break;
-	case CONV:
+	case TypeOfRelation::CONV:
 		cout << " Отношение: > Операция: Свёртка ";
 		cout << " Тройка: " << trio_str << " Результат: ";
 		if (result_str.fir_num == 0) {
@@ -495,20 +495,20 @@ void LRk_Stack_Line::PrintLine()
 			cout << "Терм";
 		}
 		break;
-	case CONV_BR:
+	case TypeOfRelation::CONV_BR:
 		cout << " Отношение: = Операция: Свёртка ";
 		cout << " Тройка: " << trio_str << " Результат: Множ";
 		break;
-	case ERROR:
+	case TypeOfRelation::ERROR:
 		cout << " Отношение: ? Операция: Ошибка ";
 		break;
-	case ID_ERROR:
+	case TypeOfRelation::ID_ERROR:
 		cout << " Отношение: ! Операция: Отсутствие идентификатора ";
 		break;
-	case OP_ERROR:
+	case TypeOfRelation::OP_ERROR:
 		cout << " Отношение: ! Операция: Отсутствие оператора ";
 		break;
-	case EXIT:
+	case TypeOfRelation::EXIT:
 		cout << " Отношение: В Операция: Выход ";
 		break;
 	}

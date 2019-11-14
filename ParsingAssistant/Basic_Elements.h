@@ -101,7 +101,8 @@ enum class TypeOfComment
 	DEAD_END,
 	PARSE_CORRECT,
 	PARSE_INCORRECT,
-	HYPOTHESIS
+	HYPOTHESIS,
+	ACTION
 };
 
 enum TypeOfTtoDLine

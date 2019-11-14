@@ -50,24 +50,46 @@ public:
 	void AddRule(unsigned i, QLabel* rule) { my_rules[i].push_back(rule); }
 	QLayout* DrawRules(const std::vector<ItemRule>& rules);
 	void ColorRule(const RuleNum r_num, Color inp_color);
+	void ShowRelationOnTable(const RuleNum r_num);
 	void SetViewRelation(QTableView* view_rel) { view_relation = view_rel; }
 	//void DeleteRules() { my_rules.clear(); }
 	void SetRelModel() 
 	{ 
 		view_relation->setModel(relation_table);
 		view_relation->resizeColumnsToContents();
+		view_relation->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+		view_relation->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+		view_relation->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+		QRect rect;
+		rect.setWidth(100);
+		rect.setHeight(100);
+		view_relation->setGeometry(rect);
+		view_relation->setSelectionMode(QAbstractItemView::NoSelection);
 	}
+
 
 	std::vector<QLabel*>& operator[] (int i) { return my_rules[i]; }
 	void Neutralize();
+	void ClearRelSelection();
 
 	void SetRelationTable(RelTable* rel_table) { relation_table = rel_table; }
+	void SetStringOfIds(QLabel* str) { string_of_ids = str; }
+	void TextStringOfIds(string text)
+	{
+		QString qtext;
+		qtext = QString::fromLocal8Bit(text.c_str());
+		string_of_ids->clear();
+		string_of_ids->setText(qtext);
+	}
 
 private:
 	std::vector<std::vector<QLabel*>> my_rules;
 	RuleNum colored_rule;
+	RuleNum selected_relation;
 	QTableView* view_relation;
 	RelTable* relation_table;
+	QLabel* string_of_ids;
 
 	//void Neutralize();
 

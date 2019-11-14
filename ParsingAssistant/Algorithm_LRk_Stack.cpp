@@ -125,13 +125,18 @@ bool Stack_LRk_MethodAlg::DoParse()
 
 	stack_str.SetString({ beg }); // beg
 
+	parsing_item.DeleteSymb(0, parsing_item.Length());
+	
+
 	while (okey) {
 
 		if (!conv_happened) {
 			symb_found = SelectNextSymb();
 
 			if (!symb_found) {
-				cout << "\nОшибка, дальнейший разбор невозможен0\n";
+				//cout << "\nОшибка, дальнейший разбор невозможен0\n";
+				comment_line = "Ошибка, дальнейший разбор невозможен";
+				comments_model->AddRecordLine(comment_line, TypeOfComment::PARSE_INCORRECT);
 				okey = false;
 				//parsing_log.PrintLogLRk();
 				return true;
@@ -141,21 +146,53 @@ bool Stack_LRk_MethodAlg::DoParse()
 			conv_happened = false;
 		}
 		
+		comment_line = "____________________________________\nРазбираемый элемент строки: \n";
+		comment_line += string(parsing_item);
+		comments_model->AddRecordLine(comment_line, TypeOfComment::INFO);
+
 		rulenum = { FindLeftNum(), FindRightNum() };
 
 		///
 
 		if ((rulenum.fir_num == -1)||(rulenum.sec_num == -1)) {
-			cout << "\nОшибка, дальнейший разбор невозможен\n";
+			//cout << "\nОшибка, дальнейший разбор невозможен\n";
+			comment_line = "Ошибка, дальнейший разбор невозможен";
+			comments_model->AddRecordLine(comment_line, TypeOfComment::PARSE_INCORRECT);
 			okey = false;
 			WriteToLog({ 0, 6 }, string(stack_str), string(parsing_item));
 			//parsing_log.PrintLogLRk();
 			return true;
 		}
 		
-		cout << "\nПолученное правило: [" << rulenum.fir_num <<", " << rulenum.sec_num << "]\n";
+
+		//cout << "\nПолученное правило: [" << rulenum.fir_num <<", " << rulenum.sec_num << "]\n";
 		relation = relation_table[rulenum.fir_num][rulenum.sec_num];
-		cout << "Отношение: " << relation <<endl;
+		//cout << "Отношение: " << relation <<endl;
+
+		comment_line.clear();
+		comment_line = "Полученное правило: [" + to_string(rulenum.fir_num) + ", " + to_string(rulenum.sec_num) + "]\n";
+		string rel_for_comment = "";
+		switch (relation)
+		{
+		case CARRY:
+			rel_for_comment = "Перенос";
+			break;
+		case CONV:
+			rel_for_comment = "Свёртка";
+			break;
+		case CONV_BR:
+			rel_for_comment = "Свёртка скобок";
+			break;
+		case ERROR:
+			rel_for_comment = "Ошибка";
+			break;
+		case EXIT:
+			rel_for_comment = "Выход";
+			break;
+		}
+		comment_line += "Отношение: " + rel_for_comment;
+		comments_model->AddRecordLine(comment_line, TypeOfComment::CORRECT_RULE, rulenum);
+		comment_line.clear();
 
 		switch (relation)
 		{
@@ -168,6 +205,11 @@ bool Stack_LRk_MethodAlg::DoParse()
 			if (!conv_done) {
 				//cout << "\n\nОшибка, дальнейший разбор невозможен1";
 				cout << "\nНет идентификатора для свертки тройки\n";
+
+				comment_line.clear();
+				comment_line = "Нет идентификатора для свертки тройки";
+				comments_model->AddRecordLine(comment_line, TypeOfComment::PARSE_INCORRECT);
+
 				WriteToLog({ 0, 5 }, string(stack_str), string(parsing_item));
 				okey = false;
 			}
@@ -176,19 +218,28 @@ bool Stack_LRk_MethodAlg::DoParse()
 			conv_done = DoConvolution(false);
 			conv_happened = true;
 			if (!conv_done) {
-				cout << "\n\nОшибка, дальнейший разбор невозможен2";
+				//cout << "\n\nОшибка, дальнейший разбор невозможен2";
+				comment_line.clear();
+				comment_line = "Ошибка, дальнейший разбор невозможен";
+				comments_model->AddRecordLine(comment_line, TypeOfComment::PARSE_INCORRECT);
 				okey = false;
 			}
 			break;
 		case ERROR:
 			WriteToLog(rulenum, string(stack_str), string(parsing_item));
-			cout << "\n\nОшибка, дальнейший разбор невозможен3";
+			//cout << "\n\nОшибка, дальнейший разбор невозможен3";
+			comment_line.clear();
+			comment_line = "Ошибка операторного предшествования, дальнейший разбор невозможен";
+			comments_model->AddRecordLine(comment_line, TypeOfComment::PARSE_INCORRECT);
 			okey = false;
 			break;
 		case EXIT:
 			WriteToLog(rulenum, string(stack_str), string(parsing_item));
 			cout << "\n\nРазбор завершён успешно";
 			okey = false;
+			comment_line.clear();
+			comment_line = "Разбор завершён успешно";
+			comments_model->AddRecordLine(comment_line, TypeOfComment::PARSE_CORRECT);
 			break;
 		default:
 			break;
@@ -206,6 +257,7 @@ bool Stack_LRk_MethodAlg::DoParse()
 
 void Stack_LRk_MethodAlg::SetParsingStr(ItemString inp_str)
 {
+	parsing_str.DeleteSymb(0, parsing_str.Length());
 	unsigned inp_size = inp_str.Length();
 	int symb_code;
 	bool prev_is_letter = false;
@@ -352,6 +404,11 @@ void Stack_LRk_MethodAlg::DoCarry()
 	cout << "\nВыполнен перенос, стек после переноса: \n";
 	stack_str.PrintString();
 	cout << "\n";
+
+	comment_line.clear();
+	comment_line = "Выполнен перенос, стек после переноса :\n";
+	comment_line += string(stack_str);
+	comments_model->AddRecordLine(comment_line, TypeOfComment::HYPOTHESIS, rulenum);
 }
 
 bool Stack_LRk_MethodAlg::DoConvolution(bool full)
@@ -365,14 +422,23 @@ bool Stack_LRk_MethodAlg::DoConvolution(bool full)
 	string stack_for_line = string(stack_str);
 	string parse_for_line = string(parsing_item);
 
-	cout << "\nДо свёртки скобок:\n Стек: ";
-	stack_str.PrintString();
-	cout << "\n Рассматриваемый элемент: ";
-	parsing_item.PrintString();
+	//cout << "\nДо свёртки скобок:\n Стек: ";
+	//stack_str.PrintString();
+	//cout << "\n Рассматриваемый элемент: ";
+	//parsing_item.PrintString();
+
+	comment_line.clear();
+	comment_line = "До свёртки:\nСтек: ";
+	comment_line += string(stack_str);
+	comment_line += "\nРассматриваемый элемент: ";
+	comment_line += string(parsing_item);
+	comments_model->AddRecordLine(comment_line, TypeOfComment::HYPOTHESIS, rulenum);
 
 	if ((parsing_item.Length() == 1) && (parsing_item[0] == ItemSymb(")"))) {
 
-		cout << "\nТройку сформировать нельзя\n";
+		//cout << "\nТройку сформировать нельзя\n";
+		comment_line = "Тройку сформировать нельзя";
+		comments_model->AddRecordLine(comment_line, TypeOfComment::PARSE_INCORRECT, rulenum);
 		return false;
 	}
 	else {
@@ -417,15 +483,28 @@ bool Stack_LRk_MethodAlg::DoConvolution(bool full)
 			cout << "\n Тройка: ";
 			trio.PrintString();
 
+			comment_line.clear();
+			comment_line = "После свёртки:\nСтек: ";
+			comment_line += string(stack_str);
+			comment_line += "\nРассматриваемый элемент: ";
+			comment_line += string(parsing_item);
+			comment_line += "\nТройка: ";
+			comment_line += string(trio);
+			comment_line += "\nРезультат: ";
+
 			cout << "\n Результат: ";
 			if (cur_rule.fir_num == 0) {
 				cout << "Выражение";
+				comment_line += "Выражение";
+
 			}
 			else if (cur_rule.fir_num == 1) {
 				cout << "Терм";
+				comment_line += "Терм";
+
 			}
 
-
+			comments_model->AddRecordLine(comment_line, TypeOfComment::ACTION, cur_rule);
 
 		}
 		else {
@@ -446,7 +525,9 @@ bool Stack_LRk_MethodAlg::DoConvolution(bool full)
 
 				bool symb_found = SelectNextSymb();
 				if (!symb_found) {
-					cout << "\nТройку сформировать нельзя\n";
+					//cout << "\nТройку сформировать нельзя\n";
+					comment_line = "Тройку сформировать нельзя";
+					comments_model->AddRecordLine(comment_line, TypeOfComment::PARSE_INCORRECT, rulenum);
 				}
 				else {
 					cout << "\nПосле свёртки скобок:\n Стек: ";
@@ -457,10 +538,22 @@ bool Stack_LRk_MethodAlg::DoConvolution(bool full)
 					trio.PrintString();
 					cout << "\n Результат: Множ";
 					//2,1
+
+					comment_line.clear();
+					comment_line = "После свёртки скобок:\nСтек: ";
+					comment_line += string(stack_str);
+					comment_line += "\nРассматриваемый элемент: ";
+					comment_line += string(parsing_item);
+					comment_line += "\nТройка: ";
+					comment_line += string(trio);
+					comment_line += "\nРезультат: Множ";
+					comments_model->AddRecordLine(comment_line, TypeOfComment::ACTION, {2,1});
 				}
 			}
 			else {
-				cout << "\nТройку сформировать нельзя\n";
+				//cout << "\nТройку сформировать нельзя\n";
+				comment_line = "Тройку сформировать нельзя";
+				comments_model->AddRecordLine(comment_line, TypeOfComment::PARSE_INCORRECT, rulenum);
 			}
 		}
 		cout << "\n";
@@ -470,10 +563,6 @@ bool Stack_LRk_MethodAlg::DoConvolution(bool full)
 		trio_num++;
 		return true;
 	}
-
-	
-
-
 }
 
 void Stack_LRk_MethodAlg::WriteToLog(const RuleNum& rel_rule_num, const string& stack_s, 

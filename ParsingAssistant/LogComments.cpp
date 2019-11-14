@@ -35,6 +35,12 @@ QVariant LogComments::data(const QModelIndex& index, int role) const
 		case TypeOfComment::WRONG_RULE:
 			unswer += " WRONG_RULE";
 			break;
+		case TypeOfComment::HYPOTHESIS:
+			unswer += " HYPOTHESIS";
+			break;
+		case TypeOfComment::ACTION:
+			unswer += " ACTION";
+			break;
 		}
 
 		unswer += QString::fromLocal8Bit(" Правило: ") + QString::fromLocal8Bit(to_string(records[index.row()]->GetRuleNum().fir_num).c_str())
@@ -67,6 +73,9 @@ QVariant LogComments::data(const QModelIndex& index, int role) const
 			color = QColor(255, 255, 255);
 			break;
 		case TypeOfComment::HYPOTHESIS:
+			color = QColor(255, 255, 255);
+			break;
+		case TypeOfComment::ACTION:
 			color = QColor(255, 255, 255);
 			break;
 		}

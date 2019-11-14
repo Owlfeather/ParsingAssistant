@@ -105,7 +105,23 @@ QVariant LogTable::data(const QModelIndex& index, int role) const
 		}
 		case TypeOfAlg::LRK_STACK:
 		{
-			///
+			string rel = records[index.row()]->GetLine()[2];
+			if (rel == "<") {
+				return QVariant(QBrush(QColor(255, 255, 255)));
+			}
+			else if (rel == ">") {
+				return QVariant(QBrush(QColor(217, 255, 196)));
+			}
+			else if (rel == "=") {
+				return QVariant(QBrush(QColor(217, 255, 196)));
+			}
+			else if (rel == "В") {
+				return QVariant(QBrush(QColor(191, 255, 157)));
+			}
+			else {
+				return QVariant(QBrush(QColor(255, 215, 174)));
+			}
+			
 		}
 		}
 
@@ -168,7 +184,7 @@ QVariant LogTable::headerData(int section, Qt::Orientation orientation, int role
 		case 0:
 			return QString::fromLocal8Bit("Стек");
 		case 1:
-			return QString::fromLocal8Bit("Рассматриваемый символ");
+			return QString::fromLocal8Bit("Рассм. символ");
 		case 2:
 			return QString::fromLocal8Bit("Отношение");
 		case 3:

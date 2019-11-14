@@ -94,6 +94,32 @@ void CWindow::RenderCWin(ModeOfCWin type)
 			ui.btnShowAll->setDisabled(false);
 			ui.tableView->setModel(algorithm->GetTable());
 			ui.tableView->resizeColumnsToContents();
+			//ui.tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+			//int size = 0;
+			switch (alg_type)
+			{
+			case TypeOfAlg::LTOR:
+				//size = 2;
+				ui.tableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+				break;
+			case TypeOfAlg::TTOD:
+				ui.tableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+				ui.tableView->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
+
+				break;
+			case TypeOfAlg::LLK_TTOD:
+				//size = 3;
+
+			case TypeOfAlg::LRK_STACK:
+				//size = 6;
+				ui.tableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+				//ui.tableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+				//ui.tableView->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Stretch);
+				break;
+			}
+
+			
 			ui.listView->setModel(algorithm->GetComments());
 			HideRows();
 
@@ -259,10 +285,32 @@ void CWindow::DrawRules()
 
 	if (alg_type == TypeOfAlg::LRK_STACK) {
 		QTableView* relation_view = new QTableView;
-		rule_lay->addWidget(relation_view);
+		//relation_view->setBaseSize({ 100, 200 });
+		relation_view->setMinimumSize({ 245, 216 });
+
+		QHBoxLayout* rule_tab_l = new QHBoxLayout;
+		rule_tab_l->addStretch(50);
+		rule_tab_l->addWidget(relation_view);
+		rule_tab_l->addStretch(50);
+		rule_lay->addLayout(rule_tab_l);
+		///////
+		QVBoxLayout* parsed_str_l = new QVBoxLayout;
+		QLabel* my_string = new QLabel;
+		rules_manager->SetStringOfIds(my_string);
+		my_string->setText(QString::fromLocal8Bit("Введите строку"));
+		parsed_str_l->addWidget(my_string);
+		rule_lay->addLayout(parsed_str_l);
+		////////
+
+
+		//rule_lay->addWidget(relation_view);
 		rules_manager->SetViewRelation(relation_view);
 
 		RelTable* table = new RelTable(dynamic_cast<Stack_LRk_MethodAlg*>(algorithm)->GetRelationTable());
+
+		relation_view->horizontalHeader()->setStyleSheet("font: bold 14px;");
+		relation_view->verticalHeader()->setStyleSheet("font: bold 14px;");
+
 		rules_manager->SetRelationTable(table);
 		rules_manager->SetRelModel();
 	}
@@ -349,6 +397,11 @@ void CWindow::onStartClicked()
 		algorithm->DoParse();
 		/// ЛОГ СФОРМИРОВАН
 		RenderCWin(ModeOfCWin::CWPARSESTARTED);
+
+		if (alg_type == TypeOfAlg::LRK_STACK) {
+			rules_manager->TextStringOfIds("Строка: "+algorithm->GetParsingString());
+		}
+
 	}
 }
 
@@ -356,6 +409,10 @@ void CWindow::onNewParseClicked()
 {
 	RenderCWin(ModeOfCWin::CWRESET);
 	algorithm->ResetLogs();
+
+	if (alg_type == TypeOfAlg::LRK_STACK) {
+		rules_manager->TextStringOfIds("");
+	}
 
 }
 
@@ -850,6 +907,100 @@ void CWindow::onStepClicked()
 			case TypeOfComment::PARSE_CORRECT:
 			{
 
+				RenderCWin(ModeOfCWin::CWPARSEENDED);
+				break;
+			}
+			}
+
+			algorithm->GetComments()->IncRow();
+		}
+
+
+		break;
+	}
+	case TypeOfAlg::LRK_STACK:
+	{
+		if (algorithm->GetComments()->NotEnd()) {
+
+			ui.listView->setRowHidden(algorithm->GetComments()->GetNextRow(), false);
+
+			scrollbar_comments->setMaximum(1000);
+			scrollbar_comments->setValue(1000);
+
+			///УПРАВЛЕНИЕ БЛОКАМИ///
+			Comment* cur_comment = algorithm->GetComments()->GetRow(algorithm->GetComments()->GetNextRow());
+
+			switch (cur_comment->GetType())
+			{
+			case TypeOfComment::INFO:
+			{
+				rules_manager->Neutralize();
+				scrollbar_comments->setMaximum(1000);
+				scrollbar_comments->setValue(1000);
+				break;
+			}
+
+			case TypeOfComment::CORRECT_RULE:
+			{
+				rules_manager->Neutralize();
+				rules_manager->ClearRelSelection();
+				//rules_manager->ColorRule(cur_comment->GetRuleNum(), Color::GREEN);
+				rules_manager->ShowRelationOnTable(cur_comment->GetRuleNum());
+
+			//	ui.tableView->showRow(algorithm->GetTable()->GetNextRow());
+			//	algorithm->GetTable()->IncRow();
+			//	scrollbar_table->setMaximum(200);
+			//	scrollbar_table->setValue(200);
+
+				if (cur_comment->GetText().find("Перенос") != string::npos) {
+					ui.tableView->showRow(algorithm->GetTable()->GetNextRow());
+					algorithm->GetTable()->IncRow();
+					scrollbar_table->setMaximum(200);
+					scrollbar_table->setValue(200);
+				}
+
+				break;
+			}
+
+			case TypeOfComment::HYPOTHESIS:
+			{
+				rules_manager->Neutralize();
+
+			//	ui.tableView->showRow(algorithm->GetTable()->GetNextRow());
+			//	algorithm->GetTable()->IncRow();
+			//	scrollbar_table->setMaximum(200);
+			//	scrollbar_table->setValue(200);
+
+				break;
+			}
+			case TypeOfComment::ACTION:
+			{
+				rules_manager->Neutralize();
+				ui.tableView->showRow(algorithm->GetTable()->GetNextRow());
+				algorithm->GetTable()->IncRow();
+				scrollbar_table->setMaximum(200);
+				scrollbar_table->setValue(200);
+
+				if (cur_comment->GetText().find("Результат") != string::npos) {
+					rules_manager->ColorRule(cur_comment->GetRuleNum(), Color::GREEN);
+				}
+
+				break;
+			}
+			case TypeOfComment::PARSE_INCORRECT:
+
+				ui.tableView->showRow(algorithm->GetTable()->GetNextRow());
+				algorithm->GetTable()->IncRow();
+				scrollbar_table->setMaximum(200);
+				scrollbar_table->setValue(200);
+
+
+			case TypeOfComment::PARSE_CORRECT:
+			{
+				ui.tableView->showRow(algorithm->GetTable()->GetNextRow());
+				algorithm->GetTable()->IncRow();
+				scrollbar_table->setMaximum(200);
+				scrollbar_table->setValue(200);
 				RenderCWin(ModeOfCWin::CWPARSEENDED);
 				break;
 			}
