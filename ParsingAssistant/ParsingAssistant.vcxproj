@@ -150,6 +150,7 @@
     <ClInclude Include="Alg_Elements.h" />
     <ClInclude Include="Basic_Algorithm.h" />
     <ClInclude Include="Basic_Elements.h" />
+    <ClInclude Include="StringGenerator.h" />
     <QtMoc Include="IWindow.h" />
     <QtMoc Include="RulesManager.h" />
     <QtMoc Include="LogComments.h" />

@@ -24,6 +24,10 @@ CWindow::CWindow(QWidget *parent)
 	connect(ui.btnRepeat, SIGNAL(clicked()), this, SLOT(onRepeatClicked()));
 	connect(ui.btnNewParse, SIGNAL(clicked()), this, SLOT(onNewParseClicked()));
 	connect(ui.btnInform, SIGNAL(clicked()), this, SLOT(onInformClicked()));
+	connect(ui.btnGenCor, SIGNAL(clicked()), this, SLOT(onGenCorClicked()));
+	connect(ui.btnGenIncor, SIGNAL(clicked()), this, SLOT(onGenIncorClicked()));
+	connect(ui.btnGenRand, SIGNAL(clicked()), this, SLOT(onGenRandClicked()));
+
 
 
 
@@ -33,6 +37,7 @@ CWindow::CWindow(QWidget *parent)
 	ui.listView->setVerticalScrollBar(scrollbar_comments);
 
 	rules_manager = new RulesManager;
+	string_generator = new TestStringGenerator;
 }
 
 CWindow::~CWindow()
@@ -48,7 +53,7 @@ void CWindow::RenderCWin(ModeOfCWin type)
 		{
 
 			ui.grboxParse->setVisible(false);
-			ui.grboxTest->setVisible(false);
+			//ui.grboxTest->setVisible(false);
 			ui.btnRepeat->setDisabled(true);
 			ui.btnStep->setVisible(false);
 			ui.btnShowAll->setDisabled(true);
@@ -401,8 +406,8 @@ void CWindow::onStartClicked()
 		if (alg_type == TypeOfAlg::LRK_STACK) {
 			rules_manager->TextStringOfIds("Строка: "+algorithm->GetParsingString());
 		}
-
 	}
+	ui.genBox->setDisabled(true);
 }
 
 void CWindow::onNewParseClicked()
@@ -413,13 +418,62 @@ void CWindow::onNewParseClicked()
 	if (alg_type == TypeOfAlg::LRK_STACK) {
 		rules_manager->TextStringOfIds("");
 	}
-
+	ui.genBox->setDisabled(false);
 }
 
 void CWindow::onInformClicked()
 {
 	i_win->SetAlgorithmInfo(alg_type);
 	i_win->show();
+}
+
+void CWindow::onGenCorClicked()
+{
+	ui.lineInpStr->clear();
+	QString generated_string;
+	switch (alg_type)
+	{
+	case TypeOfAlg::LTOR:
+	case TypeOfAlg::TTOD:
+		generated_string = string_generator->correctNumber();
+		break;
+	case TypeOfAlg::LLK_TTOD:
+	case TypeOfAlg::LRK_STACK:
+		generated_string = string_generator->expression();
+		break;
+	}
+	ui.lineInpStr->setText(generated_string);
+}
+
+void CWindow::onGenIncorClicked()
+{
+	ui.lineInpStr->clear();
+	QString generated_string;
+	switch (alg_type)
+	{
+	case TypeOfAlg::LTOR:
+	case TypeOfAlg::TTOD:
+		generated_string = string_generator->incorrectNumber();
+		break;
+	case TypeOfAlg::LLK_TTOD:
+	case TypeOfAlg::LRK_STACK:
+		//generated_string = string_generator->expression();
+		generated_string = "";
+		break;
+	}
+	ui.lineInpStr->setText(generated_string);
+}
+
+void CWindow::onGenRandClicked()
+{
+	bool variants[] = { true, false };
+	bool variant = variants[QRandomGenerator::global()->bounded(2)];
+	if (variant) {
+		onGenCorClicked();
+	}
+	else {
+		onGenIncorClicked();
+	}
 }
 
 void CWindow::closeEvent(QCloseEvent* event)
@@ -450,6 +504,7 @@ void CWindow::onBackClicked()
 	ui.btnStart->setDisabled(false);
 	ui.lineInpStr->setDisabled(false);
 	ui.btnShowAll->setDisabled(true);
+	ui.genBox->setDisabled(false);
 	ui.lineInpStr->clear();
 	ui.tableView->setModel(0);
 

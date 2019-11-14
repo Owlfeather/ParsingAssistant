@@ -131,5 +131,8 @@
     <ClInclude Include="Algorithm_LRk_Stack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="StringGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

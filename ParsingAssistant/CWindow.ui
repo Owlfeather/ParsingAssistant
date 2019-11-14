@@ -10,6 +10,12 @@
     <height>806</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>150</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>Методы грамматического разбора</string>
   </property>
@@ -78,25 +84,6 @@
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QPushButton" name="btnTest">
-            <property name="minimumSize">
-             <size>
-              <width>300</width>
-              <height>41</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>Century Gothic</family>
-              <pointsize>9</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Тестирование</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
        </layout>
@@ -117,34 +104,11 @@
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_4">
             <item>
-             <widget class="QLabel" name="lblAboutStr">
-              <property name="font">
-               <font>
-                <family>Century Gothic</family>
-                <pointsize>9</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Введите строку для разбора:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="lineInpStr"/>
-            </item>
-            <item>
-             <widget class="QTableView" name="tableView"/>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QVBoxLayout" name="verticalLayout_3">
-            <item>
-             <widget class="QPushButton" name="btnStart">
+             <widget class="QGroupBox" name="groupBox_2">
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>41</height>
+                <height>111</height>
                </size>
               </property>
               <property name="font">
@@ -153,11 +117,102 @@
                 <pointsize>9</pointsize>
                </font>
               </property>
-              <property name="text">
-               <string>Разобрать</string>
+              <property name="title">
+               <string>Введите строку для разбора:</string>
               </property>
+              <property name="alignment">
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_7">
+               <item>
+                <widget class="QLineEdit" name="lineInpStr"/>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnStart">
+                 <property name="minimumSize">
+                  <size>
+                   <width>150</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>170</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <family>Century Gothic</family>
+                   <pointsize>9</pointsize>
+                  </font>
+                 </property>
+                 <property name="layoutDirection">
+                  <enum>Qt::LeftToRight</enum>
+                 </property>
+                 <property name="autoFillBackground">
+                  <bool>false</bool>
+                 </property>
+                 <property name="text">
+                  <string>Разобрать</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </widget>
             </item>
+            <item>
+             <widget class="QGroupBox" name="genBox">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>45</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Century Gothic</family>
+                <pointsize>9</pointsize>
+               </font>
+              </property>
+              <property name="title">
+               <string>Сгенерировать строку для разбора:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_7">
+               <item>
+                <widget class="QPushButton" name="btnGenCor">
+                 <property name="text">
+                  <string>Корректная</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnGenIncor">
+                 <property name="text">
+                  <string>Некорректная</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnGenRand">
+                 <property name="text">
+                  <string>Произвольная</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTableView" name="tableView"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
             <item>
              <widget class="QPushButton" name="btnStep">
               <property name="minimumSize">
@@ -205,7 +260,10 @@
                </font>
               </property>
               <property name="text">
-               <string>Ход разбора:</string>
+               <string>   Ход разбора:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
@@ -276,62 +334,6 @@
            </widget>
           </item>
          </layout>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="grboxTest">
-     <property name="title">
-      <string/>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_7">
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="lineEdit_2"/>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton_7">
-          <property name="text">
-           <string>PushButton</string>
-          </property>
-         </widget>
         </item>
        </layout>
       </item>

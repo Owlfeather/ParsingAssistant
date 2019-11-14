@@ -10,6 +10,9 @@
 //#include "LogTable.h"
 #include <iostream>
 #include "RulesManager.h"
+#include "StringGenerator.h"
+#include <QRandomGenerator>
+
 
 
 
@@ -38,6 +41,7 @@ private:
 	QScrollBar* scrollbar_table;
 	QScrollBar* scrollbar_comments;
 	RulesManager* rules_manager;
+	TestStringGenerator* string_generator;
 	//-----------------------------
 	TypeOfAlg alg_type;
 	ParseAlgorithm* algorithm;
@@ -58,6 +62,9 @@ private slots:
 	void onRepeatClicked();
 	void onNewParseClicked();
 	void onInformClicked();
+	void onGenCorClicked();
+	void onGenIncorClicked();
+	void onGenRandClicked();
 
 protected:
 	void closeEvent(QCloseEvent* event);
