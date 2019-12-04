@@ -320,6 +320,7 @@ bool LtoR_MethodAlg::DoParse()
 					//return false;
 				}
 			}
+
 			if ((parsing_item.Length() < quantity) && (entry_point != parsing_str.Length() - 1)) {
 				parsing_item.AddSymb(parsing_str[entry_point + parsing_item.Length()]);
 			}

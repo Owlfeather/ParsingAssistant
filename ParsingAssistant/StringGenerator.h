@@ -1,15 +1,15 @@
 ﻿#pragma once
 #include <QCoreApplication>
 #include <QRandomGenerator>
-#include<QDebug>
+#include <QDebug>
 
 class TestStringGenerator {
 private:
 
 	const vector<QString> valid_signs = { QString(), QString("-"), QString("+") };;
-	const QString expr_signs = QString("*.?)(^:|}{~");
-	const QString not_valid_signs = QString("abcdefghijklmnopqrstuvwxyz");
-	const QString alphabet = QString("+-*/");
+	const QString expr_signs = QString("+-*/");
+	const QString not_valid_signs = QString("*.?)(^:|}{~");
+	const QString alphabet = QString("abcdefghijklmnopqrstuvwxyz");
 
 public:
 
@@ -56,7 +56,7 @@ public:
 
 	QString expression(QString expr = "")
 	{
-		if (!QRandomGenerator::global()->bounded(3) && expr.size() != 0) {
+		if (!QRandomGenerator::global()->bounded(5) && expr.size() != 0) {
 			return expr;
 		}
 		if (expr.size() != 0) {
@@ -84,6 +84,18 @@ public:
 
 		}
 		return expression(expr);
+	}
+	
+	QString incorrectExpression()
+	{
+		QString wrong_expr;
+		QString mistake = expr_signs[QRandomGenerator::global()->bounded(expr_signs.size())];
+		mistake += expr_signs[QRandomGenerator::global()->bounded(expr_signs.size())];
+
+		wrong_expr = expression();
+		wrong_expr.insert(QRandomGenerator::global()->bounded(wrong_expr.size()), mistake);
+
+		return wrong_expr;
 	}
 
 };

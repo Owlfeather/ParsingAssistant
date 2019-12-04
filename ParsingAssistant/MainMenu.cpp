@@ -2,6 +2,7 @@
 #include <QTextCodec>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QMouseEvent>
 
 // Преобразуем входную последовательность символов в кодировку UNICODE
 #define RUS( str ) codec->toUnicode(str)
@@ -25,11 +26,14 @@ MainMenu::MainMenu(QWidget *parent)
 	connect(ui.btnLLkTtoD, SIGNAL(clicked()), this, SLOT(onLLkTtoDClicked()));
 	connect(ui.btnLRkStack, SIGNAL(clicked()), this, SLOT(onLRkStackClicked()));
 
+	QPixmap picture("pic3.jpg");
+	ui.label->setPixmap(picture);
 	//connect()
 }
 
 void MainMenu::onExitClicked()
 {
+	/*
 	QTextCodec * codec = QTextCodec::codecForName("Windows-1251");
 	QMessageBox msgBox;
 	msgBox.setWindowTitle(RUS("Выход"));
@@ -41,6 +45,8 @@ void MainMenu::onExitClicked()
 
 	if (msgBox.clickedButton() == pButtonYes) { exit(0); }
 	else { show(); }
+	*/
+	close();
 };
 
 MainMenu::~MainMenu()
@@ -96,8 +102,35 @@ void MainMenu::onHelpClicked()
 
 void MainMenu::closeEvent(QCloseEvent* event)
 {
-	delete c_win->GetIWin();
-	delete c_win;
+	QTextCodec* codec = QTextCodec::codecForName("Windows-1251");
+	QMessageBox msgBox;
+	msgBox.setWindowTitle(RUS("Выход"));
+	msgBox.setText(RUS("Завершить приложение?"));
+	QAbstractButton* pButtonYes = msgBox.addButton(RUS("Да"), QMessageBox::YesRole);
+	msgBox.addButton(RUS("Нет"), QMessageBox::NoRole);
+
+	msgBox.exec();
+
+	if (msgBox.clickedButton() == pButtonYes)
+	{
+		//exit(0); 
+		//hide();
+		delete c_win->GetIWin();
+		delete c_win;
+		exit(0);
+	
+	}
+	else
+	{
+		//show(); 
+		//return;
+		event->ignore();
+
+	}
+
+
+	//delete c_win->GetIWin();
+	//delete c_win;
 }
 
 

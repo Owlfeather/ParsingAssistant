@@ -199,7 +199,7 @@
                <item>
                 <widget class="QPushButton" name="btnGenRand">
                  <property name="text">
-                  <string>Произвольная</string>
+                  <string>Случайная</string>
                  </property>
                 </widget>
                </item>

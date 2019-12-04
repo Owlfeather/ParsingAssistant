@@ -14,7 +14,7 @@ QVariant LogComments::data(const QModelIndex& index, int role) const
 	if (role == Qt::DisplayRole) {
 		
 		QString unswer = QString::fromLocal8Bit(records[index.row()]->GetText().c_str());
-	//	/*
+		/*
 		switch (records[index.row()]->GetType())
 		{
 		case TypeOfComment::CORRECT_RULE:

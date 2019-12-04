@@ -6,6 +6,7 @@
 #include <QAbstractItemView>
 #include <QScrollBar>
 #include <QVBoxLayout>
+#include <QMouseEvent>
 
 
 #define RUS( str ) codec->toUnicode(str)
@@ -457,8 +458,7 @@ void CWindow::onGenIncorClicked()
 		break;
 	case TypeOfAlg::LLK_TTOD:
 	case TypeOfAlg::LRK_STACK:
-		//generated_string = string_generator->expression();
-		generated_string = "";
+		generated_string = string_generator->incorrectExpression();
 		break;
 	}
 	ui.lineInpStr->setText(generated_string);
@@ -479,6 +479,28 @@ void CWindow::onGenRandClicked()
 void CWindow::closeEvent(QCloseEvent* event)
 {
 	i_win->hide();
+	//this->parentWidget().show();
+	QTextCodec* codec = QTextCodec::codecForName("Windows-1251");
+	QMessageBox msgBox;
+	msgBox.setWindowTitle(RUS("Выход"));
+	msgBox.setText(RUS("Завершить приложение?"));
+	QAbstractButton* pButtonYes = msgBox.addButton(RUS("Да"), QMessageBox::YesRole);
+	msgBox.addButton(RUS("Нет"), QMessageBox::NoRole);
+
+	msgBox.exec();
+
+	if (msgBox.clickedButton() == pButtonYes) 
+	{ 
+		//exit(0); 
+		hide();
+	}
+	else 
+	{ 
+		//show(); 
+		//return;
+		event->ignore();
+
+	}
 }
 
 void CWindow::onRepeatClicked()
@@ -514,7 +536,8 @@ void CWindow::onBackClicked()
 	algorithm->GetComments()->ResetRow();
 	////////////////////////////////
 
-	close();
+	//close();
+	hide();
 	emit cWindowClosed();
 }
 // НЕ ТОТ ПОРЯДОК ПРОСМОТРА
