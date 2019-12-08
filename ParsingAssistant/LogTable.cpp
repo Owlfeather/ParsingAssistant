@@ -101,6 +101,11 @@ QVariant LogTable::data(const QModelIndex& index, int role) const
 				return QVariant(QBrush(QColor(191, 255, 157)));
 				break;
 			}
+			default:
+			{
+				return QVariant(QBrush(QColor(255, 255, 255)));
+				break;
+			}
 			}
 		}
 		case TypeOfAlg::LRK_STACK:

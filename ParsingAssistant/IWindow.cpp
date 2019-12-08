@@ -24,7 +24,7 @@ IWindow::~IWindow()
 void IWindow::SetHelpInfo()
 {
 	setWindowTitle(QString::fromLocal8Bit("Помощь"));
-	QFile file("help.txt");
+	QFile file(":/ParsingAssistant/help.txt");
 
 	if ((file.exists()) && (file.open(QIODevice::ReadOnly)))
 	{
@@ -40,7 +40,7 @@ void IWindow::SetAlgorithmInfo(TypeOfAlg alg_type)
 	{
 	case TypeOfAlg::LTOR:
 		setWindowTitle(QString::fromLocal8Bit("Разбор \"слева направо\""));
-		file = new QFile("LtoR.txt");
+		file = new QFile(":/ParsingAssistant/LtoR.txt");
 
 		if ((file->exists()) && (file->open(QIODevice::ReadOnly)))
 		{
@@ -51,7 +51,7 @@ void IWindow::SetAlgorithmInfo(TypeOfAlg alg_type)
 		break;
 	case TypeOfAlg::TTOD:
 		setWindowTitle(QString::fromLocal8Bit("Разбор \"сверху вниз\""));
-		file = new QFile("TtoD.txt");
+		file = new QFile(":/ParsingAssistant/TtoD.txt");
 
 		if ((file->exists()) && (file->open(QIODevice::ReadOnly)))
 		{
@@ -62,7 +62,7 @@ void IWindow::SetAlgorithmInfo(TypeOfAlg alg_type)
 		break;
 	case TypeOfAlg::LLK_TTOD:
 		setWindowTitle(QString::fromLocal8Bit("Разбор \"слева направо\" для LLk грамматик"));
-		file = new QFile("LLk.txt");
+		file = new QFile(":/ParsingAssistant/LLk.txt");
 
 		if ((file->exists()) && (file->open(QIODevice::ReadOnly)))
 		{
@@ -73,7 +73,7 @@ void IWindow::SetAlgorithmInfo(TypeOfAlg alg_type)
 		break;
 	case TypeOfAlg::LRK_STACK:
 		setWindowTitle(QString::fromLocal8Bit("Разбор стековым методом для LRk грамматик"));
-		file = new QFile("LRk.txt");
+		file = new QFile(":/ParsingAssistant/LRk.txt");
 
 		if ((file->exists()) && (file->open(QIODevice::ReadOnly)))
 		{

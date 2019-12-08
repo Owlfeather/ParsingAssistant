@@ -112,6 +112,7 @@ void TtoD_LLk_MethodAlg::SetParsingStr(ItemString inp_str)
 		//	|| 
 		if	((symb_code <0 && symb_code > -65) 
 			|| (symb_code > 64 && symb_code < 91) 
+			|| (symb_code > 47 && symb_code < 58)
 			|| (symb_code > 96 && symb_code < 123))
 		
 		{

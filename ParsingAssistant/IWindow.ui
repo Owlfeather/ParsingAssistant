@@ -24,7 +24,7 @@
        <property name="font">
         <font>
          <family>Century Gothic</family>
-         <pointsize>7</pointsize>
+         <pointsize>9</pointsize>
         </font>
        </property>
        <property name="mouseTracking">

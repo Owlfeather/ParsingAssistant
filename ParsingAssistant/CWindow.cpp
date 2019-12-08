@@ -323,45 +323,6 @@ void CWindow::DrawRules()
 	ui.ruleBox->setLayout(rule_lay);
 }
 
-//void CWindow::ChangeColor(unsigned i, unsigned j, Color inp_color)
-/*{ 
-	QColor color;
-	QPalette palette;
-
-	switch (inp_color)
-	{
-	case Color::RED:
-	{
-		color = Qt::red;
-		palette = drawed_rules[i][j]->palette();
-		palette.setColor(QPalette::WindowText, color);
-		drawed_rules[i][j]->setPalette(palette);
-		drawed_rules[i][0]->setPalette(palette);
-
-	}
-		break;
-	
-	case Color::BLACK:
-	{
-		color = Qt::black;
-		palette = drawed_rules[i][j]->palette();
-		palette.setColor(QPalette::WindowText, color);
-		drawed_rules[i][j]->setPalette(palette);
-		drawed_rules[i][0]->setPalette(palette);
-	}
-		break;
-	case Color::GREEN:
-	{
-		color = Qt::green;
-		palette = drawed_rules[i][j]->palette();
-		palette.setColor(QPalette::WindowText, color);
-		drawed_rules[i][j]->setPalette(palette);
-		drawed_rules[i][0]->setPalette(palette);
-	}
-	}
-	
-}*/
-
 
 void CWindow::HideRows()
 {
@@ -490,14 +451,11 @@ void CWindow::closeEvent(QCloseEvent* event)
 	msgBox.exec();
 
 	if (msgBox.clickedButton() == pButtonYes) 
-	{ 
-		//exit(0); 
+	{  
 		hide();
 	}
 	else 
 	{ 
-		//show(); 
-		//return;
 		event->ignore();
 
 	}

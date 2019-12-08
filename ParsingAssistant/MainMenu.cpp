@@ -26,8 +26,9 @@ MainMenu::MainMenu(QWidget *parent)
 	connect(ui.btnLLkTtoD, SIGNAL(clicked()), this, SLOT(onLLkTtoDClicked()));
 	connect(ui.btnLRkStack, SIGNAL(clicked()), this, SLOT(onLRkStackClicked()));
 
-	QPixmap picture("pic3.jpg");
+	QPixmap picture(":/ParsingAssistant/LogoPNG.png");
 	ui.label->setPixmap(picture);
+	ui.label->resize(400, 400);
 	//connect()
 }
 
