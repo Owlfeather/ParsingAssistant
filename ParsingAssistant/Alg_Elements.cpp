@@ -1,7 +1,6 @@
 ﻿#include "Alg_Elements.h"
 
-//#define LTOR 0
-//#define TTOD 1
+
 
 
 //---------------------ItemRule---------------------
@@ -127,16 +126,7 @@ TypeOfAlg TtoD_Line::GetType()
 }
 
 //---------------------TtoD_Line---------------------
-/*
-void TtoD_Line::SetLine(const string & rec_str, const string & pars_str, const string & targ_str, unsigned type_of_line, const RuleNum & inp_rnum)
-{
-	recognized = rec_str;
-	cur_string = pars_str;
-	target = targ_str;
-	type = type_of_line;
-	rule_num = inp_rnum;
-}
-*/
+
 void TtoD_Line::SetLine(const string& rec_str, const string& pars_str, const string& targ_str, unsigned type_of_l, TypeOfTtoDLine line_type, const RuleNum& inp_rnum)
 {
 	recognized = rec_str;
@@ -190,33 +180,7 @@ vector<string> TtoD_Line::GetLine()
 	line.push_back(MakePrintable(recognized));
 	line.push_back(MakePrintable(cur_string));
 	line.push_back(MakePrintable(target));
-	/*
-	switch (type)
-	{
-	case 1:
-		line.push_back("?");
-		break;
-	case 2:
-		line.push_back(to_string(rule_num.fir_num + 1) + char(rule_num.sec_num + 224) + " - ?");
-		break;
-	case 3:
-		if (rule_num.sec_num == 0) {
-			line.push_back(to_string(rule_num.fir_num + 1) + char(rule_num.sec_num + 224) + " - нет");
-		}
-		else {
-			line.push_back(to_string(rule_num.fir_num + 1) + "а..." + char(rule_num.sec_num + 224) + " - нет");
-		}
-		break;
-	case 4:
-		line.push_back(to_string(rule_num.fir_num + 1) + char(rule_num.sec_num + 224) + " - да");
-		break;
-	}
-
-	if (type_of_line == END_LINE) {
-		line.pop_back();
-		line.push_back("Разбор завершён");
-	}
-	*/
+	
 
 
 	switch (type_of_line)
@@ -275,25 +239,6 @@ string TtoD_Line::MakePrintable(string & str_with_seps)
 	return str_for_print;
 }
 
-
-/*
-void ParseAlgorithm::SetLogTable(unsigned type_alg)
-{
-	table_model->SetRowCount(parsing_log.Size());
-	switch (type_alg)
-	{
-	case LTOR: {
-		table_model->SetColomnCount(2);
-		break;
-		//table_view->headerData(1, "dfrg");
-	}
-	case TTOD: {
-		table_model->SetColomnCount(4);
-		break;
-	}
-	}
-}
-*/
 
 //---------------------LLk_TtoD_Line---------------------
 

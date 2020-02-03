@@ -49,10 +49,7 @@ public:
 
 	void ClearRecords() { records.clear(); }
 
-	//const unsigned & CurRow() { return cur_row; }
 	const int Size() { return records.size(); }
-	//Comment* operator[] (int i) { return records[i]; }
-	//void Inc() { cur_row++; }
 	void ResetRow() { next_row = 1; }
 	void IncRow()
 	{
@@ -68,7 +65,6 @@ private:
 
 	vector<Comment*> records;
 	unsigned next_row;
-	//unsigned cur_row;
 
 	int rowCount(const QModelIndex& parent) const;
 	QVariant data(const QModelIndex& index, int role) const;

@@ -12,8 +12,6 @@
 
 class Stack_LRk_MethodAlg : public ParseAlgorithm {
 
-	//ItemString target_str;
-	//ItemString recognized_str;
 
 public:
 
@@ -28,22 +26,15 @@ private:
 	ItemString stack_str;
 	ItemString parsing_item;
 	RuleNum rulenum;
-	//RuleNum rulenum;
-	//ItemString trio;
+	
 	unsigned point_of_entry;
 
 	bool SelectNextSymb();
 	int FindLeftNum();
 	int FindRightNum();
-
 	void DoCarry();
 	bool DoConvolution(bool full);
 
-//	RuleNum FindRuleNum();
-//	bool FindCorrectTerm(const RuleNum& rulenum);
-//	void RemoveMatchingSymbs();
-
-//	void TransformAccordingRule(const RuleNum& rulenum);
 
 	void WriteToLog(const RuleNum& rel_rule_num, const string& stack_s, const string& parse_s,
 		const string& trio_str = "", const RuleNum& res_rule_num = { -1, 0 });

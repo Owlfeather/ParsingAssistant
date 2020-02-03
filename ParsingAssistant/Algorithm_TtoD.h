@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
-//#include "Alg_Elements.h"
 #include "Basic_Algorithm.h"
 
 
@@ -24,17 +23,16 @@ public:
 
 private:
 
-	//unsigned FindMaxQuantity();
+
 
 	RuleNum FindRuleNum();
 	bool FindCorrectTerm(const RuleNum & rulenum);
 	void RemoveMatchingSymbs();
-	//RuleNum GetNextRule();
+
 
 	void TransformAccordingRule(const RuleNum & rulenum);
 	RuleNum Rollback();
 
-	//void WriteToLog(const unsigned & type, const RuleNum & cur_rule_num = {-1, 0});
 	void WriteToLog(const unsigned& type, const TypeOfTtoDLine& line_type, const RuleNum& cur_rule_num = { -1, 0 });
 	ItemString RestoreStringFromLog(const string & log_str);
 

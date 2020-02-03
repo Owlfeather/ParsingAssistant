@@ -50,7 +50,6 @@ public:
 			res.insert(QRandomGenerator::global()->bounded(res.size())
 				, not_valid_signs[QRandomGenerator::global()->bounded(not_valid_signs.size())]);
 		}
-		//if (!QRandomGenerator::global()->bounded(10)) res = "ALOHA";
 		return res;
 	}
 
@@ -99,7 +98,4 @@ public:
 	}
 
 };
-//const QString TestStringGenerator::valid_signs[] = { QString(), QString("-"), QString("+") };
-//const QString TestStringGenerator::not_valid_signs = QString("*.?)(^:|}{~");
-//const QString TestStringGenerator::alphabet = QString("abcdefghijklmnopqrstuvwxyz");
-//const QString TestStringGenerator::expr_signs = QString("+-*/");
+

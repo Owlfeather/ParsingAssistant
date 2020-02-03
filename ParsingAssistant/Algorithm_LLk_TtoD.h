@@ -12,7 +12,6 @@
 class TtoD_LLk_MethodAlg : public ParseAlgorithm {
 
 	ItemString target_str;
-	//ItemString recognized_str;
 
 public:
 
@@ -27,11 +26,8 @@ private:
 	void RemoveMatchingSymbs();
 
 	void TransformAccordingRule(const RuleNum& rulenum);
-//	RuleNum Rollback();
 
 	void WriteToLog(const RuleNum& cur_rule_num = { -1, 0 });
-//	ItemString RestoreStringFromLog(const string& log_str);
 
-//	string MakeStrForLog(ItemString& orig_str);
 
 };

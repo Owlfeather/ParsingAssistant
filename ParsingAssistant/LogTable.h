@@ -20,7 +20,6 @@ public:
 	}
 	void SetType(TypeOfAlg type) { alg_type = type; };
 	void AppendLine(RecordLine * line);
-	//void ColorizeRule(const RuleNum & rulenum);
 
 	void ClearRecords() { records.clear(); }
 
@@ -32,7 +31,6 @@ public:
 		}
 	}
 	const unsigned GetNextRow() { return next_row; }
-	//bool NotEndOfTable() { return (next_row < records.size()); }
 
 	RecordLine* GetRow(unsigned i) { return records[i]; }
 

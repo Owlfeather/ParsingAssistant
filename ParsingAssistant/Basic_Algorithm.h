@@ -1,5 +1,4 @@
 ﻿#pragma once
-//#include "Alg_Elements.h"
 #include "LogTable.h"
 #include"LogComments.h"
 
@@ -53,7 +52,6 @@ public:
 	string GetParsingString() {return string(parsing_str);}
 
 
-	//void SetParsingStr(ItemString inp_str) { parsing_str = inp_str; }
 
 	virtual void SetParsingStr(ItemString inp_str) = 0;
 	virtual void SetRulesOfAlg() = 0;

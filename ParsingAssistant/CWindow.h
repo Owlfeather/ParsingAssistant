@@ -7,7 +7,6 @@
 #include "Algorithm_LLk_TtoD.h"
 #include "Algorithm_LRk_Stack.h"
 #include "IWindow.h"
-//#include "LogTable.h"
 #include <iostream>
 #include "RulesManager.h"
 #include "StringGenerator.h"
@@ -27,12 +26,7 @@ public:
 	void SetAlgorithm(TypeOfAlg inp_alg_type);
 	void DrawRules();
 	IWindow* GetIWin() { return i_win;  };
-	//void ChangeColor(unsigned i, unsigned j, Color inp_color);
 
-	//void ShowParseStr(const string& p_s) {
-	//	ui.ruleBox->add
-
-	//}
 
 private:
 	Ui::Form ui;

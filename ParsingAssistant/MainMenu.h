@@ -1,13 +1,9 @@
 ﻿#pragma once
 
 #include <QtWidgets/QMainWindow>
-//#include "ui_ParsingAssistant.h"
 #include "ui_MainMenu.h"
 #include"CWindow.h"
-//#include"IWindow.h"
-
 #include <iostream>
-//#include <RulesManager.h>
 
 
 class MainMenu : public QMainWindow
@@ -21,7 +17,6 @@ public:
 private:
 	Ui::MainWindow ui;
 	CWindow * c_win;
-	//IWindow * i_win;
 
 private slots:
 	void onExitClicked();

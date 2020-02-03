@@ -20,9 +20,6 @@ public:
 
 private:
 	Ui::Form1 ui;
-	//QFile file;
-
-
 
 signals:
 

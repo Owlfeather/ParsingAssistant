@@ -54,13 +54,10 @@ void CWindow::RenderCWin(ModeOfCWin type)
 		{
 
 			ui.grboxParse->setVisible(false);
-			//ui.grboxTest->setVisible(false);
 			ui.btnRepeat->setDisabled(true);
 			ui.btnStep->setVisible(false);
 			ui.btnShowAll->setDisabled(true);
 
-			//ui.lineInpStr->setFocus();
-			//ui.lineInpStr->grabKeyboard();
 		
 			QTextCodec * codec = QTextCodec::codecForName("Windows-1251");
 			switch (alg_type)
@@ -100,13 +97,11 @@ void CWindow::RenderCWin(ModeOfCWin type)
 			ui.btnShowAll->setDisabled(false);
 			ui.tableView->setModel(algorithm->GetTable());
 			ui.tableView->resizeColumnsToContents();
-			//ui.tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+			ui.genBox->setDisabled(true);
 
-			//int size = 0;
 			switch (alg_type)
 			{
 			case TypeOfAlg::LTOR:
-				//size = 2;
 				ui.tableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
 				break;
 			case TypeOfAlg::TTOD:
@@ -115,13 +110,10 @@ void CWindow::RenderCWin(ModeOfCWin type)
 
 				break;
 			case TypeOfAlg::LLK_TTOD:
-				//size = 3;
 
 			case TypeOfAlg::LRK_STACK:
-				//size = 6;
 				ui.tableView->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-				//ui.tableView->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
-				//ui.tableView->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Stretch);
+				
 				break;
 			}
 
@@ -208,79 +200,6 @@ void CWindow::SetAlgorithm(TypeOfAlg inp_alg_type)
 	DrawRules();
 }
 
-/*
-void CWindow::DrawRules()
-{
-	QVBoxLayout* vbox = new QVBoxLayout;
-	//QWidget* gbox = new QWidget;
-	QTextCodec* codec = QTextCodec::codecForName("Windows-1251");
-
-	std::vector<QLabel *> buf;
-	std::vector<QHBoxLayout *> array_h_layouts;
-	std::vector<QLabel*> separators;
-	separators.resize(1);
-	ItemRule cur_rule;
-	QString text;
-	unsigned rules_size = algorithm->RulesSize(); // размер строк правил
-
-	array_h_layouts.resize(rules_size); //число правил
-	drawed_rules.resize(rules_size); ///число правил
-
-	cur_rule = algorithm->GetRule(0);
-	int size = cur_rule.RightSize() + 1; // число вариантов раскрытия первого правила
-
-	for (int i = 0; i < size; i++) {
-
-		cur_rule = algorithm->GetRule(i);
-		size = cur_rule.RightSize() + 1;
-
-		array_h_layouts[i] = new QHBoxLayout;
-		buf.clear();
-		buf.resize(size);
-
-		//drawed_rules[i].resize(size);
-
-		for (int j = 0; j < size; j++) {
-			buf[j] = new QLabel;
-
-			if (j == 0) {
-				text = QString::fromLocal8Bit((string(cur_rule.GetLeft())).c_str());
-				buf[j]->setText(text);
-				drawed_rules[i].push_back(buf[j]);
-				array_h_layouts[i]->addWidget(buf[j]);
-
-				text = "::=";
-				separators.resize(separators.size() + 1);
-				unsigned last_sep_num = separators.size() - 1;
-				separators[last_sep_num] = new QLabel;
-				separators[last_sep_num]->setText(text);
-				array_h_layouts[i]->addWidget(separators[separators.size() - 1]);
-			}
-			else {
-				text = QString::fromLocal8Bit((string(cur_rule.GetRight(j-1))).c_str());
-				buf[j]->setText(text);
-				drawed_rules[i].push_back(buf[j]);
-				array_h_layouts[i]->addWidget(buf[j]);
-
-				if (j != size - 1) {
-					text = "|";
-					separators.resize(separators.size() + 1);
-					unsigned last_sep_num = separators.size() - 1;
-					separators[last_sep_num] = new QLabel;
-					separators[last_sep_num]->setText(text);
-					array_h_layouts[i]->addWidget(separators[separators.size() - 1]);
-				}
-			}
-		}
-
-		array_h_layouts[i]->insertStretch(array_h_layouts[i]->count(), 1);
-		vbox->addLayout(array_h_layouts[i]);
-		ui.ruleBox->setLayout(vbox);
-		++size;
-	}
-
-}
-*/
 
 void CWindow::DrawRules()
 {
@@ -291,7 +210,6 @@ void CWindow::DrawRules()
 
 	if (alg_type == TypeOfAlg::LRK_STACK) {
 		QTableView* relation_view = new QTableView;
-		//relation_view->setBaseSize({ 100, 200 });
 		relation_view->setMinimumSize({ 245, 216 });
 
 		QHBoxLayout* rule_tab_l = new QHBoxLayout;
@@ -309,7 +227,6 @@ void CWindow::DrawRules()
 		////////
 
 
-		//rule_lay->addWidget(relation_view);
 		rules_manager->SetViewRelation(relation_view);
 
 		RelTable* table = new RelTable(dynamic_cast<Stack_LRk_MethodAlg*>(algorithm)->GetRelationTable());
@@ -358,6 +275,8 @@ void CWindow::onStartClicked()
 		messageBox.critical(0, QString::fromLocal8Bit("Ошибка: пустая строка"), 
 							   QString::fromLocal8Bit("Введите строку для разбора!"));
 		messageBox.setFixedSize(500, 200);
+
+		
 	}
 	else {
 		algorithm->SetParsingStr(ItemString(ui.lineInpStr->text().toLocal8Bit().constData()));
@@ -369,7 +288,6 @@ void CWindow::onStartClicked()
 			rules_manager->TextStringOfIds("Строка: "+algorithm->GetParsingString());
 		}
 	}
-	ui.genBox->setDisabled(true);
 }
 
 void CWindow::onNewParseClicked()
@@ -440,7 +358,6 @@ void CWindow::onGenRandClicked()
 void CWindow::closeEvent(QCloseEvent* event)
 {
 	i_win->hide();
-	//this->parentWidget().show();
 	QTextCodec* codec = QTextCodec::codecForName("Windows-1251");
 	QMessageBox msgBox;
 	msgBox.setWindowTitle(RUS("Выход"));
@@ -498,206 +415,7 @@ void CWindow::onBackClicked()
 	hide();
 	emit cWindowClosed();
 }
-// НЕ ТОТ ПОРЯДОК ПРОСМОТРА
-/* //НЕ ТОТ ПОРЯДОК ПРОСМОТРА
-void CWindow::onStepClicked()
-{
-	//
-	switch (alg_type)
-	{
-	case TypeOfAlg::LTOR:
 
-		RuleNum last_rule;
-
-		if (prev_rule.fir_num != -10) {											// если в предыдущий шаг какое-то правило было закрашено зелёным - 
-			ChangeColor(prev_rule.fir_num, prev_rule.sec_num, Color::BLACK);	// покрасить его обратно в чёрный
-			prev_rule.fir_num = -10;
-		}
-
-		if (cur_rule.fir_num == -10) // если начало поиска правил - смотрим с самого последнего правила
-		{
-			cur_rule.fir_num = algorithm->RulesSize() - 1;
-			cur_rule.sec_num = algorithm->GetRule(cur_rule.fir_num).RightSize();
-			ChangeColor(cur_rule.fir_num, cur_rule.sec_num, Color::RED);
-		}
-		else {
-
-			ChangeColor(cur_rule.fir_num, cur_rule.sec_num, Color::BLACK);	// если не начало поиска - красим обратно в чёрный предыдущее
-			if (cur_rule.sec_num != 1) {	// идём дальше по правилам
-				cur_rule.sec_num--;	
-			}
-			else {
-				if (cur_rule.fir_num != 0) {
-					cur_rule.fir_num--;
-					cur_rule.sec_num = algorithm->GetRule(cur_rule.fir_num).RightSize();
-				}
-				else {
-					ui.tableView->showRow(0);
-					ui.tableView->selectRow(0);
-					RenderCWin(ModeOfCWin::CWPARSEENDED);
-					break;
-				}
-			}
-			ChangeColor(cur_rule.fir_num, cur_rule.sec_num, Color::RED); // закрашиваем красным следующее рассматриваемое правило
-		}
-
-		last_rule = algorithm->GetTable()->GetRow(cur_row)->GetRuleNum(); // last_rule - последнее искомое правило
-
-		if ((last_rule.fir_num == cur_rule.fir_num) && (last_rule.sec_num == cur_rule.sec_num - 1)) // если правило нашлось
-		{
-			ui.tableView->showRow(cur_row);
-			ui.tableView->selectRow(cur_row);
-
-			scrollbar->setMaximum(200);
-			emit scrollbar->setValue(200);
-
-			if (cur_row != ui.tableView->model()->rowCount() - 1) {
-				cur_row++;
-				//проверка на тупик
-				
-				if (cur_rule.fir_num == 0) {
-					ui.tableView->showRow(cur_row);
-					ui.tableView->selectRow(cur_row);
-
-					scrollbar->setMaximum(200);
-					emit scrollbar->setValue(200);
-
-					if (algorithm->GetTable()->GetRow(cur_row)->GetRuleNum().sec_num == -3) {
-						RenderCWin(ModeOfCWin::CWPARSEENDED);
-								break;
-					}
-					else {
-						cur_row++;
-						if (algorithm->GetTable()->GetRow(cur_row)->GetRuleNum().sec_num == -4) {
-							ui.tableView->showRow(cur_row);
-							ui.tableView->selectRow(cur_row);
-							RenderCWin(ModeOfCWin::CWPARSEENDED);
-							break;
-						}
-					}
-				}
-			}
-			ChangeColor(cur_rule.fir_num, cur_rule.sec_num, Color::GREEN);
-			prev_rule = cur_rule;
-			cur_rule.fir_num = -10; // начать смотреть правила сначала
-		}
-		
-		break;
-
-	case TypeOfAlg::TTOD:
-		break;
-	}
-}
-*/  //
-// НЕКОРРЕКТНЫЙ ВЫВОД
-/*
-void CWindow::onStepClicked()
-{
-	//
-	switch (alg_type)
-	{
-	case TypeOfAlg::LTOR:
-
-		RuleNum last_rule;
-
-		if (prev_rule.fir_num != -10) {											// если в предыдущий шаг какое-то правило было закрашено зелёным - 
-			ChangeColor(prev_rule.fir_num, prev_rule.sec_num, Color::BLACK);	// покрасить его обратно в чёрный
-			prev_rule.fir_num = -10;
-		}
-
-		if (cur_rule.fir_num == -10) // если начало поиска правил - смотрим с первого правила
-		{
-			cur_rule.fir_num = 0;
-			cur_rule.sec_num = 1;
-			ChangeColor(cur_rule.fir_num, cur_rule.sec_num, Color::RED);
-		}
-		else {
-
-			ChangeColor(cur_rule.fir_num, cur_rule.sec_num, Color::BLACK);	// если не конец поиска - красим обратно в чёрный предыдущее
-			if (cur_rule.sec_num != algorithm->GetRule(cur_rule.fir_num).RightSize()) {	// идём дальше по правилам
-				cur_rule.sec_num++;
-			}
-			else {
-				if (cur_rule.fir_num != algorithm->RulesSize()-1) {
-					cur_rule.fir_num++;
-					cur_rule.sec_num = 1;
-				}
-				else {
-					ui.tableView->showRow(0);
-					ui.tableView->selectRow(0);
-					RenderCWin(ModeOfCWin::CWPARSEENDED);
-					break;
-				}
-			}
-			ChangeColor(cur_rule.fir_num, cur_rule.sec_num, Color::RED); // закрашиваем красным следующее рассматриваемое правило
-
-		}
-
-		last_rule = algorithm->GetTable()->GetRow(cur_table_row)->GetRuleNum(); // last_rule - последнее искомое правило
-
-		if ((last_rule.fir_num == cur_rule.fir_num) && (last_rule.sec_num == cur_rule.sec_num - 1)) // если правило нашлось
-		{
-			ui.tableView->showRow(cur_table_row);
-			ui.tableView->selectRow(cur_table_row);
-
-			scrollbar_table->setMaximum(200);
-			emit scrollbar_table->setValue(200);
-
-			if (cur_table_row != ui.tableView->model()->rowCount() - 1) {
-				cur_table_row++;
-				//проверка на тупик
-
-				if (cur_rule.fir_num == 0) {
-					ui.tableView->showRow(cur_table_row);
-					ui.tableView->selectRow(cur_table_row);
-
-					scrollbar_table->setMaximum(200);
-					emit scrollbar_table->setValue(200);
-
-					if (algorithm->GetTable()->GetRow(cur_table_row)->GetRuleNum().sec_num == -3) {
-						RenderCWin(ModeOfCWin::CWPARSEENDED);
-						break;
-					}
-					else {
-						cur_table_row++;
-						if (algorithm->GetTable()->GetRow(cur_table_row)->GetRuleNum().sec_num == -4) {
-							ui.tableView->showRow(cur_table_row);
-							ui.tableView->selectRow(cur_table_row);
-							RenderCWin(ModeOfCWin::CWPARSEENDED);
-							break;
-						}
-					}
-				}
-			}
-			ChangeColor(cur_rule.fir_num, cur_rule.sec_num, Color::GREEN);
-			prev_rule = cur_rule;
-			cur_rule.fir_num = -10; // начать смотреть правила сначала
-
-			for (unsigned i = 0; i < 3; i++) {
-				cur_comment_row++;
-				ui.listView->setRowHidden(cur_comment_row, false);
-				scrollbar_comments->setMaximum(200);
-				scrollbar_comments->setValue(200);
-			}
-
-
-		}
-		else {
-			if (cur_comment_row != algorithm->GetComments()->Size()) {
-				cur_comment_row++;
-				ui.listView->setRowHidden(cur_comment_row, false);
-				scrollbar_comments->setMaximum(200);
-				scrollbar_comments->setValue(200);
-			}
-		}
-
-		break;
-
-	case TypeOfAlg::TTOD:
-		break;
-	}
-}
-*/ 
 
 void CWindow::onStepClicked()
 {
@@ -814,7 +532,6 @@ void CWindow::onStepClicked()
 
 				for (int i = 0; i < 3; i++){
 					ui.tableView->showRow(algorithm->GetTable()->GetNextRow());
-					//ui.tableView->selectRow(algorithm->GetTable()->GetNextRow());
 					algorithm->GetTable()->IncRow();
 					scrollbar_table->setMaximum(200);
 					scrollbar_table->setValue(200);
@@ -831,12 +548,10 @@ void CWindow::onStepClicked()
 				scrollbar_comments->setMaximum(1000);
 				scrollbar_comments->setValue(1000);
 
-				//for(int i = 0; i < 2; i++){
 					ui.tableView->showRow(algorithm->GetTable()->GetNextRow());
 					algorithm->GetTable()->IncRow();
 					scrollbar_table->setMaximum(200);
 					scrollbar_table->setValue(200);
-			//	}
 				break;
 			}
 			case TypeOfComment::HYPOTHESIS:
@@ -850,7 +565,6 @@ void CWindow::onStepClicked()
 				scrollbar_comments->setValue(1000);
 
 				ui.tableView->showRow(algorithm->GetTable()->GetNextRow());
-				//ui.tableView->selectRow(algorithm->GetTable()->GetNextRow());
 				algorithm->GetTable()->IncRow();
 				scrollbar_table->setMaximum(200);
 				scrollbar_table->setValue(200);
@@ -868,11 +582,7 @@ void CWindow::onStepClicked()
 
 			case TypeOfComment::PARSE_CORRECT:
 			{
-			//	ui.tableView->showRow(algorithm->GetTable()->GetNextRow());
-			//	ui.tableView->selectRow(algorithm->GetTable()->GetNextRow());
-			//	algorithm->GetTable()->IncRow();
-			//	scrollbar_table->setMaximum(200);
-			//	scrollbar_table->setValue(200);
+
 
 				RenderCWin(ModeOfCWin::CWPARSEENDED);
 				break;
@@ -980,13 +690,7 @@ void CWindow::onStepClicked()
 			{
 				rules_manager->Neutralize();
 				rules_manager->ClearRelSelection();
-				//rules_manager->ColorRule(cur_comment->GetRuleNum(), Color::GREEN);
 				rules_manager->ShowRelationOnTable(cur_comment->GetRuleNum());
-
-			//	ui.tableView->showRow(algorithm->GetTable()->GetNextRow());
-			//	algorithm->GetTable()->IncRow();
-			//	scrollbar_table->setMaximum(200);
-			//	scrollbar_table->setValue(200);
 
 				if (cur_comment->GetText().find("Перенос") != string::npos) {
 					ui.tableView->showRow(algorithm->GetTable()->GetNextRow());
@@ -1001,11 +705,6 @@ void CWindow::onStepClicked()
 			case TypeOfComment::HYPOTHESIS:
 			{
 				rules_manager->Neutralize();
-
-			//	ui.tableView->showRow(algorithm->GetTable()->GetNextRow());
-			//	algorithm->GetTable()->IncRow();
-			//	scrollbar_table->setMaximum(200);
-			//	scrollbar_table->setValue(200);
 
 				break;
 			}

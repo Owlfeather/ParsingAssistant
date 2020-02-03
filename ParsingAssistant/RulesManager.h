@@ -19,8 +19,6 @@ private:
 	///
 	vector<vector<TypeOfRelation>>* relation_table;
 
-	//void AddRecordLine(RecordLine* inp_rec) { records.push_back(inp_rec); }
-	//int Size() { return records.size(); }
 	///
 
 	int rowCount(const QModelIndex& parent) const;
@@ -36,10 +34,7 @@ class RulesManager :
 	public QWidget
 {
 	Q_OBJECT
-//public:
-	//std::vector<std::vector<QLabel*>> my_rules;
 public:
-	//std::vector<std::vector<QLabel *>> my_rules;
 	~RulesManager() 
 	{ 
 		for (int i = 0; i < my_rules.size(); i++) {
@@ -52,7 +47,6 @@ public:
 	void ColorRule(const RuleNum r_num, Color inp_color);
 	void ShowRelationOnTable(const RuleNum r_num);
 	void SetViewRelation(QTableView* view_rel) { view_relation = view_rel; }
-	//void DeleteRules() { my_rules.clear(); }
 	void SetRelModel() 
 	{ 
 		view_relation->setModel(relation_table);
@@ -90,9 +84,6 @@ private:
 	QTableView* view_relation;
 	RelTable* relation_table;
 	QLabel* string_of_ids;
-
-	//void Neutralize();
-
 };
 
 
