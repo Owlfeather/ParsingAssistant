@@ -154,10 +154,10 @@ QVariant RelTable::data(const QModelIndex& index, int role) const
 ///*
 		switch (relation_table->at(index.row())[index.column()])
 		{case TypeOfRelation::CARRY:
-			unswer = "<";
+			unswer = "<" + QString::fromWCharArray(L"\u00B7");
 			break;
 		case TypeOfRelation::CONV:
-			unswer = ">";
+			unswer = QString::fromWCharArray(L"\u00B7") + ">";
 			break;
 		case TypeOfRelation::CONV_BR:
 			unswer = "=";

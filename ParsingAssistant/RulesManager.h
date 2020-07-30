@@ -72,6 +72,7 @@ public:
 	void TextStringOfIds(string text)
 	{
 		QString qtext;
+		string_of_ids->setWordWrap(true);
 		qtext = QString::fromLocal8Bit(text.c_str());
 		string_of_ids->clear();
 		string_of_ids->setText(qtext);

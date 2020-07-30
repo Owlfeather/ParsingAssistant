@@ -340,9 +340,11 @@ bool TtoD_LLk_MethodAlg::DoParse()
 	RuleNum next_rule;
 	RuleNum new_rule;
 	ItemSymb end("end");
+	//ItemSymb new_end("\u2BC7");
 	//recognized_str.AddSymb(ItemSymb(""));
 
 	target_str.SetString({ rules[1].GetLeft(), ItemSymb("end") }); // <выражение>end
+	///target_str.SetString({ rules[1].GetLeft(), ItemSymb(string("\u2BC7")) }); // <выражение>end
 
 	// запись в лог
 
