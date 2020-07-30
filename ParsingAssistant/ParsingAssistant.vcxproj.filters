@@ -72,6 +72,9 @@
     <ClCompile Include="Algorithm_LRk_Stack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="InfWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="MainMenu.ui">
@@ -81,6 +84,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="IWindow.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="InfWindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
@@ -101,6 +107,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="IWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="InfWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

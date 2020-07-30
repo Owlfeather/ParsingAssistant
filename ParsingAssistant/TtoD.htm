@@ -1,0 +1,284 @@
+<h2 style="text-align: center;">
+	<span style="font-family:Century Gothic;"><strong>Левосторонний нисходящий грамматический разбор (&laquo;сверху вниз&raquo;)</strong></span></h2>
+<p>
+	<span style="font-size:14px;"><span style="font-family:Century Gothic;">Метод разбора &laquo;сверху-вниз&raquo; применим, если грамматика <span style="color:#b22222;"><strong>не содержит правил с левосторонней рекурсией</strong></span>.<br />
+	Метод предполагает последовательное <span style="color:#b22222;"><strong>выдвижение гипотез, начиная с аксиомы, их доказательство </strong></span>посредством подбора правил, которым удовлетворяет разбираемый фрагмент, и выдвижения новых гипотез относительно не разобранной части предложения.<br />
+	Правила подстановки также должны проверяться, начиная <span style="color:#b22222;"><strong>с самого сложного</strong></span>, иначе цель разбора не будет достигнута.<br />
+	При наличии правил с левосторонней рекурсией процедура разбора становится бесконечной.<br />
+	В общем случае при разборе возможны возвраты, поскольку может быть выбрано неподходящее правило подстановки.</span></span></p>
+<hr />
+<p>
+	<span style="font-size:14px;"><span style="font-family:Century Gothic;"><u>Пример</u>. Разобрать строку &laquo;-45&raquo;</span></span></p>
+<p>
+	<strong><span style="font-size:14px;"><span style="font-family:Century Gothic;">Правила грамматики:</span></span></strong></p>
+<ol>
+	<li>
+		<span style="font-family:courier new,courier,monospace;"><span style="font-size:14px;">&lt;целое&gt; ::= &lt;знак&gt;&lt;целое без знака&gt;|&lt;целое без знака&gt;</span></span></li>
+	<li>
+		<span style="font-family:courier new,courier,monospace;"><span style="font-size:14px;">&lt;целое без знака&gt; ::= &lt;цифра&gt;&lt;целое без знака&gt;|&lt;цифра&gt;</span></span></li>
+	<li>
+		<span style="font-family:courier new,courier,monospace;"><span style="font-size:14px;">&lt;цифра &gt; ::= 0|1|2|3|4|5|6|7|8|9</span></span></li>
+	<li>
+		<span style="font-family:courier new,courier,monospace;"><span style="font-size:14px;">&lt;знак&gt; ::= +| -</span></span></li>
+</ol>
+<p>
+	<strong><span style="font-size:14px;"><span style="font-family:Century Gothic;">Последовательность разбора:</span></span></strong></p>
+<table border="1" style="border-collapse: collapse; width: 100%; height: 306px;">
+	<tbody>
+		<tr style="height: 17px;">
+			<td style="width: 16.3503%; height: 17px; text-align: center;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;"><strong>№ шага</strong></span></span></td>
+			<td style="width: 18.9014%; height: 17px; text-align: center;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;"><strong>Распознано</strong></span></span></td>
+			<td style="width: 18.2735%; height: 17px; text-align: center;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;"><strong>Текущий символ</strong></span></span></td>
+			<td style="width: 20.5755%; height: 17px; text-align: center;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;"><strong>Цель</strong></span></span></td>
+			<td style="width: 14.1727%; height: 17px; text-align: center;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;"><strong>Правило</strong></span></span></td>
+			<td style="width: 11.7266%; text-align: center;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;"><strong>Истина?</strong></span></span></td>
+		</tr>
+		<tr style="height: 17px;">
+			<td style="width: 16.3503%; height: 17px; text-align: center;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">1</span></span></td>
+			<td style="width: 18.9014%; height: 17px;">
+				&nbsp;</td>
+			<td style="width: 18.2735%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">-</span></span></td>
+			<td style="width: 20.5755%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">Целое</span></span></td>
+			<td style="width: 14.1727%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">1а</span></span></td>
+			<td style="width: 11.7266%;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">да</span></span></td>
+		</tr>
+		<tr style="height: 17px;">
+			<td style="width: 16.3503%; height: 17px; text-align: center;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">2</span></span></td>
+			<td style="width: 18.9014%; height: 17px;">
+				&nbsp;</td>
+			<td style="width: 18.2735%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">-</span></span></td>
+			<td style="width: 20.5755%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">Знак</span></span></td>
+			<td style="width: 14.1727%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">4а</span></span></td>
+			<td style="width: 11.7266%;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">нет</span></span></td>
+		</tr>
+		<tr style="height: 17px;">
+			<td style="width: 16.3503%; height: 17px; text-align: center;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">3</span></span></td>
+			<td style="width: 18.9014%; height: 17px;">
+				&nbsp;</td>
+			<td style="width: 18.2735%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">-</span></span></td>
+			<td style="width: 20.5755%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">Знак</span></span></td>
+			<td style="width: 14.1727%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">4б</span></span></td>
+			<td style="width: 11.7266%;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">да</span></span></td>
+		</tr>
+		<tr style="height: 17px;">
+			<td style="width: 16.3503%; height: 17px; text-align: center;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">4</span></span></td>
+			<td style="width: 18.9014%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">-</span></span></td>
+			<td style="width: 18.2735%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">4</span></span></td>
+			<td style="width: 20.5755%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">ЦБЗ</span></span></td>
+			<td style="width: 14.1727%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">2а</span></span></td>
+			<td style="width: 11.7266%;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">да</span></span></td>
+		</tr>
+		<tr style="height: 17px;">
+			<td style="width: 16.3503%; height: 17px; text-align: center;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">5</span></span></td>
+			<td style="width: 18.9014%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">-</span></span></td>
+			<td style="width: 18.2735%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">4</span></span></td>
+			<td style="width: 20.5755%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">Цифра</span></span></td>
+			<td style="width: 14.1727%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">3а-3г</span></span></td>
+			<td style="width: 11.7266%;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">нет</span></span></td>
+		</tr>
+		<tr style="height: 17px;">
+			<td style="width: 16.3503%; height: 17px; text-align: center;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">6</span></span></td>
+			<td style="width: 18.9014%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">-</span></span></td>
+			<td style="width: 18.2735%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">4</span></span></td>
+			<td style="width: 20.5755%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">Цифра</span></span></td>
+			<td style="width: 14.1727%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">3д</span></span></td>
+			<td style="width: 11.7266%;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">да</span></span></td>
+		</tr>
+		<tr style="height: 17px;">
+			<td style="width: 16.3503%; height: 17px; text-align: center;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">7</span></span></td>
+			<td style="width: 18.9014%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">-4</span></span></td>
+			<td style="width: 18.2735%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">5</span></span></td>
+			<td style="width: 20.5755%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">ЦБЗ</span></span></td>
+			<td style="width: 14.1727%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">2а</span></span></td>
+			<td style="width: 11.7266%;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">нет</span></span></td>
+		</tr>
+		<tr style="height: 17px;">
+			<td style="width: 16.3503%; height: 17px; text-align: center;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">8</span></span></td>
+			<td style="width: 18.9014%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">-4</span></span></td>
+			<td style="width: 18.2735%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">5</span></span></td>
+			<td style="width: 20.5755%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">Цифра</span></span></td>
+			<td style="width: 14.1727%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">3а-3д</span></span></td>
+			<td style="width: 11.7266%;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">нет</span></span></td>
+		</tr>
+		<tr style="height: 17px;">
+			<td style="width: 16.3503%; height: 17px; text-align: center;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">9</span></span></td>
+			<td style="width: 18.9014%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">-4</span></span></td>
+			<td style="width: 18.2735%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">5</span></span></td>
+			<td style="width: 20.5755%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">Цифра</span></span></td>
+			<td style="width: 14.1727%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">3е</span></span></td>
+			<td style="width: 11.7266%;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">да</span></span></td>
+		</tr>
+		<tr style="height: 17px;">
+			<td style="width: 16.3503%; height: 17px; text-align: center;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">10</span></span></td>
+			<td style="width: 18.9014%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">-45</span></span></td>
+			<td style="width: 18.2735%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">_</span></span></td>
+			<td style="width: 20.5755%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">ЦБЗ</span></span></td>
+			<td style="width: 14.1727%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">2а</span></span></td>
+			<td style="width: 11.7266%;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">нет</span></span></td>
+		</tr>
+		<tr style="height: 17px;">
+			<td style="width: 16.3503%; height: 17px; text-align: center;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">11</span></span></td>
+			<td style="width: 18.9014%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">-45</span></span></td>
+			<td style="width: 18.2735%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">_</span></span></td>
+			<td style="width: 20.5755%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">Цифра</span></span></td>
+			<td style="width: 14.1727%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">3а-3к</span></span></td>
+			<td style="width: 11.7266%;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">нет</span></span></td>
+		</tr>
+		<tr style="height: 17px;">
+			<td style="width: 16.3503%; height: 17px; text-align: center;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">12</span></span></td>
+			<td style="width: 18.9014%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">-45</span></span></td>
+			<td style="width: 18.2735%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">_</span></span></td>
+			<td style="width: 20.5755%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">ЦБЗ</span></span></td>
+			<td style="width: 14.1727%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">2б</span></span></td>
+			<td style="width: 11.7266%;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">нет</span></span></td>
+		</tr>
+		<tr style="height: 17px;">
+			<td style="width: 16.3503%; height: 17px; text-align: center;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">13</span></span></td>
+			<td style="width: 18.9014%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">-45</span></span></td>
+			<td style="width: 18.2735%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">_</span></span></td>
+			<td style="width: 20.5755%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">Цифра</span></span></td>
+			<td style="width: 14.1727%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">3а-3к</span></span></td>
+			<td style="width: 11.7266%;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">нет</span></span></td>
+		</tr>
+		<tr style="height: 17px;">
+			<td style="width: 16.3503%; height: 17px; text-align: center;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">14</span></span></td>
+			<td style="width: 18.9014%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">-4</span></span></td>
+			<td style="width: 18.2735%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">5</span></span></td>
+			<td style="width: 20.5755%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">ЦБЗ</span></span></td>
+			<td style="width: 14.1727%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">2б</span></span></td>
+			<td style="width: 11.7266%;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">да</span></span></td>
+		</tr>
+		<tr style="height: 17px;">
+			<td style="width: 16.3503%; height: 17px; text-align: center;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">15</span></span></td>
+			<td style="width: 18.9014%; height: 17px;">
+				&nbsp;</td>
+			<td style="width: 18.2735%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">5</span></span></td>
+			<td style="width: 20.5755%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">Цифра</span></span></td>
+			<td style="width: 14.1727%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">3а-3д</span></span></td>
+			<td style="width: 11.7266%;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">нет</span></span></td>
+		</tr>
+		<tr style="height: 17px;">
+			<td style="width: 16.3503%; height: 17px; text-align: center;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">16</span></span></td>
+			<td style="width: 18.9014%; height: 17px;">
+				&nbsp;</td>
+			<td style="width: 18.2735%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">5</span></span></td>
+			<td style="width: 20.5755%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">Цифра</span></span></td>
+			<td style="width: 14.1727%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">3е</span></span></td>
+			<td style="width: 11.7266%;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">да</span></span></td>
+		</tr>
+		<tr style="height: 17px;">
+			<td style="width: 16.3503%; height: 17px; text-align: center;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">17</span></span></td>
+			<td style="width: 18.9014%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">-45</span></span></td>
+			<td style="width: 18.2735%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">_</span></span></td>
+			<td style="width: 20.5755%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">_</span></span></td>
+			<td style="width: 14.1727%; height: 17px;">
+				<span style="font-size:14px;"><span style="font-family:Century Gothic;">Разбор завершён</span></span></td>
+			<td style="width: 11.7266%;">
+				&nbsp;</td>
+		</tr>
+	</tbody>
+</table>
+<hr />
+<p>
+	<span style="font-size:14px;"><span style="font-family:Century Gothic;">Недостаток метода, как и в предыдущем случае, заключается в том, что в программе разбора следует <strong>хранить</strong> <strong>всю информацию о каждом его шаге</strong>. Выбор метода разбора для грамматики определяется видом правил продукции языка.</span></span></p>

@@ -15,7 +15,7 @@ CWindow::CWindow(QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
-	i_win = new IWindow;
+	i_win = new InfWindow;
 
 	connect(ui.btnBack, SIGNAL(clicked()), this, SLOT(onBackClicked()));
 	connect(ui.btnParse, SIGNAL(clicked()), this, SLOT(onParseModeClicked()));

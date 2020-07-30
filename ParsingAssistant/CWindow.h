@@ -7,6 +7,7 @@
 #include "Algorithm_LLk_TtoD.h"
 #include "Algorithm_LRk_Stack.h"
 #include "IWindow.h"
+#include "InfWindow.h"
 #include <iostream>
 #include "RulesManager.h"
 #include "StringGenerator.h"
@@ -25,12 +26,12 @@ public:
 	void RenderCWin(ModeOfCWin type);
 	void SetAlgorithm(TypeOfAlg inp_alg_type);
 	void DrawRules();
-	IWindow* GetIWin() { return i_win;  };
+	InfWindow* GetIWin() { return i_win;  };
 
 
 private:
 	Ui::Form ui;
-	IWindow* i_win;
+	InfWindow* i_win;
 
 	QScrollBar* scrollbar_table;
 	QScrollBar* scrollbar_comments;

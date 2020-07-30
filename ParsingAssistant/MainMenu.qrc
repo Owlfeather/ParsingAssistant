@@ -6,5 +6,8 @@
         <file>LRk.txt</file>
         <file>LtoR.txt</file>
         <file>TtoD.txt</file>
+        <file>help.htm</file>
+        <file>LtoR.htm</file>
+        <file>TtoD.htm</file>
     </qresource>
 </RCC>

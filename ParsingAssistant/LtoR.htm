@@ -1,0 +1,33 @@
+     
+<h2 style="text-align: center;">
+	<span style="font-family:Century Gothic;"><strong>Левосторонний восходящий грамматический разбор (&laquo;слева направо&raquo;)</strong></span></h2>
+<p>
+	<span style="font-family:Century Gothic;"><span style="font-size:15px;">Метод разбора &laquo;слава-направо&raquo; применим, если грамматика <span style="color:#b22222;"><strong>не содержит правил с правосторонней рекурсией.</strong></span><br />
+	При осуществлении грамматического разбора сентенциальные формы просматриваются <span style="color:#b22222;"><strong>слева направо</strong></span> и последовательно &laquo;свертываются&raquo; посредством замены подстроки, совпадающей с правой частью правила (&laquo;основы&raquo;) на левую часть того же правила.<br />
+	Правила подстановки должны проверяться, <span style="color:#b22222;"><strong>начиная с самого сложного</strong></span>, иначе сложные правила никогда не будут применены, и разбор не удастся. В общем случае при разборе возможны возвраты, поскольку может быть выбрано неподходящее правило подстановки.</span></span></p>
+<p>
+	<span style="font-size:15px;"><span style="font-family:Century Gothic;">Для распознания целого числа <strong>правила грамматики</strong> будут следующими:</span></span></p>
+<p>
+	<span style="font-size:15px;"><strong><span style="font-family:courier new,courier,monospace;">&lt;целое&gt; ::= &lt;знак&gt;&lt;целое без знака&gt;|&lt;целое без знака&gt;,<br />
+	&lt;целое без знака&gt; ::= &lt;целое без знака&gt;&lt;цифра&gt;|&lt;цифра&gt;,<br />
+	&lt;цифра &gt; ::= 0|1|2|3|4|5|6|7|8|9,<br />
+	&lt;знак&gt; ::= +| -</span></strong></span></p>
+<hr />
+<p>
+	<span style="font-size:15px;"><span style="font-family:Century Gothic;"><span style="text-decoration: underline;">Пример:</span> Разобрать строку &laquo;-45&raquo;</span></span></p>
+<p>
+	<span style="font-size:15px;"><span style="font-family:Century Gothic;">Последовательность получения сентенциальных форм данным методом:</span></span></p>
+<p style="margin-left: 40px;">
+	<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong><span style="font-family:courier new,courier,monospace;">&lt;знак&gt; 45</span><br />
+	<span style="font-family:courier new,courier,monospace;">&lt;знак&gt;&lt;цифра&gt;5</span><br />
+	<span style="font-family:courier new,courier,monospace;">&lt;знак&gt;&lt;цбз&gt;5</span></strong><br />
+	<strong><span style="font-family:courier new,courier,monospace;">&lt;целое&gt;5</span></strong> &ndash; <strong><span style="color:#ff0000;">Тупик! </span></strong>Возвращаемся и ищем другой вариант подстановки!<br />
+	<strong><span style="font-family:courier new,courier,monospace;">&lt;знак&gt;&lt;целое&gt;5</span></strong> &ndash; <span style="color:#ff0000;"><strong>Тупик! </strong></span>Возвращаемся и ищем другой вариант подстановки!<br />
+	<strong><span style="font-family:courier new,courier,monospace;">&lt;знак&gt;&lt;цбз&gt;&lt;цифра&gt;</span></strong><br />
+	<strong><span style="font-family:courier new,courier,monospace;">&lt;целое&gt;&lt;цифра&gt;</span> </strong>&ndash; <span style="color:#ff0000;"><strong>Тупик!</strong></span> Возвращаемся и ищем другой вариант подстановки!<br />
+	<strong><span style="font-family:courier new,courier,monospace;">&lt;знак&gt;&lt;целое&gt;&lt;цифра&gt;</span></strong> &ndash; <span style="color:#ff0000;"><strong>Тупик!</strong></span> Возвращаемся и ищем другой вариант!<br />
+	<strong><span style="font-family:courier new,courier,monospace;">&lt;знак&gt;&lt;цбз&gt;</span></strong><br />
+	<strong><span style="font-family:courier new,courier,monospace;">&lt;целое&gt;</span></strong> &ndash; <span style="color:#008000;"><strong>Разбор завершился распознанием целого числа!</strong></span></span></span></p>
+<hr />
+<p>
+	<span style="font-size:15px;"><span style="font-family:Century Gothic;">Необходимость предусмотреть возможность возвратов требует хранить <strong>всю информацию о каждом шаге разбора</strong>, что требует много памяти и существенно усложняет процесс написания программы разбора.</span></span></p>
