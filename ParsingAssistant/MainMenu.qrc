@@ -9,5 +9,7 @@
         <file>help.htm</file>
         <file>LtoR.htm</file>
         <file>TtoD.htm</file>
+        <file>LLk.htm</file>
+        <file>LRk.htm</file>
     </qresource>
 </RCC>

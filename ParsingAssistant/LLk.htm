@@ -1,0 +1,732 @@
+<h2 style="text-align: center;">
+	<span style="font-family:Century Gothic;"><strong>Левосторонний нисходящий разбор для LL(k)-грамматик</strong></span></h2>
+<p>
+	<span style="font-family:Century Gothic;"><span style="font-size:15px;"><strong>LL(k)-грамматики</strong> &ndash; это класс КС-грамматик, гарантирующих существование детерминированных нисходящих распознавателей<br />
+	(L &ndash; левосторонний просмотр исходной строки, L &ndash; левосторонний разбор, k &ndash; количество символов, просматриваемых для определения очередного правила).</span></span></p>
+<p>
+	<span style="font-family:Century Gothic;"><span style="font-size:15px;">В грамматиках этого класса для однозначного выбора правил <span style="color:#b22222;"><strong>должны</strong></span>:</span></span></p>
+<ol>
+	<li>
+		<span style="font-family:Century Gothic;"><span style="font-size:15px;">отсутствовать правила с левосторонней рекурсией;</span></span></li>
+	<li>
+		<span style="font-family:Century Gothic;"><span style="font-size:15px;">различаться k первых символов разных правил.</span></span></li>
+</ol>
+<p>
+	<span style="font-family:Century Gothic;"><span style="font-size:15px;">Реализация нисходящего разбора заключается в следующем. В исходный момент времени в стек записывают аксиому. Затем выбирают правило подстановки аксиомы, сравнивая k символов исходной строки с тем же количеством символов правых частей правил. Правую часть правила подставляют в стек вместо левой части. Одинаковые первые символы стека и исходной строки удаляют. Затем вновь выбирают правило подстановки уже для нетерминала, который оказался в начале стека и т. д. Количество просматриваемых символов определяется конкретными правилами грамматики.</span></span></p>
+<p>
+	<span style="font-family:Century Gothic;"><span style="font-size:15px;"><span style="text-decoration: underline;">Пример</span>.<br />
+	Дана грамматика записи выражений:</span></span></p>
+<p>
+	<span style="font-size:15px;"><span style="font-family:courier new,courier,monospace;"><strong>а) &lt;Выр&gt; ::= &lt;Терм&gt; &lt;Слож&gt;</strong></span></span></p>
+<p>
+	<span style="font-size:15px;"><span style="font-family:courier new,courier,monospace;"><strong>б) &lt;Слож&gt; ::= + &lt;Терм&gt; &lt;Слож&gt; | - &lt;Терм&gt;&lt;Слож&gt; | </strong><strong>e</strong></span></span></p>
+<p>
+	<span style="font-size:15px;"><span style="font-family:courier new,courier,monospace;"><strong>в) &lt;Терм&gt; ::= &lt;Множ&gt;&lt;Умн&gt;</strong></span></span></p>
+<p>
+	<span style="font-size:15px;"><span style="font-family:courier new,courier,monospace;"><strong>г) &lt;Умн&gt; ::= *&lt;Множ&gt;&lt;Умн&gt; | / &lt;Множ&gt;&lt;Умн&gt; | </strong><strong>e</strong></span></span></p>
+<p>
+	<span style="font-size:15px;"><span style="font-family:courier new,courier,monospace;"><strong>д) &lt;Множ&gt; ::= (&lt;Выр&gt;) &nbsp;| </strong><strong>&lt;</strong><strong>Ид&gt;</strong></span></span></p>
+<p style="margin-left: 40px;">
+	<span style="font-family:Century Gothic;"><span style="font-size:15px;">где &nbsp;&nbsp;&nbsp;&lt;Выр&gt; = &lt;Выражение&gt;,</span></span></p>
+<p style="margin-left: 40px;">
+	<span style="font-family:Century Gothic;"><span style="font-size:15px;">&lt;Терм&gt; = &lt;Терминал&gt;,</span></span></p>
+<p style="margin-left: 40px;">
+	<span style="font-family:Century Gothic;"><span style="font-size:15px;">&lt;Слож&gt; = &lt;Сложение&gt;,</span></span></p>
+<p style="margin-left: 40px;">
+	<span style="font-family:Century Gothic;"><span style="font-size:15px;">&lt;Умн&gt; = &lt;Умножение&gt;,</span></span></p>
+<p style="margin-left: 40px;">
+	<span style="font-family:Century Gothic;"><span style="font-size:15px;">&lt;Множ&gt; = &lt;Множитель&gt;,</span></span></p>
+<p style="margin-left: 40px;">
+	<span style="font-family:Century Gothic;"><span style="font-size:15px;">&lt;Ид&gt; = &lt;Идентификатор&gt;,</span></span></p>
+<p style="margin-left: 40px;">
+	<span style="font-family:Century Gothic;"><span style="font-size:15px;">е &ndash; пустая строка.</span></span></p>
+<p>
+	<span style="font-family:Century Gothic;"><span style="font-size:15px;">Полученная грамматика по-прежнему является грамматикой второго типа по Хомскому, так как в ней присутствует вложенная рекурсия. Однако теперь это <em>LL</em>(1)-грамматика, так как, чтобы правильно выбрать очередное правило из альтернативных, достаточно проанализировать один терминальный символ &ndash; знак операции. Следовательно, для распознавания можно использовать нисходящий метод:</span></span></p>
+<table border="1" style="border-collapse: collapse; width="794">
+	<tbody>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>№</strong></span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>Распознаваемая строка</strong></span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>Цель и подцели</strong></span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>Правило</strong></span></span></p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>Истина?</strong></span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">1</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;Ид&gt;*(&lt;Ид&gt;+&lt;Ид&gt;)+&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;<strong>Выр</strong>&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">а</span></span></p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Да</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">2</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;Ид&gt;*(&lt;Ид&gt;+&lt;Ид&gt;)+&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>&lt;Терм&gt;</strong>&lt;Слож&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">в</span></span></p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Да</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">3</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;Ид&gt;*(&lt;Ид&gt;+&lt;Ид&gt;)+&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;<strong>Множ</strong>&gt;&lt;Умн&gt;&lt;Слож&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">д2</span></span></p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Да</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">4</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;Ид&gt;<strong>*</strong>(&lt;Ид&gt;+&lt;Ид&gt;)+&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;Ид&gt;&lt;Умн&gt;&lt;Слож&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					&nbsp;</p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Распознано</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">5</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>*</strong>(&lt;Ид&gt;+&lt;Ид&gt;)+&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;<strong>Умн</strong>&gt;&lt;Слож&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">г1</span></span></p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Да</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">6</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>*</strong>(&lt;Ид&gt;+&lt;Ид&gt;)+&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">*&lt;Множ&gt;&lt;Умн&gt;&lt;Слож&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					&nbsp;</p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Распознано</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">7</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">(&lt;Ид&gt;+&lt;Ид&gt;)+&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;<strong>Множ</strong>&gt;&lt;Умн&gt;&lt;Слож&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">д1</span></span></p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Да</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">8</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">(&lt;Ид&gt;+&lt;Ид&gt;)+&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">(&lt;Выр&gt;)&lt;Умн&gt;&lt;Сложение&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					&nbsp;</p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Распознано</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">9</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;Ид&gt;+&lt;Ид&gt;)+&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>&lt;Выр&gt;</strong>)&lt;Умн&gt;&lt;Слож&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">а</span></span></p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Да</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">10</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;Ид&gt;<strong>+</strong>&lt;Ид&gt;)+&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>&lt;Терм&gt;</strong>&lt;Слож&gt;)&lt;Умн&gt;&lt;Слож&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">в</span></span></p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Да</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">11</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;Ид&gt;<strong>+</strong>&lt;Ид&gt;)+&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>&lt;Множ&gt;&lt;</strong>Умн<strong>&gt;</strong>&lt;Слож&gt;)&lt;Умн&gt;&lt;Слож&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">д2</span></span></p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Да</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">12</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>&lt;Ид&gt;</strong><strong>+</strong>&lt;Ид&gt;)+&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;Ид&gt;<strong>&lt;</strong>Умн<strong>&gt;</strong>&lt;Слож&gt;)&lt;Умн&gt;&lt;Слож&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					&nbsp;</p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Распознано</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">13</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">+&lt;Ид&gt;)+&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>&lt;Умн&gt;</strong>&lt;Слож&gt;)&lt;Умн&gt;&lt;Слож&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">г3 (е)</span></span></p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Да</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">14</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">+&lt;Ид&gt;)+&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;<strong>Слож</strong>&gt;)&lt;Умн&gt;&lt;Слож&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">б1</span></span></p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Да</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">15</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">+&lt;Ид&gt;)+&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">+&lt;Терм&gt;&lt;Слож&gt;)&lt;Умн&gt;&lt;Слож&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					&nbsp;</p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Распознано</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">16</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;Ид&gt;)+&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>&lt;Терм&gt;</strong>&lt;Слож&gt;)&lt;Умн&gt;&lt;Слож&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">в</span></span></p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Да</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">17</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;Ид&gt;)+&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>&lt;Множ&gt;</strong>&lt;Умн&gt;&lt;Слож<strong>&gt;</strong>)&lt;Умн&gt;&lt;Слож&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">д2</span></span></p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Да</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">18</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;Ид&gt;)+&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;Ид&gt;<strong>&lt;</strong>Умн<strong>&gt;&lt;</strong>Слож<strong>&gt;</strong>)&lt;Умн&gt;&lt;Слож&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					&nbsp;</p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Распознано</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">19</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">)+&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>&lt;Умн&gt;&lt;</strong>Слож<strong>&gt;</strong>)&lt;Умн&gt;&lt;Слож&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">г3 (е)</span></span></p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Да</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">20</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">)+&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>&lt;Слож&gt;</strong>)&lt;Умн&gt;&lt;Слож&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">б3 (е)</span></span></p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Да</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">21</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>)</strong>+&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">)&lt;Умн&gt;&lt;Слож&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					&nbsp;</p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Распознано</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">22</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">+&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;<strong>Умн</strong>&gt;&lt;Слож&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">г3 (е)</span></span></p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Да</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">23</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">+&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;<strong>Слож</strong>&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">б1</span></span></p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Да</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">24</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>+</strong>&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>+</strong><strong>&lt;</strong>Терм&gt;&lt;Слож<strong>&gt;</strong></span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					&nbsp;</p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Распознано</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">25</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>&lt;Терм&gt;</strong>&lt;Слож<strong>&gt;</strong></span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">в</span></span></p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Да</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">26</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>&lt;Множ&gt;&lt;</strong>Умн&gt;&lt;Слож&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">д2</span></span></p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Да</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">27</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;Ид&gt;</span></span></p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;Ид&gt; <strong>&lt;</strong>Умн&gt;&lt;Слож<strong>&gt;</strong></span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					&nbsp;</p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Распознано</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">28</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					&nbsp;</p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>&lt;Умн</strong>&gt;&lt;Слож&gt;</span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">г3 (е)</span></span></p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Да</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">29</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					&nbsp;</p>
+			</td>
+			<td width="329">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>&lt;Слож&gt;</strong></span></span></p>
+			</td>
+			<td width="83">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">б3 (е)</span></span></p>
+			</td>
+			<td width="113">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Да</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="41">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">30</span></span></p>
+			</td>
+			<td width="227">
+				<p>
+					&nbsp;</p>
+			</td>
+			<td width="329">
+				<p>
+					&nbsp;</p>
+			</td>
+			<td width="83">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Конец</span></span></p>
+			</td>
+			<td width="113">
+				<p>
+					&nbsp;</p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<p>
+	&nbsp;</p>

@@ -1,0 +1,498 @@
+<h2 style="text-align: center;">
+	<span style="font-family:Century Gothic;"><strong>Стековый метод для LR(k)-грамматик</strong></span></h2>
+<p>
+	<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>LR(k)-грамматики</strong> &ndash; это класс КС-грамматик, гарантирующих существование детерминированных восходящих распознавателей<br />
+	(L &ndash; левосторонний просмотр, R &ndash; правосторонний разбор, k &ndash; количество символов, просматриваемых для однозначного определения следующего правила).</span></span></p>
+<p>
+	<span style="font-size:15px;"><span style="font-family:Century Gothic;">В грамматиках этого класса <span style="color:#b22222;"><strong>отсутствуют правила с правосторонней рекурсией</strong></span>&nbsp;и <span style="color:#b22222;"><strong>обеспечивается однозначное выделение основы</strong></span>.<br />
+	К этому классу, например, относятся грамматики с операторным предшествованием, простым предшествованием и расширенным предшествованием, обеспечивающие еще более простые алгоритмы распознавания.</span></span></p>
+<p>
+	<span style="font-size:15px;"><span style="font-family:Century Gothic;">При восходящем разборе стек используют для накопления основы. Автомат при этом выполняет две основные операции: свертку и перенос.<br />
+	Свертка выполняется, когда в стеке накоплена вся основа, и заключается в ее замене на левую часть соответствующего правила.<br />
+	Перенос выполняется в процессе накопления основы и заключается в сохранении в стеке очередного распознаваемого символа сентенциальной формы.</span></span></p>
+<p>
+	<span style="font-size:15px;"><span style="font-family:Century Gothic;">Основная проблема метода заключается в нахождении способа выделения очередной основы.<br />
+	Проще всего основу выделить для грамматик, получивших название <strong>&laquo;грамматики предшествования&raquo;.</strong></span></span></p>
+<p>
+	<span style="font-size:15px;"><span style="font-family:Century Gothic;"><u>Рассмотрим эти грамматики.</u><br />
+	Если два символа &alpha;, &beta; &isin;V расположены рядом в сентенциальной форме, то между ними возможны следующие отношения, названные отношениями предшествования:</span></span></p>
+<ul>
+	<li>
+		<span style="font-size:15px;"><span style="font-family:Century Gothic;">&alpha; принадлежит основе, а &beta; &ndash; нет, т. е. &alpha; &ndash; конец основы: &alpha; &sdot;&gt; &beta;;</span></span></li>
+	<li>
+		<span style="font-size:15px;"><span style="font-family:Century Gothic;">&beta; принадлежит основе, а &alpha; &ndash; нет, т. е. &beta; &ndash; начало основы: &alpha; &lt;&sdot; &beta; ;</span></span></li>
+	<li>
+		<span style="font-size:15px;"><span style="font-family:Century Gothic;">&alpha; и &beta; принадлежит одной основе, т. е. &alpha; =&sdot; &beta;;</span></span></li>
+	<li>
+		<span style="font-size:15px;"><span style="font-family:Century Gothic;">&alpha; и &beta; не могут находиться рядом в сентенциальной форме (ошибка).</span></span></li>
+</ul>
+<p>
+	<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>Грамматикой с предшествованием</strong> называется грамматика, в которой существует <span style="color:#b22222;"><strong>однозначное отношение предшествования между соседними символами</strong></span>. Это отношение позволяет просто определить очередную основу, т. е. момент выполнения каждой свертки.</span></span></p>
+<p>
+	<br />
+	<strong><span style="font-size:15px;"><span style="font-family:Century Gothic;">Различают:</span></span></strong></p>
+<ol>
+	<li>
+		<span style="font-size:15px;"><span style="font-family:Century Gothic;">грамматики с простым предшествованием, для которых &alpha;, &beta; &isin;V;</span></span></li>
+	<li>
+		<span style="font-size:15px;"><span style="font-family:Century Gothic;">грамматики с операторным предшествованием, для которых &alpha;, &beta; &isin;VТ; т. е. отношение предшествования определено для терминальных символов и не зависит от нетерминальных символов, расположенных между ними;</span></span></li>
+	<li>
+		<span style="font-size:15px;"><span style="font-family:Century Gothic;">грамматики со слабым предшествованием, для которых отношение предшествования не однозначно &ndash; оно требует выполнения специальных проверок.</span></span></li>
+</ol>
+<p>
+	<span style="font-size:15px;"><span style="font-family:Century Gothic;"><span style="text-decoration: underline;">Пример</span>.</span></span></p>
+<p>
+	<br />
+	<span style="font-size:15px;"><span style="font-family:Century Gothic;">Грамматика описания арифметических выражений, представленная ниже, относится к классу грамматик с операторным предшествованием:</span></span></p>
+<p style="margin-left: 40px;">
+	<strong><span style="font-size:15px;"><span style="font-family:courier new,courier,monospace;">&lt;Выражение&gt; ::= &lt;Терм&gt; | &lt; Терм &gt; + &lt;Выражение&gt; | &lt;Терм&gt; - &lt;Выражение&gt;<br />
+	&lt;Терм&gt; ::= &lt;Множитель&gt; | &lt;Множитель&gt;* &lt;Терм&gt; | &lt;Множитель&gt; / &lt;Терм&gt;<br />
+	&lt;Множитель&gt; ::= (&lt;Выражение&gt;) | &lt;Идентификатор&gt;</span></span></strong></p>
+<p>
+	<span style="font-size:15px;"><span style="font-family:Century Gothic;">Отношения предшествования терминалов (знаков операций), полученные с учетом приоритетов операций, сведены в таблицу:</span></span></p>
+<table border="1">
+	<tbody>
+		<tr>
+			<td style="width: 28px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>&nbsp;</strong></span></span></p>
+			</td>
+			<td style="width: 24.8px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>+</strong></span></span></p>
+			</td>
+			<td style="width: 24.8px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>*</strong></span></span></p>
+			</td>
+			<td style="width: 25.6px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>(</strong></span></span></p>
+			</td>
+			<td style="width: 27.2px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>)</strong></span></span></p>
+			</td>
+			<td style="width: 53.6px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>◄</strong></span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td style="width: 28px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>►</strong></span></span></p>
+			</td>
+			<td style="width: 24.8px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;&sdot;</span></span></p>
+			</td>
+			<td style="width: 24.8px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;&sdot;</span></span></p>
+			</td>
+			<td style="width: 25.6px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;&sdot;</span></span></p>
+			</td>
+			<td style="width: 27.2px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">?</span></span></p>
+			</td>
+			<td style="width: 53.6px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Выход</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td style="width: 28px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>+</strong></span></span></p>
+			</td>
+			<td style="width: 24.8px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&sdot;&gt;</span></span></p>
+			</td>
+			<td style="width: 24.8px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;&sdot;</span></span></p>
+			</td>
+			<td style="width: 25.6px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;&sdot;</span></span></p>
+			</td>
+			<td style="width: 27.2px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&sdot;&gt;</span></span></p>
+			</td>
+			<td style="width: 53.6px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&sdot;&gt;</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td style="width: 28px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>*</strong></span></span></p>
+			</td>
+			<td style="width: 24.8px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&sdot;&gt;</span></span></p>
+			</td>
+			<td style="width: 24.8px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&sdot;&gt;</span></span></p>
+			</td>
+			<td style="width: 25.6px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;&sdot;</span></span></p>
+			</td>
+			<td style="width: 27.2px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&sdot;&gt;</span></span></p>
+			</td>
+			<td style="width: 53.6px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&sdot;&gt;</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td style="width: 28px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>(</strong></span></span></p>
+			</td>
+			<td style="width: 24.8px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;&sdot;</span></span></p>
+			</td>
+			<td style="width: 24.8px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;&sdot;</span></span></p>
+			</td>
+			<td style="width: 25.6px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;&sdot;</span></span></p>
+			</td>
+			<td style="width: 27.2px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">=</span></span></p>
+			</td>
+			<td style="width: 53.6px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">?</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td style="width: 28px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>)</strong></span></span></p>
+			</td>
+			<td style="width: 24.8px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&sdot;&gt;</span></span></p>
+			</td>
+			<td style="width: 24.8px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&sdot;&gt;</span></span></p>
+			</td>
+			<td style="width: 25.6px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">?</span></span></p>
+			</td>
+			<td style="width: 27.2px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&sdot;&gt;</span></span></p>
+			</td>
+			<td style="width: 53.6px; text-align: center;">
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&sdot;&gt;</span></span></p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<p style="margin-left: 40px;">
+	<span style="font-size:15px;"><span style="font-family:Century Gothic;"><u>Обозначения:</u><br />
+	? &ndash; ошибка;<br />
+	&lt; - начало основы;<br />
+	&gt; - конец основы;<br />
+	= - принадлежат одной основе;<br />
+	►- начало выражения;<br />
+	◄ - конец выражения.</span></span></p>
+<p>
+	<span style="font-size:15px;"><span style="font-family:Century Gothic;">В соответствие с этой таблицей при разборе выражения:<br />
+	►d+c*(a+b) ◄<br />
+	содержимое стека будет выглядеть следующим образом:</span></span></p>
+<table border="1">
+	<tbody>
+		<tr>
+			<td>
+				<p style="text-align: center;">
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>Содержимое</strong></span></span></p>
+				<p style="text-align: center;">
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>стека</strong></span></span></p>
+			</td>
+			<td>
+				<p style="text-align: center;">
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>Анализируемые</strong></span></span></p>
+				<p style="text-align: center;">
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>символы</strong></span></span></p>
+			</td>
+			<td>
+				<p style="text-align: center;">
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>Отношение</strong></span></span></p>
+				<p style="text-align: center;">
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>&nbsp;</strong></span></span></p>
+			</td>
+			<td>
+				<p style="text-align: center;">
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>Операция</strong></span></span></p>
+			</td>
+			<td>
+				<p style="text-align: center;">
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>Тройка</strong></span></span></p>
+			</td>
+			<td>
+				<p style="text-align: center;">
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>Результат</strong></span></span></p>
+				<p style="text-align: center;">
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><strong>свертки</strong></span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">►</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">d+</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;&times;</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Перенос</span></span></p>
+			</td>
+			<td>
+				<p>
+					&nbsp;</p>
+			</td>
+			<td>
+				<p>
+					&nbsp;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">►d+</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">c*</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;&times;</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Перенос</span></span></p>
+			</td>
+			<td>
+				<p>
+					&nbsp;</p>
+			</td>
+			<td>
+				<p>
+					&nbsp;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">►d+ c*</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">(</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;&times;</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Перенос</span></span></p>
+			</td>
+			<td>
+				<p>
+					&nbsp;</p>
+			</td>
+			<td>
+				<p>
+					&nbsp;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">►d+ c*(</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">a+</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;&times;</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Перенос</span></span></p>
+			</td>
+			<td>
+				<p>
+					&nbsp;</p>
+			</td>
+			<td>
+				<p>
+					&nbsp;</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">►d+ c*( a+</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;"><u>b</u>)</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&times;&gt;</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Свертка</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">R<sub>1</sub>:= a + b</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;Выражение&gt;</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">►d+ c*(</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">R<sub>1</sub>)</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">=&times;</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Свертка</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">R<sub>1</sub>:= (R<sub>1</sub>)</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;Множитель&gt;</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">►d+ c*</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">R<sub>1</sub>◄</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&times;&gt;</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Свертка</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">R<sub>2</sub>:= c* R<sub>1</sub></span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;Терм&gt;</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">►d+</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">R<sub>2</sub>◄</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&times;&gt;</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Свертка</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">R<sub>3</sub>:= d+ R<sub>2</sub></span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">&lt;Выражение&gt;</span></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">►</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">R<sub>3</sub>◄</span></span></p>
+			</td>
+			<td>
+				<p>
+					<span style="font-size:15px;"><span style="font-family:Century Gothic;">Конец</span></span></p>
+			</td>
+			<td>
+				<p>
+					&nbsp;</p>
+			</td>
+			<td>
+				<p>
+					&nbsp;</p>
+			</td>
+			<td>
+				<p>
+					&nbsp;</p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<p>
+	&nbsp;</p>
