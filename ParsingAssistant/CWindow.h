@@ -2,7 +2,9 @@
 
 #include <QWidget>
 #include "ui_CWindow.h"
+//#include "Algorithm_LtoR_u.h"
 #include "Algorithm_LtoR.h"
+//#include "Algorithm_TtoD_u.h"
 #include "Algorithm_TtoD.h"
 #include "Algorithm_LLk_TtoD.h"
 #include "Algorithm_LRk_Stack.h"

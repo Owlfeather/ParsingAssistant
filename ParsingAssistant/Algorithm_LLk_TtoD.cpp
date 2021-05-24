@@ -8,15 +8,15 @@ void TtoD_LLk_MethodAlg::SetRulesOfAlg()
 {
 	//__________________________________________Создание нетерминалов
 
-	ItemSymb c_string("<Строка>", false);
-	ItemSymb c_calculation("<Выражение>", false);
-	ItemSymb c_sum("<Слож>", false);
-	ItemSymb c_term("<Терм>", false);
-	ItemSymb c_mul("<Умнож>", false);
-	ItemSymb c_factor("<Множ>", false);
-	ItemSymb c_id("<Ид>");
-	ItemSymb empty("e");
-	ItemSymb end("end");
+	ItemSymb c_string(string("<Строка>"), false);
+	ItemSymb c_calculation(string("<Выражение>"), false);
+	ItemSymb c_sum(string("<Слож>"), false);
+	ItemSymb c_term(string("<Терм>"), false);
+	ItemSymb c_mul(string("<Умнож>"), false);
+	ItemSymb c_factor(string("<Множ>"), false);
+	ItemSymb c_id(string("<Ид>"));
+	ItemSymb empty(string("e"));
+	ItemSymb end(string("end"));
 
 	vector<ItemSymb> buf_symb;					// переменная-шаблон для варианта раскрытия правила
 	vector<ItemString> buf_str;					// переменная-шаблон для хранения всех вариантов 
@@ -41,10 +41,10 @@ void TtoD_LLk_MethodAlg::SetRulesOfAlg()
 	buf_symb = { empty };						// e
 	buf_str.push_back(ItemString(buf_symb));
 
-	buf_symb = { ItemSymb("+"), c_term, c_sum }; // +<Терм><Слож>
+	buf_symb = { ItemSymb(string("+")), c_term, c_sum }; // +<Терм><Слож>
 	buf_str.push_back(ItemString(buf_symb));
 
-	buf_symb = { ItemSymb("-"), c_term, c_sum }; // +<Терм><Слож>
+	buf_symb = { ItemSymb(string("-")), c_term, c_sum }; // +<Терм><Слож>
 	buf_str.push_back(ItemString(buf_symb));
 
 	rule.SetRule(c_sum, buf_str);				// ПРАВИЛО
@@ -63,10 +63,10 @@ void TtoD_LLk_MethodAlg::SetRulesOfAlg()
 	buf_symb = { empty };						// e
 	buf_str.push_back(ItemString(buf_symb));
 
-	buf_symb = { ItemSymb("*"), c_factor, c_mul }; // *<Множ><Умнож>
+	buf_symb = { ItemSymb(string("*")), c_factor, c_mul }; // *<Множ><Умнож>
 	buf_str.push_back(ItemString(buf_symb));
 
-	buf_symb = { ItemSymb("/"), c_factor, c_mul }; // /<Множ><Умнож>
+	buf_symb = { ItemSymb(string("/")), c_factor, c_mul }; // /<Множ><Умнож>
 	buf_str.push_back(ItemString(buf_symb));
 
 	rule.SetRule(c_mul, buf_str);				// ПРАВИЛО
@@ -77,7 +77,7 @@ void TtoD_LLk_MethodAlg::SetRulesOfAlg()
 	buf_symb = { c_id };						// <Ид>
 	buf_str.push_back(ItemString(buf_symb));
 
-	buf_symb = { ItemSymb("("), c_calculation, ItemSymb(")") }; // *<Множ><Умнож>
+	buf_symb = { ItemSymb(string("(")), c_calculation, ItemSymb(string(")")) }; // *<Множ><Умнож>
 	buf_str.push_back(ItemString(buf_symb));
 
 	rule.SetRule(c_factor, buf_str);				// ПРАВИЛО
@@ -119,7 +119,7 @@ void TtoD_LLk_MethodAlg::SetParsingStr(ItemString inp_str)
 			///это буква
 			if (!prev_is_letter) { // буква встретилась первой
 				prev_is_letter = true;
-				parsing_str.AddSymb(ItemSymb("<Ид>"));
+				parsing_str.AddSymb(ItemSymb(string("<Ид>")));
 			}
 			// иначе - просто следующая буква идентификатора	
 		}
@@ -128,7 +128,7 @@ void TtoD_LLk_MethodAlg::SetParsingStr(ItemString inp_str)
 			parsing_str.AddSymb(inp_str[i]);
 		}
 	}
-	parsing_str.AddSymb(ItemSymb("end"));
+	parsing_str.AddSymb(ItemSymb(string("end")));
 
 	cout << endl << "Входная строка: ";
 	parsing_str.PrintString();
@@ -149,7 +149,7 @@ RuleNum TtoD_LLk_MethodAlg::FindRuleNum()
 		}
 	}
 
-	ItemSymb bracket(")");
+	ItemSymb bracket(string(")"));
 	if ((parsing_str[0] == bracket)
 		&& (target_str[0] == bracket)) {
 		return RuleNum({ -4,-4 });	// скобки, которые необходимо убрать
@@ -162,7 +162,7 @@ RuleNum TtoD_LLk_MethodAlg::FindRuleNum()
 bool TtoD_LLk_MethodAlg::FindCorrectTerm(const RuleNum& rulenum)
 {
 
-	ItemSymb empty("e");
+	ItemSymb empty(string("e"));
 	bool may_be_deleted = false;
 	unsigned del_num;
 	// символ уберётся гарантированно
@@ -339,11 +339,11 @@ bool TtoD_LLk_MethodAlg::DoParse()
 	bool term_was_found;
 	RuleNum next_rule;
 	RuleNum new_rule;
-	ItemSymb end("end");
+	ItemSymb end(string("end"));
 	//ItemSymb new_end("\u2BC7");
 	//recognized_str.AddSymb(ItemSymb(""));
 
-	target_str.SetString({ rules[1].GetLeft(), ItemSymb("end") }); // <выражение>end
+	target_str.SetString({ rules[1].GetLeft(), ItemSymb(string("end")) }); // <выражение>end
 	///target_str.SetString({ rules[1].GetLeft(), ItemSymb(string("\u2BC7")) }); // <выражение>end
 
 	// запись в лог

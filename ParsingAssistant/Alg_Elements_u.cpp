@@ -1,4 +1,4 @@
-﻿#include "Alg_Elements.h"
+﻿#include "Alg_Elements_u.h"
 
 
 
@@ -76,7 +76,8 @@ vector<string> LtoR_Line::GetLine()
 	RuleNum rule_num = GetRuleNum();
 
 	if (rule_num.fir_num > -1) {
-		line.push_back(to_string(rule_num.fir_num + 1) + char(rule_num.sec_num + 224));
+		//line.push_back(to_string(rule_num.fir_num + 1) + char(rule_num.sec_num + 224));
+		line.push_back(char(rule_num.fir_num + 224) + to_string(rule_num.sec_num + 1));
 	}
 	else
 		if (rule_num.sec_num == -3) {

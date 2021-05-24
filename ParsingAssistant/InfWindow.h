@@ -3,7 +3,7 @@
 #include <QWidget>
 #include <qfile.h>
 #include "ui_InfWindow.h"
-#include "Basic_Elements.h"
+#include "Basic_Elements_u.h"
 
 
 class InfWindow : public QWidget

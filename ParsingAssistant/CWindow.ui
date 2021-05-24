@@ -233,6 +233,25 @@
              </widget>
             </item>
             <item>
+             <widget class="QPushButton" name="btnChooseRules">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>41</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Century Gothic</family>
+                <pointsize>9</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Выбрать набор правил</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QGroupBox" name="ruleBox">
               <property name="minimumSize">
                <size>

@@ -116,10 +116,13 @@
     <ClCompile Include="Algorithm_LLk_TtoD.cpp" />
     <ClCompile Include="Algorithm_LRk_Stack.cpp" />
     <ClCompile Include="Algorithm_LtoR.cpp" />
+    <ClCompile Include="Algorithm_LtoR_u.cpp" />
     <ClCompile Include="Algorithm_TtoD.cpp" />
-    <ClCompile Include="Alg_Elements.cpp" />
-    <ClCompile Include="Basic_Algorithm.cpp" />
-    <ClCompile Include="Basic_Elements.cpp" />
+    <ClCompile Include="Algorithm_TtoD_u.cpp" />
+    <ClCompile Include="Alg_Elements_u.cpp" />
+    <ClCompile Include="Basic_Algorithm_u.cpp" />
+    <ClCompile Include="Basic_Elements_u.cpp" />
+    <ClCompile Include="EdWindow.cpp" />
     <ClCompile Include="InfWindow.cpp" />
     <ClCompile Include="IWindow.cpp" />
     <ClCompile Include="LogComments.cpp" />
@@ -128,15 +131,18 @@
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="CWindow.cpp" />
     <ClCompile Include="RulesManager.cpp" />
+    <ClCompile Include="SetWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="MainMenu.h" />
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="CWindow.ui" />
+    <QtUic Include="EdWindow.ui" />
     <QtUic Include="InfWindow.ui" />
     <QtUic Include="IWindow.ui" />
     <QtUic Include="MainMenu.ui" />
+    <QtUic Include="SetWindow.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="MainMenu.qrc" />
@@ -148,11 +154,15 @@
     <ClInclude Include="Algorithm_LLk_TtoD.h" />
     <ClInclude Include="Algorithm_LRk_Stack.h" />
     <ClInclude Include="Algorithm_LtoR.h" />
+    <ClInclude Include="Algorithm_LtoR_u.h" />
     <ClInclude Include="Algorithm_TtoD.h" />
-    <ClInclude Include="Alg_Elements.h" />
-    <ClInclude Include="Basic_Algorithm.h" />
-    <ClInclude Include="Basic_Elements.h" />
+    <ClInclude Include="Algorithm_TtoD_u.h" />
+    <ClInclude Include="Alg_Elements_u.h" />
+    <ClInclude Include="Basic_Algorithm_u.h" />
     <QtMoc Include="InfWindow.h" />
+    <ClInclude Include="Basic_Elements_u.h" />
+    <QtMoc Include="EdWindow.h" />
+    <QtMoc Include="SetWindow.h" />
     <ClInclude Include="StringGenerator.h" />
     <QtMoc Include="IWindow.h" />
     <QtMoc Include="RulesManager.h" />

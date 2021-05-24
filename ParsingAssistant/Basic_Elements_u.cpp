@@ -1,11 +1,11 @@
-﻿#include "Basic_Elements.h"
+﻿#include "Basic_Elements_u.h"
 //---------------------ItemSymb---------------------
-//*** ItemSymb::ItemSymb(const QString inp_cont, bool inp_term, bool inp_axiom)
-//*** {
-//*** 	content = inp_cont.toLocal8Bit().constData();
-//*** 	term = inp_term;
-//*** 	axiom = inp_axiom;
-//*** }
+ ItemSymb::ItemSymb(const QString inp_cont, bool inp_term, bool inp_axiom)
+ {
+ 	content = inp_cont.toLocal8Bit().constData();
+ 	term = inp_term;
+ 	axiom = inp_axiom;
+ }
 
 void ItemSymb::SetSymb(const string & inp_cont, bool inp_term, bool inp_axiom)
 {

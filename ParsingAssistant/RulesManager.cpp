@@ -53,7 +53,7 @@ QLayout* RulesManager::DrawRules(const std::vector<ItemRule>& rules)
 				array_h_layouts[i]->addWidget(separators[separators.size() - 1]);
 			}
 			else {
-				text = QString::fromLocal8Bit((string(cur_rule.GetRight(j - 1))).c_str());
+				text = QString::fromLocal8Bit((string(cur_rule.GetRightOption(j - 1))).c_str());
 				buf[j]->setText(text);
 				my_rules[i].push_back(buf[j]);
 				array_h_layouts[i]->addWidget(buf[j]);

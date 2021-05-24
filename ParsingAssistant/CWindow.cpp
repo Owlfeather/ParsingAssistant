@@ -29,9 +29,6 @@ CWindow::CWindow(QWidget *parent)
 	connect(ui.btnGenIncor, SIGNAL(clicked()), this, SLOT(onGenIncorClicked()));
 	connect(ui.btnGenRand, SIGNAL(clicked()), this, SLOT(onGenRandClicked()));
 
-
-
-
 	scrollbar_table = new QScrollBar;
 	ui.tableView->setVerticalScrollBar(scrollbar_table);
 	scrollbar_comments = new QScrollBar;
@@ -96,9 +93,13 @@ void CWindow::RenderCWin(ModeOfCWin type)
 			ui.lineInpStr->setDisabled(true);
 			ui.btnShowAll->setDisabled(false);
 			ui.tableView->setModel(algorithm->GetTable());
+
+
 			ui.tableView->resizeColumnsToContents();
 			ui.genBox->setDisabled(true);
+			ui.btnChooseRules->setDisabled(true);
 
+			
 			switch (alg_type)
 			{
 			case TypeOfAlg::LTOR:
@@ -163,6 +164,7 @@ void CWindow::RenderCWin(ModeOfCWin type)
 
 void CWindow::SetAlgorithm(TypeOfAlg inp_alg_type)
 {
+	///*
 	alg_type = inp_alg_type;
 
 	switch (alg_type)
@@ -198,11 +200,28 @@ void CWindow::SetAlgorithm(TypeOfAlg inp_alg_type)
 	}
 	algorithm->SetRulesOfAlg();
 	DrawRules();
+	//*/
+
+	/*
+	alg_type = inp_alg_type;
+
+	switch (alg_type)
+	{
+	case TypeOfAlg::LTOR:
+	{
+		LtoR_MethodAlg_u* cur_alg = new LtoR_MethodAlg_u;
+		algorithm = cur_alg;
+		algorithm->SetLogTableType(TypeOfAlg::LTOR);
+		break;
+	}
+	}
+	*/
 }
 
 
 void CWindow::DrawRules()
 {
+	///*
 	QVBoxLayout* rule_lay = new QVBoxLayout;
 
 	rules_manager->setLayout(rules_manager->DrawRules((algorithm->GetRules())));
@@ -238,6 +257,7 @@ void CWindow::DrawRules()
 		rules_manager->SetRelModel();
 	}
 	ui.ruleBox->setLayout(rule_lay);
+	//*/
 }
 
 
@@ -269,7 +289,7 @@ void CWindow::onParseModeClicked()
 }
 
 void CWindow::onStartClicked()
-{
+{ ///*
 	if (ui.lineInpStr->text().isEmpty()) {
 		QMessageBox messageBox;
 		messageBox.critical(0, QString::fromLocal8Bit("Ошибка: пустая строка"), 
@@ -285,13 +305,17 @@ void CWindow::onStartClicked()
 		RenderCWin(ModeOfCWin::CWPARSESTARTED);
 
 		if (alg_type == TypeOfAlg::LRK_STACK) {
-			rules_manager->TextStringOfIds("Строка: "+algorithm->GetParsingString());
+			rules_manager->TextStringOfIds("Строка: " + algorithm->GetParsingString());
 		}
+
+		//ui.btnChooseRules->setDisabled(true);
 	}
+	//*/
 }
 
 void CWindow::onNewParseClicked()
 {
+	///*
 	RenderCWin(ModeOfCWin::CWRESET);
 	algorithm->ResetLogs();
 
@@ -299,12 +323,15 @@ void CWindow::onNewParseClicked()
 		rules_manager->TextStringOfIds("");
 	}
 	ui.genBox->setDisabled(false);
+	//*/
 }
 
 void CWindow::onInformClicked()
 {
+	/*
 	i_win->SetAlgorithmInfo(alg_type);
 	i_win->show();
+	*/
 }
 
 void CWindow::onGenCorClicked()
@@ -379,13 +406,14 @@ void CWindow::closeEvent(QCloseEvent* event)
 }
 
 void CWindow::onRepeatClicked()
-{
+{ /*
 	HideRows();
 	rules_manager->Neutralize();
 	ui.btnStep->setDisabled(false);
 	ui.btnShowAll->setDisabled(false);
 	algorithm->GetComments()->ResetRow();
 	algorithm->GetTable()->ResetRow();
+	*/
 }
 
 void CWindow::onBackClicked()
@@ -419,6 +447,7 @@ void CWindow::onBackClicked()
 
 void CWindow::onStepClicked()
 {
+	///*
 	switch (alg_type)
 	{
 	case TypeOfAlg::LTOR:
@@ -748,10 +777,12 @@ void CWindow::onStepClicked()
 		break;
 	}
 	}
+	//*/
 }
 
 void CWindow::onShowAllClicked()
 {
+	///*
 	unsigned size = ui.tableView->model()->rowCount();
 
 	for (unsigned i = 1; i <= size; i++) {
@@ -762,4 +793,5 @@ void CWindow::onShowAllClicked()
 		ui.listView->setRowHidden(j, false);
 	}
 	RenderCWin(ModeOfCWin::CWPARSEENDED);
+	//*/
 }

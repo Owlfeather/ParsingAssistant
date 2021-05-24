@@ -21,6 +21,8 @@ int LogTable::columnCount(const QModelIndex& parent) const
 		return 3;
 	case TypeOfAlg::LRK_STACK:
 		return 6;
+	default:
+		return 0;
 	}
 }
 

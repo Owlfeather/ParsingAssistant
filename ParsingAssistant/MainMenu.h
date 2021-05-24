@@ -3,6 +3,8 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_MainMenu.h"
 #include"CWindow.h"
+#include"EdWindow.h"
+#include"SetWindow.h"
 #include <iostream>
 
 
@@ -17,6 +19,9 @@ public:
 private:
 	Ui::MainWindow ui;
 	CWindow * c_win;
+	EdWindow* e_win;
+	SetWindow* s_win;
+
 
 private slots:
 	void onExitClicked();
@@ -25,6 +30,8 @@ private slots:
 	void onLLkTtoDClicked();
 	void onLRkStackClicked();
 	void onHelpClicked();
+	void onEditorClicked();
+	void onTestClicked();
 
 protected:
 	void closeEvent(QCloseEvent* event);

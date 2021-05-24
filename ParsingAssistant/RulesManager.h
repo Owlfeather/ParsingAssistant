@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <qwidget.h>
 #include <qlabel.h>
-#include "Alg_Elements.h"
+#include "Alg_Elements_u.h"
 #include <QVBoxLayout>
 #include <QTableView>
 

@@ -8,10 +8,10 @@ void Stack_LRk_MethodAlg::SetRulesOfAlg()
 {
 	//__________________________________________Создание нетерминалов
 
-	ItemSymb c_calculation("<Выражение>", false);
-	ItemSymb c_term("<Терм>", false);
-	ItemSymb c_factor("<Множ>", false);
-	ItemSymb c_id("<Ид>");
+	ItemSymb c_calculation(string("<Выражение>"), false);
+	ItemSymb c_term(string("<Терм>"), false);
+	ItemSymb c_factor(string("<Множ>"), false);
+	ItemSymb c_id(string("<Ид>"));
 
 	vector<ItemSymb> buf_symb;					// переменная-шаблон для варианта раскрытия правила
 	vector<ItemString> buf_str;					// переменная-шаблон для хранения всех вариантов 
@@ -20,10 +20,10 @@ void Stack_LRk_MethodAlg::SetRulesOfAlg()
 	buf_symb = { c_term };									// <Терм>
 	buf_str.push_back(ItemString(buf_symb));
 
-	buf_symb = { c_term, ItemSymb("+"), c_calculation };	// <Терм>+<Выражение>
+	buf_symb = { c_term, ItemSymb(string("+")), c_calculation };	// <Терм>+<Выражение>
 	buf_str.push_back(ItemString(buf_symb));
 
-	buf_symb = { c_term, ItemSymb("-"), c_calculation };	// <Терм>-<Выражение>
+	buf_symb = { c_term, ItemSymb(string("-")), c_calculation };	// <Терм>-<Выражение>
 	buf_str.push_back(ItemString(buf_symb));
 
 	ItemRule rule(c_calculation, buf_str);					// ПРАВИЛО
@@ -34,10 +34,10 @@ void Stack_LRk_MethodAlg::SetRulesOfAlg()
 	buf_symb = { c_factor };								// <Множ>
 	buf_str.push_back(ItemString(buf_symb));
 
-	buf_symb = { c_factor, ItemSymb("*"), c_term };			// <Множ>*<Терм>
+	buf_symb = { c_factor, ItemSymb(string("*")), c_term };			// <Множ>*<Терм>
 	buf_str.push_back(ItemString(buf_symb));
 
-	buf_symb = { c_factor, ItemSymb("/"), c_term };			// <Множ>/<Терм>
+	buf_symb = { c_factor, ItemSymb(string("/")), c_term };			// <Множ>/<Терм>
 	buf_str.push_back(ItemString(buf_symb));
 
 	rule.SetRule(c_term, buf_str);							// ПРАВИЛО
@@ -48,7 +48,7 @@ void Stack_LRk_MethodAlg::SetRulesOfAlg()
 	buf_symb = { c_id };									// <Ид>
 	buf_str.push_back(ItemString(buf_symb));
 
-	buf_symb = { ItemSymb("("), c_calculation, ItemSymb(")") };	//(<Выражение>)								// <Ид>
+	buf_symb = { ItemSymb(string("(")), c_calculation, ItemSymb(string(")")) };	//(<Выражение>)								// <Ид>
 	buf_str.push_back(ItemString(buf_symb));
 
 	rule.SetRule(c_factor, buf_str);							// ПРАВИЛО
@@ -114,8 +114,8 @@ bool Stack_LRk_MethodAlg::DoParse()
 {
 	bool okey = true;
 	//RuleNum rulenum;
-	ItemSymb beg("beg");
-	ItemSymb end("end");
+	ItemSymb beg(string("beg"));
+	ItemSymb end(string("end"));
 	point_of_entry = 0;
 	TypeOfRelation relation;
 	bool conv_happened = false;
@@ -285,7 +285,7 @@ void Stack_LRk_MethodAlg::SetParsingStr(ItemString inp_str)
 			parsing_str.AddSymb(inp_str[i]);
 		}
 	}
-	parsing_str.AddSymb(ItemSymb("end"));
+	parsing_str.AddSymb(ItemSymb(string("end")));
 
 	cout << endl << "Входная строка: ";
 	parsing_str.PrintString();
@@ -297,7 +297,7 @@ void Stack_LRk_MethodAlg::SetParsingStr(ItemString inp_str)
 bool Stack_LRk_MethodAlg::SelectNextSymb()
 {
 	ItemSymb next_symb;
-	const vector<ItemSymb> operators({ ItemSymb("+"), ItemSymb("-"), ItemSymb("*"), ItemSymb("/"), ItemSymb("("), ItemSymb(")"),ItemSymb("end") });
+	const vector<ItemSymb> operators({ ItemSymb(string("+")), ItemSymb(string("-")), ItemSymb(string("*")), ItemSymb(string("/")), ItemSymb(string("(")), ItemSymb(string(")")),ItemSymb(string("end")) });
 	bool operator_found = false;
 
 //	if (parsing_item.Length() != 0) {
@@ -320,10 +320,10 @@ bool Stack_LRk_MethodAlg::SelectNextSymb()
 		cout << "\nРассматриваемая конструкция:\n";
 		parsing_item.PrintString();
 		/////////////////////////////////////////
-		if ((parsing_item.Length() == 1) && ((parsing_item[0] == ItemSymb("+") )
-											|| (parsing_item[0] == ItemSymb("-"))
-											|| (parsing_item[0] == ItemSymb("*"))
-											|| (parsing_item[0] == ItemSymb("/") )) ) {
+		if ((parsing_item.Length() == 1) && ((parsing_item[0] == ItemSymb(string("+")) )
+											|| (parsing_item[0] == ItemSymb(string("-")))
+											|| (parsing_item[0] == ItemSymb(string("*")))
+											|| (parsing_item[0] == ItemSymb(string("/")) )) ) {
 			cout << "\nНет идентификатора для свертки тройки\n";
 			WriteToLog({ 0, 5 }, string(stack_str), string(parsing_item));
 			return false;
@@ -341,21 +341,21 @@ int Stack_LRk_MethodAlg::FindLeftNum()
 	stack_s = stack_str[stack_str.Length() - 1];
 	unsigned result;
 
-	if (stack_s == ItemSymb("beg")) {
+	if (stack_s == ItemSymb(string("beg"))) {
 		result = 0;
 	}
-	else if((stack_s == ItemSymb("+"))
-		|| (stack_s == ItemSymb("-"))) {
+	else if((stack_s == ItemSymb(string("+")))
+		|| (stack_s == ItemSymb(string("-")))) {
 		result = 1;
 	}
-	else if ((stack_s == ItemSymb("*"))
-		|| (stack_s == ItemSymb("/"))) {
+	else if ((stack_s == ItemSymb(string("*")))
+		|| (stack_s == ItemSymb(string("/")))) {
 		result = 2;
 	}
-	else if (stack_s == ItemSymb("(")) {
+	else if (stack_s == ItemSymb(string("("))) {
 		result = 3;
 	}
-	else if (stack_s == ItemSymb(")")) {
+	else if (stack_s == ItemSymb(string(")"))) {
 		result = 4;
 	}
 	else result = -1;
@@ -369,21 +369,21 @@ int Stack_LRk_MethodAlg::FindRightNum()
 	parse_s = parsing_item[parsing_item.Length() - 1];
 	unsigned result;
 
-	if ((parse_s == ItemSymb("+"))
-		|| (parse_s == ItemSymb("-"))) {
+	if ((parse_s == ItemSymb(string("+")))
+		|| (parse_s == ItemSymb(string("-")))) {
 		result = 0;
 	}
-	else if ((parse_s == ItemSymb("*"))
-		|| (parse_s == ItemSymb("/"))) {
+	else if ((parse_s == ItemSymb(string("*")))
+		|| (parse_s == ItemSymb(string("/")))) {
 		result = 1;
 	}
-	else if (parse_s == ItemSymb("(")) {
+	else if (parse_s == ItemSymb(string("("))) {
 		result = 2;
 	}
-	else if (parse_s == ItemSymb(")")) {
+	else if (parse_s == ItemSymb(string(")"))) {
 		result = 3;
 	}
-	else if (parse_s == ItemSymb("end")) {
+	else if (parse_s == ItemSymb(string("end"))) {
 		result = 4;
 	}
 	else {
@@ -435,7 +435,7 @@ bool Stack_LRk_MethodAlg::DoConvolution(bool full)
 	comment_line += string(parsing_item);
 	comments_model->AddRecordLine(comment_line, TypeOfComment::HYPOTHESIS, rulenum);
 
-	if ((parsing_item.Length() == 1) && (parsing_item[0] == ItemSymb(")"))) {
+	if ((parsing_item.Length() == 1) && (parsing_item[0] == ItemSymb(string(")")))) {
 
 		//cout << "\nТройку сформировать нельзя\n";
 		comment_line = "Тройку сформировать нельзя";
@@ -445,8 +445,8 @@ bool Stack_LRk_MethodAlg::DoConvolution(bool full)
 	else {
 		if (full) {
 
-			trio.AddSymb(ItemSymb("R" + to_string(trio_num)));
-			trio.AddSymb(ItemSymb("="));
+			trio.AddSymb(ItemSymb(string("R" + to_string(trio_num))));
+			trio.AddSymb(ItemSymb(string("=")));
 				
 			//	= { ItemSymb("R" + to_string(trio_num)), ItemSymb("=") };
 			trio.AddSymb(stack_str[stack_len - 2]);
@@ -454,19 +454,19 @@ bool Stack_LRk_MethodAlg::DoConvolution(bool full)
 
 			ItemSymb oper = trio[trio.Length() - 1];
 			
-			if (oper == ItemSymb("+")) {
+			if (oper == ItemSymb(string("+"))) {
 				//0,1
 				cur_rule = { 0, 1 };
 			}
-			else if (oper == ItemSymb("-")) {
+			else if (oper == ItemSymb(string("-"))) {
 				//0,2
 				cur_rule = { 0, 2 };
 			}
-			else if (oper == ItemSymb("*")) {
+			else if (oper == ItemSymb(string("*"))) {
 				//1,1
 				cur_rule = { 1, 1 };
 			}
-			else if (oper == ItemSymb("/")) {
+			else if (oper == ItemSymb(string("/"))) {
 				//1,2
 				cur_rule = { 1, 2 };
 			}
@@ -510,12 +510,12 @@ bool Stack_LRk_MethodAlg::DoConvolution(bool full)
 		}
 		else {
 
-			if (stack_str[stack_len - 1] == ItemSymb("(")) {
+			if (stack_str[stack_len - 1] == ItemSymb(string("("))) {
 
 				trio_num--;
 				//ItemString trio({ ItemSymb("R" + to_string(trio_num)), ItemSymb("=") });
-				trio.AddSymb(ItemSymb("R" + to_string(trio_num)));
-				trio.AddSymb(ItemSymb("="));
+				trio.AddSymb(ItemSymb(string("R" + to_string(trio_num))));
+				trio.AddSymb(ItemSymb(string("=")));
 
 				trio.AddSymb(stack_str[stack_len - 1]);
 				trio.AddSymb(parsing_item[0]);

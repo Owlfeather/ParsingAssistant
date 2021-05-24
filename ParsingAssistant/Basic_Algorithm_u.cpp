@@ -4,7 +4,7 @@
 
 void ParseAlgorithm::SetLogTableType(TypeOfAlg type_alg)
 { 
-	//table_model->SetType(type_alg);
+	table_model->SetType(type_alg);
 	/*
 	table_model->SetRowCount(parsing_log.Size());
 	switch (type_alg)

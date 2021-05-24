@@ -7,10 +7,10 @@ void LtoR_MethodAlg::SetRulesOfAlg()
 
 	//__________________________________________Создание нетерминалов
 
-	ItemSymb c_integer("<Целое>", false);
-	ItemSymb c_unsigned_int("<ЦБЗ>", false);
-	ItemSymb c_number("<Цифра>", false);
-	ItemSymb c_sign("<Знак>", false);
+	ItemSymb c_integer(string("<Целое>"), false);
+	ItemSymb c_unsigned_int(string("<ЦБЗ>"), false);
+	ItemSymb c_number(string("<Цифра>"), false);
+	ItemSymb c_sign(string("<Знак>"), false);
 
 	vector<ItemSymb> buf_symb;					// переменная-шаблон для варианта раскрытия правила
 	vector<ItemString> buf_str;					// переменная-шаблон для хранения всех вариантов раскрытия правила (правая часть правила)
@@ -48,10 +48,10 @@ void LtoR_MethodAlg::SetRulesOfAlg()
 	rules.push_back(rule);						// добавление нового правила
 	//----------------------------------------------------
 
-	buf_symb = { ItemSymb("+") };
+	buf_symb = { ItemSymb(string("+")) };
 	buf_str.push_back(ItemString(buf_symb));	// +
 
-	buf_symb = { ItemSymb("-") };
+	buf_symb = { ItemSymb(string("-")) };
 	buf_str.push_back(ItemString(buf_symb));	// -
 
 	rule.SetRule(c_sign, buf_str);				// ПРАВИЛО
@@ -110,7 +110,12 @@ RuleNum LtoR_MethodAlg::FindRuleNum(const RuleNum & rulenum)
 			if (parsing_item == rules[i][j]) {
 
 				comment_line.clear();
-				comment_line = "   Правило " + to_string((i + 1)) + (char(j + 224)) + " подошло!";
+				//comment_line = "   Правило " + to_string((i + 1)) + (char(j + 224)) + " подошло!";
+				//comment_line = "   Правило " + (char(i + 224)) + (to_string(j + 1)) + " подошло!";
+				string fir_letter = "";
+				fir_letter.push_back(char(i + 224));
+				comment_line = "   Правило " + fir_letter + (to_string(j + 1)) + " подошло!";
+
 				comments_model->AddRecordLine(comment_line, TypeOfComment::CORRECT_RULE, {i, j});
 				comment_line.clear();
 
@@ -125,7 +130,14 @@ RuleNum LtoR_MethodAlg::FindRuleNum(const RuleNum & rulenum)
 			}
 			else {
 				comment_line.clear();
-				comment_line = "   Правило " + to_string((i + 1)) + (char(j + 224)) + " не подошло";
+				//comment_line = "   Правило " + to_string((i + 1)) + (char(j + 224)) + " не подошло";
+
+				//comment_line = "   Правило " + to_string(char(i + 224)) + (to_string(j + 1)) + " не подошло";
+				string fir_letter = "";
+				fir_letter.push_back(char(i + 224));
+				comment_line = "   Правило " + fir_letter + (to_string(j + 1)) + " не подошло";
+
+				////comment_line = "   Правило " + (char(i + 224)) + to_string((j + 1)) + " не подошло";
 				comments_model->AddRecordLine(comment_line, TypeOfComment::WRONG_RULE, {i, j});
 				comment_line.clear();
 			}
@@ -181,7 +193,7 @@ ItemString LtoR_MethodAlg::RestoreStringFromLog(const string & log_str)
 			}
 		}
 		if (!added) {
-			restored_str.AddSymb(ItemSymb(item));
+			restored_str.AddSymb(ItemSymb(string(item)));
 		}
 		item = strtok_s(NULL, "\n", &context);
 		added = false;
@@ -332,7 +344,7 @@ bool LtoR_MethodAlg::DoParse()
 			// в начало
 		}
 	}
-	parsing_log.PrintLogltoR();
+	//parsing_log.PrintLogLtoR();
 	return true;
 }
 

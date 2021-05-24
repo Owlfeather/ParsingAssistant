@@ -4,7 +4,7 @@
 
 using namespace std;
 
-#include "Alg_Elements.h"
+#include "Alg_Elements_u.h"
 
 class LogTable :
 	public QAbstractTableModel
@@ -35,7 +35,7 @@ public:
 	RecordLine* GetRow(unsigned i) { return records[i]; }
 
 
-private:
+//private:
 
 	TypeOfAlg alg_type;
 	unsigned next_row;
@@ -45,7 +45,7 @@ private:
 	void AddRecordLine(RecordLine* inp_rec) { records.push_back(inp_rec); }
 	int Size() { return records.size(); }
 	///
-
+public:
 	int rowCount(const QModelIndex& parent) const;
 	int columnCount(const QModelIndex& parent) const;
 	QVariant data(const QModelIndex& index, int role) const;

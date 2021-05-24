@@ -6,8 +6,8 @@
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
-//*** #include <QString>
-//*** #include <QTextCodec>
+ #include <QString>
+ #include <QTextCodec>
 
 using namespace std;
 
@@ -24,7 +24,7 @@ public:
 	ItemSymb(): term(true), content(""), axiom(false) {}		// по умолчанию создаётся терминал (символы)
 	ItemSymb(const string inp_cont, bool inp_term = true, bool inp_axiom = false) : content(inp_cont), term(inp_term), axiom(inp_axiom)  {}
 	ItemSymb(const char inp_cont, bool inp_term = true, bool inp_axiom = false) : content({ inp_cont }), term(inp_term), axiom(inp_axiom) {}
-	//*** ItemSymb(const QString inp_cont, bool inp_term = true, bool inp_axiom = false);
+	ItemSymb(const QString inp_cont, bool inp_term = true, bool inp_axiom = false);
 
 	bool IsTerm() const { return term; }
 	bool IsAxiom() const { return axiom; }
@@ -36,10 +36,10 @@ public:
 
 	operator string() const { return content; }
 
-	//*** QString to_QString() {
-	//*** 	QTextCodec* codec = QTextCodec::codecForName("Windows-1251");
-	//*** 	return QString{ codec->toUnicode(content.c_str()) };
-	//*** }
+	 QString to_QString() {
+	 	QTextCodec* codec = QTextCodec::codecForName("Windows-1251");
+	 	return QString{ codec->toUnicode(content.c_str()) };
+	 }
 
 	bool operator == (const ItemSymb& c2) const { return content == c2.content; }
 	bool operator != (const ItemSymb& c2) const { return content != c2.content; }

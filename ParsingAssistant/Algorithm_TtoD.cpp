@@ -7,10 +7,10 @@ void TtoD_MethodAlg::SetRulesOfAlg()
 
 	//__________________________________________Создание нетерминалов
 
-	ItemSymb c_integer("<Целое>", false);
-	ItemSymb c_unsigned_int("<ЦБЗ>", false);
-	ItemSymb c_number("<Цифра>", false);
-	ItemSymb c_sign("<Знак>", false);
+	ItemSymb c_integer(string("<Целое>"), false);
+	ItemSymb c_unsigned_int(string("<ЦБЗ>"), false);
+	ItemSymb c_number(string("<Цифра>"), false);
+	ItemSymb c_sign(string("<Знак>"), false);
 
 	vector<ItemSymb> buf_symb;					// переменная-шаблон для варианта раскрытия правила
 	vector<ItemString> buf_str;					// переменная-шаблон для хранения всех вариантов раскрытия правила (правая часть правила)
@@ -48,10 +48,10 @@ void TtoD_MethodAlg::SetRulesOfAlg()
 	rules.push_back(rule);						// добавление нового правила
 	//----------------------------------------------------
 
-	buf_symb = { ItemSymb("+") };
+	buf_symb = { ItemSymb(string(string("+"))) };
 	buf_str.push_back(ItemString(buf_symb));	// +
 
-	buf_symb = { ItemSymb("-") };
+	buf_symb = { ItemSymb(string("-")) };
 	buf_str.push_back(ItemString(buf_symb));	// -
 
 	rule.SetRule(c_sign, buf_str);				// ПРАВИЛО
@@ -127,16 +127,16 @@ bool TtoD_MethodAlg::DoParse()
 	bool okey = true;
 	RuleNum next_rule;
 	RuleNum new_rule;
-	ItemSymb end("end");
+	ItemSymb end(string("end"));
 
 	if (recognized_str.Length() != 0) {
 		recognized_str.DeleteSymb(0, recognized_str.Length());
 	}
 	
-	recognized_str.AddSymb(ItemSymb(""));
+	recognized_str.AddSymb(ItemSymb(string("")));
 	bool rollback_happened = false;
 
-	target_str.SetString({ rules[0].GetLeft(), ItemSymb("end") }); // <целое>end
+	target_str.SetString({ rules[0].GetLeft(), ItemSymb(string("end")) }); // <целое>end
 	WriteToLog(1, TypeOfTtoDLine::STATEMENT);
 
 	cout << "Строка-цель: ";
@@ -242,7 +242,7 @@ bool TtoD_MethodAlg::DoParse()
 void TtoD_MethodAlg::SetParsingStr(ItemString inp_str)
 {
 	parsing_str = inp_str;
-	parsing_str.AddSymb(ItemSymb("end"));
+	parsing_str.AddSymb(ItemSymb(string("end")));
 	cout << "Добавлен символ конца строки" << endl;
 
 }
@@ -615,7 +615,7 @@ ItemString TtoD_MethodAlg::RestoreStringFromLog(const string & log_str)
 			}
 		}
 		if (!added) {
-			restored_str.AddSymb(ItemSymb(item));
+			restored_str.AddSymb(ItemSymb(string(item)));
 		}
 		item = strtok_s(NULL, "\n", &context);
 		added = false;
