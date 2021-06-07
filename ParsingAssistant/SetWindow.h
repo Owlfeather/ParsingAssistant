@@ -2,6 +2,7 @@
 
 #include <QWidget>
 #include "ui_SetWindow.h"
+#include "TestWindow.h"
 
 class SetWindow : public QWidget
 {
@@ -13,15 +14,18 @@ public:
 
 private:
 	Ui::SetWindow ui;
+	TestWindow* t_win;
 
 signals:
 	void sWindowClosed();
 
 private slots:
 	void onBackClicked();
+	void onStartClicked();
 	//void onClosedClicked();
 
 protected:
 	void closeEvent(QCloseEvent* event);
+	void setTestWinParams();
 
 };

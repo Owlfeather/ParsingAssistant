@@ -328,10 +328,10 @@ void CWindow::onNewParseClicked()
 
 void CWindow::onInformClicked()
 {
-	/*
+	
 	i_win->SetAlgorithmInfo(alg_type);
 	i_win->show();
-	*/
+	
 }
 
 void CWindow::onGenCorClicked()

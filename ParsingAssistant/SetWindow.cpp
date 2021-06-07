@@ -16,13 +16,33 @@ SetWindow::SetWindow(QWidget* parent)
 {
 	ui.setupUi(this);
 
+	t_win = new TestWindow();
+	t_win->hide();
+
 	//connect(ui.btnClose, SIGNAL(clicked()), this, SLOT(onClosedClicked()));
 	connect(ui.btnBack, SIGNAL(clicked()), this, SLOT(onBackClicked()));
+	connect(ui.btnStart, SIGNAL(clicked()), this, SLOT(onStartClicked()));
 
 }
 
 SetWindow::~SetWindow()
 {
+}
+
+void SetWindow::onStartClicked()
+{
+	TypeOfAlg a_type;
+	if (ui.radioButtonLtoR->isChecked()) {
+		a_type = TypeOfAlg::LTOR;
+	}
+	else if (ui.radioButton_TtoD->isChecked()) {
+		a_type = TypeOfAlg::TTOD;
+	}
+	else a_type = TypeOfAlg::LTOR;
+
+	setTestWinParams();
+	t_win->show();
+	hide();
 }
 
 void SetWindow::closeEvent(QCloseEvent* event)
@@ -45,6 +65,20 @@ void SetWindow::closeEvent(QCloseEvent* event)
 		event->ignore();
 
 	}
+}
+
+void SetWindow::setTestWinParams()
+{
+	TypeOfAlg a_type;
+	if (ui.radioButtonLtoR->isChecked()) {
+		a_type = TypeOfAlg::LTOR;
+	}
+	else if (ui.radioButton_TtoD->isChecked()) {
+		a_type = TypeOfAlg::TTOD;
+	}
+	else a_type = TypeOfAlg::LTOR;
+
+	t_win->setTestParams(ui.spinBox->value(), a_type);
 }
 
 void SetWindow::onBackClicked()

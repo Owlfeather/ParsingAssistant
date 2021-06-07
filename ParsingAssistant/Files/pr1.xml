@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules>
+    <rule>
+        <left axiom="true">&lt;�����&gt;</left>
+    </rule>
+    <rule>
+        <left axiom="false">&lt;���&gt;</left>
+    </rule>
+    <rule>
+        <left axiom="false">&lt;�����&gt;</left>
+    </rule>
+    <rule>
+        <left axiom="false">&lt;����&gt;</left>
+    </rule>
+</rules>

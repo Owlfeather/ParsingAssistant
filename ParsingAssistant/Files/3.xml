@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules>
+    <rule>
+        <left axiom="true">&lt;Целое&gt;</left>
+    </rule>
+    <rule>
+        <left axiom="false">&lt;ЦБЗ&gt;</left>
+    </rule>
+    <rule>
+        <left axiom="false">&lt;Цифра&gt;</left>
+    </rule>
+    <rule>
+        <left axiom="false">&lt;Знак&gt;</left>
+    </rule>
+</rules>

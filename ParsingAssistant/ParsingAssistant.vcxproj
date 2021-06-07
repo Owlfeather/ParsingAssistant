@@ -120,8 +120,10 @@
     <ClCompile Include="Algorithm_TtoD.cpp" />
     <ClCompile Include="Algorithm_TtoD_u.cpp" />
     <ClCompile Include="Alg_Elements_u.cpp" />
+    <ClCompile Include="AnsTable.cpp" />
     <ClCompile Include="Basic_Algorithm_u.cpp" />
     <ClCompile Include="Basic_Elements_u.cpp" />
+    <ClCompile Include="ConfWindow.cpp" />
     <ClCompile Include="EdWindow.cpp" />
     <ClCompile Include="InfWindow.cpp" />
     <ClCompile Include="IWindow.cpp" />
@@ -130,19 +132,25 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="CWindow.cpp" />
+    <ClCompile Include="RuleBox.cpp" />
+    <ClCompile Include="RulesEditorManager.cpp" />
     <ClCompile Include="RulesManager.cpp" />
     <ClCompile Include="SetWindow.cpp" />
+    <ClCompile Include="TestManager.cpp" />
+    <ClCompile Include="TestWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="MainMenu.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtUic Include="ConfWindow.ui" />
     <QtUic Include="CWindow.ui" />
     <QtUic Include="EdWindow.ui" />
     <QtUic Include="InfWindow.ui" />
     <QtUic Include="IWindow.ui" />
     <QtUic Include="MainMenu.ui" />
     <QtUic Include="SetWindow.ui" />
+    <QtUic Include="TestWindow.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="MainMenu.qrc" />
@@ -158,11 +166,17 @@
     <ClInclude Include="Algorithm_TtoD.h" />
     <ClInclude Include="Algorithm_TtoD_u.h" />
     <ClInclude Include="Alg_Elements_u.h" />
+    <QtMoc Include="AnsTable.h" />
     <ClInclude Include="Basic_Algorithm_u.h" />
+    <ClInclude Include="TestManager.h" />
+    <QtMoc Include="TestWindow.h" />
     <QtMoc Include="InfWindow.h" />
     <ClInclude Include="Basic_Elements_u.h" />
     <QtMoc Include="EdWindow.h" />
     <QtMoc Include="SetWindow.h" />
+    <QtMoc Include="ConfWindow.h" />
+    <QtMoc Include="RulesEditorManager.h" />
+    <QtMoc Include="RuleBox.h" />
     <ClInclude Include="StringGenerator.h" />
     <QtMoc Include="IWindow.h" />
     <QtMoc Include="RulesManager.h" />

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules recursion="LTOR_REC">
+    <rule>
+        <left axiom="true">&lt;ЛВыражение&gt;</left>
+        <right>
+            <option>
+                <el terminal="false">&lt;ЛВыражение&gt;</el>
+                <el terminal="true">v</el>
+                <el terminal="false">&lt;Пересечение&gt;</el>
+            </option>
+            <option>
+                <el terminal="false">&lt;Пересечение&gt;</el>
+            </option>
+        </right>
+    </rule>
+    <rule>
+        <left axiom="false">&lt;Пересечение&gt;</left>
+        <right>
+            <option>
+                <el terminal="false">&lt;Пересечение&gt;</el>
+                <el terminal="true">^</el>
+                <el terminal="false">&lt;Операнд&gt;</el>
+            </option>
+            <option>
+                <el terminal="false">&lt;Операнд&gt;</el>
+            </option>
+        </right>
+    </rule>
+    <rule>
+        <left axiom="false">&lt;Операнд&gt;</left>
+        <right>
+            <option>
+                <el terminal="true">(</el>
+                <el terminal="false">&lt;ЛВыражение&gt;</el>
+                <el terminal="true">)</el>
+            </option>
+            <option>
+                <el terminal="true">&lt;Ид&gt;</el>
+            </option>
+        </right>
+    </rule>
+</rules>

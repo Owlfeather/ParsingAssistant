@@ -602,7 +602,7 @@ void LtoR_MethodAlg_u::WriteToLog(const RuleNum cur_rule_num,
 
 	buf_line->SetLine(str_with_separators, cur_rule_num, entry_point, inp_status, inp_source_s, inp_offset);
 	parsing_log.AddRecordLine(buf_line);
-	///table_model->AppendLine(buf_line);
+	table_model->AppendLine(buf_line);
 }
 
 ItemString LtoR_MethodAlg_u::RestoreStringFromLog(const string& log_str)

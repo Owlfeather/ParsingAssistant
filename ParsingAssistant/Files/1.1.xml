@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules>
+    <rule>
+        <left axiom="true">&lt;Целое&gt;</left>
+        <right>
+            <option>
+                <el terminal="false">&lt;Знак&gt;</el>
+                <el terminal="false">&lt;ЦБЗ&gt;</el>
+            </option>
+            <option>
+                <el terminal="false">&lt;ЦБЗ&gt;</el>
+            </option>
+        </right>
+    </rule>
+    <rule>
+        <left axiom="false">&lt;ЦБЗ&gt;</left>
+        <right>
+            <option>
+                <el terminal="false">&lt;ЦБЗ&gt;</el>
+                <el terminal="false">&lt;Цифра&gt;</el>
+            </option>
+            <option>
+                <el terminal="false">&lt;Цифра&gt;</el>
+            </option>
+        </right>
+    </rule>
+    <rule>
+        <left axiom="false">&lt;Цифра&gt;</left>
+        <right>
+            <option>
+                <el terminal="true">0</el>
+            </option>
+            <option>
+                <el terminal="true">1</el>
+            </option>
+            <option>
+                <el terminal="true">2</el>
+            </option>
+            <option>
+                <el terminal="true">3</el>
+            </option>
+            <option>
+                <el terminal="true">4</el>
+            </option>
+            <option>
+                <el terminal="true">5</el>
+            </option>
+            <option>
+                <el terminal="true">6</el>
+            </option>
+            <option>
+                <el terminal="true">7</el>
+            </option>
+            <option>
+                <el terminal="true">8</el>
+            </option>
+            <option>
+                <el terminal="true">9</el>
+            </option>
+        </right>
+    </rule>
+    <rule>
+        <left axiom="false">&lt;Знак&gt;</left>
+        <right>
+            <option>
+                <el terminal="true">+</el>
+            </option>
+            <option>
+                <el terminal="true">-</el>
+            </option>
+        </right>
+    </rule>
+</rules>
